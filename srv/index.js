@@ -1,24 +1,18 @@
-import express from 'express';
-// import socketIO from "socket.io";
+
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+
+// const employeeRoutes = require('./routes/employee.routes')
+const userRoutes = require('./routes/user.routes')
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 
 export default (app, http) => {
-  // app.use(express.json());
-  //
-  // app.get('/foo', (req, res) => {
-  //   res.json({msg: 'foo'});
-  // });
-  //
-  // app.post('/bar', (req, res) => {
-  //   res.json(req.body);
-  // });
-  // 
-  // optional support for socket.io
-  // 
-  // let io = socketIO(http);
-  // io.on("connection", client => {
-  //   client.on("message", function(data) {
-  //     // do something
-  //   });
-  //   client.emit("message", "Welcome");
-  // });
+    
+    // app.use('/api/employees', employeeRoutes)
+    app.use('/api/users', userRoutes)
+
 }
