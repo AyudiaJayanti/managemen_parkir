@@ -14,4 +14,6 @@ router.delete('/:id', parkirController.delete);
 
 router.post('/enter', parkirController.enter);
 
+router.post('/exit', parkirController.exit);
+
 module.exports = router
