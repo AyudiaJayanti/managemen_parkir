@@ -160,7 +160,7 @@ exports.enter = async function(req, res) {
             })
         }
 
-    } else if (visitor_id) {  // masuk siswa 
+    } else {  // masuk siswa 
         const siswa = await model.siswa.findOne({
             where: {
                 nis: visitor_id
@@ -209,6 +209,8 @@ exports.enter = async function(req, res) {
 
 exports.exit = async function(req, res) {
     
+    var updated_parkir;
+
     await model.parkir.findOne({
         where: {
             visitor_id: req.body.visitor_id,
@@ -216,6 +218,7 @@ exports.exit = async function(req, res) {
         }, 
         include: ['siswa', 'guru']
     }).then((parkir) => {
+        updated_parkir = parkir
 
         model.parkir.update({
             keluar: new Date(),
@@ -223,11 +226,11 @@ exports.exit = async function(req, res) {
             where: { id: parkir.id },
             returning: true,
             plain: true
-        }).then((parkir) => {            
+        }).then((parkir) => {                           
             res.status(200).json({
                 'success': 1,
                 'message': 'Berhasil Keluar',
-                'data': parkir
+                'data': updated_parkir
             })
         }).catch(function(err) {
             res.status(400).json({
