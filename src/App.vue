@@ -38,23 +38,34 @@
     </v-app-bar>
 
     <v-main>
-      <HelloWorld/>
+      <router-view />      
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+// import HelloWorld from './components/HelloWorld';
+// import { StreamBarcodeReader } from "vue-barcode-reader";
 
 export default {
   name: 'App',
 
-  components: {
-    HelloWorld,
-  },
+  // components: {
+  //   HelloWorld,
+  //   // StreamBarcodeReader
+  // },
 
-  data: () => ({
-    //
-  }),
-};
+  // data: () => ({
+  //   //
+  // }),
+
+  // methods: {
+  //   onDecode (result) {
+  //     console.log(result)
+  //   },
+  //   onLoaded () {
+  //     console.log("loaded")
+  //   }
+  // }
+}
 </script>

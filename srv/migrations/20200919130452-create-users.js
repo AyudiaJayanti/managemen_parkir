@@ -11,29 +11,14 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      password: {
-        allowNull: true,
-        type: Sequelize.STRING(50)
-      },
       email: {
         allowNull: true,
         type: Sequelize.STRING(50)
       },
-      phone_number: {
+      password: {
         allowNull: true,
         type: Sequelize.STRING(50)
-      },
-      gender: {
-        type: Sequelize.BOOLEAN
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      }
+      },      
     });
   },
   down: async (queryInterface, Sequelize) => {
