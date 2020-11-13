@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar
       app
-      color="primary"
+      color="black"
       dark
     >
       <div class="d-flex align-center">
@@ -23,49 +23,40 @@
           src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
           width="100"
         />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      </div>      
+      
+      <v-btn-toggle>
+        <v-btn        
+          color="primary"
+          :to="{name: 'masuk'}">
+          Masuk
+        </v-btn>
+        <v-btn          
+          color="primary"
+          :to="{name: 'keluar'}">
+          Keluar
+        </v-btn>
+      </v-btn-toggle>
     </v-app-bar>
 
-    <v-main>
-      <router-view />      
+    <v-main contain>  
+      <v-container>    
+        <v-row>
+          <v-spacer></v-spacer>
+          <v-col cols="6">
+            <router-view />         
+          </v-col>
+          <v-spacer></v-spacer>
+        </v-row>  
+      </v-container>          
     </v-main>
   </v-app>
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld';
-// import { StreamBarcodeReader } from "vue-barcode-reader";
 
 export default {
-  name: 'App',
-
-  // components: {
-  //   HelloWorld,
-  //   // StreamBarcodeReader
-  // },
-
-  // data: () => ({
-  //   //
-  // }),
-
-  // methods: {
-  //   onDecode (result) {
-  //     console.log(result)
-  //   },
-  //   onLoaded () {
-  //     console.log("loaded")
-  //   }
-  // }
+  name: 'App',    
 }
+
 </script>

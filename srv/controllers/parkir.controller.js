@@ -123,6 +123,8 @@ exports.enter = async function(req, res) {
                 nip: visitor_id
             }, 
             include: 'parkirs'
+        }).catch(function(err) {
+
         })
                 
         if (guru) { 
@@ -144,6 +146,8 @@ exports.enter = async function(req, res) {
                         'messages': 'Parkir Berhasil',
                         'data': parkir,
                     })
+                }).catch((err) => {
+                    
                 })
             } else {
                 res.status(400).json({
@@ -166,6 +170,8 @@ exports.enter = async function(req, res) {
                 nis: visitor_id
             }, 
             include: 'parkirs'
+        }).catch((err) => {
+
         })
                 
         if (siswa) { 
@@ -188,6 +194,8 @@ exports.enter = async function(req, res) {
                         'messages': 'Parkir Berhasil',
                         'data': parkir,
                     })
+                }).catch((err) => {
+
                 })
             } else { 
                 res.status(400).json({
@@ -229,13 +237,13 @@ exports.exit = async function(req, res) {
         }).then((parkir) => {                           
             res.status(200).json({
                 'success': 1,
-                'message': 'Berhasil Keluar',
+                'messages': 'Berhasil Keluar',
                 'data': updated_parkir
             })
         }).catch(function(err) {
             res.status(400).json({
                 'success': 0,
-                'message': 'error',
+                'messages': 'error',
                 'error': err.message,
                 'data': {}
             })
@@ -244,7 +252,7 @@ exports.exit = async function(req, res) {
     }).catch(function(err) {
         res.status(400).json({
             'success': 0,
-            'message': 'Anda Belum Parkir',
+            'messages': 'Anda Belum Parkir',
             'data': {}
         })
     })
