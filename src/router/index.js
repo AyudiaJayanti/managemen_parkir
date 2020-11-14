@@ -8,15 +8,16 @@ import GuestData from '../components/GuestData.vue'
 import UserData from '../components/UserData.vue'
 import Dashboard from '../components/Dashboard'
 import Home from '../views/Home'
+// import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
+  // {
+  //   path: '/',
+  //   name: 'Home',
+  //   component: Home
+  // },
   {
     path: '/Dashboard',
     name: 'Dashboard',
@@ -64,6 +65,17 @@ const routes = [
     path: '/visitor',
     name: 'Visitor',
   },
+  {
+    path: '/',
+    alias: '/masuk',
+    name: 'masuk',
+    component: () => import('../components/MasukCam')
+  },
+  {
+    path: '/keluar',
+    name: 'keluar',
+    component: () => import('../components/KeluarCam')
+  }
 ]
 
 const router = new VueRouter({

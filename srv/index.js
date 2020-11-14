@@ -1,18 +1,24 @@
 
-const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
-const app = express();
-
-// const employeeRoutes = require('./routes/employee.routes')
-const userRoutes = require('./routes/user.routes')
-
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+// const userRoutes = require('./routes/user.routes')
+const parkirRoutes = require('./routes/parkir.routes')
+const siswaRoutes = require('./routes/siswa.routes')
+const guruRoutes = require('./routes/guru.routes')
 
 export default (app, http) => {
     
-    // app.use('/api/employees', employeeRoutes)
-    app.use('/api/users', userRoutes)
+    app.use(cors());
+    app.use(bodyParser.urlencoded({ extended: true }))
+    app.use(bodyParser.json())
+
+    // app.use('/api/users', userRoutes)
+    
+    app.options('*', cors())
+
+    app.use('/api/parkir', parkirRoutes)
+    app.use('/api/siswa', siswaRoutes)
+    app.use('/api/guru', guruRoutes)
 
 }

@@ -3,7 +3,7 @@ const faker = require('faker');
 
 const users = [...Array(30)].map((user) => (
   {
-    name          : faker.name.findName(),
+    name          : faker.name.findName(),    
     email         : faker.internet.email(),
     phone_number  : faker.phone.phoneNumber(),
     gender        : faker.random.number({'min': 0, 'max': 1}),

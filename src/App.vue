@@ -15,7 +15,6 @@
     
 
     <v-main> </v-main>
-  </v-app>
   
 </template>
 
@@ -37,9 +36,6 @@ export default {
     Login,
     Home,
   },
+}
 
-  data: () => ({
-    //
-  }),
-};
 </script>
