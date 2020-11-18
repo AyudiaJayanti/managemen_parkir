@@ -1,27 +1,27 @@
 <template>
   <v-app>
+  <div>
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant.sync="mini"
       permanent=""
-      color="#333"
+      color="#393939"
       dark
       app
     >
       <v-list-item class="px-2 pt-1">
-        <v-list-item-avatar>
+        <!-- <v-list-item-avatar>
           <v-img
-            src="../assets/logo.png"
+            src="logo.png"
             alt="admin"
             style="width: 30px; height: auto"
             class="mx-auto"
           />
-        </v-list-item-avatar>
-        <v-list-item-title class="ml-4 text-capitalize"
-          >Parkir</v-list-item-title
-        >
+        </v-list-item-avatar> -->
+        <v-list-item-title class="text-left text-capitalize display-1 pl-4 pt-4"
+          > Parkir</v-list-item-title>
       </v-list-item>
-      <v-list shaped class="clickable">
+      <v-list shaped class="clickable pt-5">
         <template v-for="item in items">
           <!-- v-slot:activator-->
           <v-list-item
@@ -29,6 +29,8 @@
             active-class="white--text"
             route
             :to="item.route"
+            class="mt-2 font-weight-normal"
+             style="font-size: 18px"
           >
             <v-list-item-action>
               <v-icon>{{ item.icon }} </v-icon>
@@ -47,14 +49,13 @@
         class="clickable"
         left
       ></v-app-bar-nav-icon>
-      <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
-        <span class="hidden-sm-and-down">Parkir</span>
-      </v-toolbar-title>
 
       <v-spacer></v-spacer>
-      <Avatar />
+      <Avatar  class="mr-6"/>
     </v-app-bar>
+  </div>
     <v-main>
+      
       <router-view></router-view>
     </v-main>
   </v-app>
@@ -62,7 +63,7 @@
 
 
 <script>
-import Avatar from "../component/Avatar";
+import Avatar from "../Avatar";
 export default {
   name: "App",
   props: {

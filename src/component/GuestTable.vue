@@ -11,7 +11,7 @@
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
 
-        <v-dialog v-model="dialog" max-width="600px" height="300px">
+        <v-dialog v-model="dialog" max-width="600px" height="80vh">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
               TAMBAH
@@ -24,7 +24,7 @@
 
             <v-card-text>
               <v-container>
-                <v-row>
+                <v-row style="height: 50vh">
                   <v-col cols="12">
                     <v-text-field
                       v-model="editedItem.id"
@@ -105,6 +105,7 @@ export default {
       },
       { text: "Status", value: "status" },
       { text: "Tgl Registrasi", value: "tglRegis" },
+      
       { text: "Actions", value: "actions", sortable: false },
     ],
     tamu: [],
@@ -149,7 +150,7 @@ export default {
           name: "Candra",
           id: "T-00001",
           tglRegis: "12-05-2020",
-          status: "Orangtua"
+          status: "Orangtua",
         },
         {
           name: "Candra",

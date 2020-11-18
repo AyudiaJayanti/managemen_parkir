@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <Navbar />
+    <!--<Navbar />-->
     <v-main>
       <Masuk />
     </v-main>
@@ -8,12 +8,12 @@
 </template>
 
 <script>
-import Navbar from "../component/Navbar";
+//import Navbar from "../component/Appbar/Navbar";
 import Masuk from "./Masuk";
 export default {
   name: "Home",
   components: {
-    Navbar,
+  //  Navbar,
     Masuk,
   },
 };

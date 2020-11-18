@@ -9,7 +9,7 @@
   </v-app-bar>
 </template>
 <script>
-import Avatar from "../component/Avatar";
+import Avatar from "../Avatar";
 export default {
   name: "App",
   props: {

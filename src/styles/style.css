@@ -1,0 +1,12 @@
+.text-color {
+    color: orange;
+}
+.background-main{
+    background-color: #E9E9E9 !important;
+}
+.v-data-table-header{
+    background-color: orange !important;
+}
+th .text-start{
+    width: 48px !important;
+}

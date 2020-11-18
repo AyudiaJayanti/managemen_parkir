@@ -142,7 +142,7 @@ export default {
     dialog: false,
     dialogDelete: false,
     headers: [
-      { text: "NIS", align: "start", value: "nis" },
+      { text: "NIS", align: "start", value: "nis",},
       {
         text: "Nama Siswa",
         sortable: false,

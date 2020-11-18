@@ -1,27 +1,20 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import TeachersData from '../components/TeachersData.vue'
-import StudentsData from '../components/StudentsData.vue'
-import Login from '../components/Login.vue'
-import ParkingData from '../components/ParkingData.vue'
-import GuestData from '../components/GuestData.vue'
-import UserData from '../components/UserData.vue'
-import Dashboard from '../components/Dashboard'
 import Home from '../views/Home'
 // import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: 'Home',
-  //   component: Home
-  // },
+  {
+    path: '/',
+    name: 'Home',
+    component: Home
+  },
   {
     path: '/Dashboard',
     name: 'Dashboard',
-    component: Dashboard
+    component: () => import('../components/Dashboard')
   },
   {
     path: '/about',
@@ -34,36 +27,32 @@ const routes = [
   {
     path: '/Teacher',
     name: 'Teacher',
-    component: TeachersData
+    component: () => import('../components/TeachersData')
   },
   {
     path: '/Login',
     name: 'Login',
-    component: Login,
+    component: () => import('../components/Login')
   },
   {
     path: '/Students',
     name: 'Students',
-    component: StudentsData
+    component: () => import('../components/StudentsData')
   },
   {
     path: '/Parking',
     name: 'Parking',
-    component: ParkingData
+    component: () => import('../components/ParkingData')
   },
   {
     path: '/Guest',
     name: 'Guest',
-    component: GuestData
+    component: () => import('../components/GuestData')
   },
   {
     path: '/User',
     name: 'User',
-    component: UserData
-  },
-  {
-    path: '/visitor',
-    name: 'Visitor',
+    component: () => import('../components/UserData')
   },
   {
     path: '/',
