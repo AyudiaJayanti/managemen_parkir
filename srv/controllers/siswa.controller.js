@@ -42,7 +42,7 @@ exports.create = async function(req, res) {
     }).then((siswa) => {
         res.status(200).json({
             'success' : 1,
-            'messages': 'siswa berhasil ditambahkan',
+            'messages': 'Siswa berhasil ditambahkan',
             'data': siswa,
         })
     }).catch(function(err) {
@@ -80,7 +80,7 @@ exports.findById = async function(req, res) {
 exports.update = async function(req, res) {
     const {   
         nis,     
-        nama,                     
+        nama,                 
     } = req.body;
     
     await model.siswa.update({        

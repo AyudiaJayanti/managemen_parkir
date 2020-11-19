@@ -12,7 +12,7 @@
             Nama
           </th>
           <th class="text-left">
-            Status
+            Role
           </th>
           <th class="text-left">
             Tanggal Masuk
@@ -24,7 +24,7 @@
             Jam Keluar
           </th>
           <th class="text-left">
-            Aktif
+            Status
           </th>
         </tr>
       </thead>
@@ -34,13 +34,17 @@
           :key="item.id"
         >
           <td>{{ item.id }}</td>
-          <td>{{ item.name }}</td>
-          <td>{{ item.status }}</td>
+          <td>{{ item.nama }}</td>
+          <td>{{ item.role }}</td>
           <td>{{ item.tglmasuk }}</td>
           <td>{{ item.jammasuk }}</td>
           <td>{{ item.jamkeluar }}</td>
-          <td class="text-center "><v-btn class="white--text font-weight-light" color="blue" height="20px" style="font-size: 0.5rem;" rounded>{{ item.aktif }}</v-btn></td>
+          <td class="text-center "><v-btn class="white--text font-weight-light" color="blue" height="20px" style="font-size: 0.5rem;" rounded>{{ item.status }}</v-btn></td>
         </tr>
+        <v-tooltip top>
+        
+        <span>Download Bulan Agustus</span>
+        </v-tooltip>
         <v-tooltip top>
       <template v-slot:activator="{ on, attrs }">
         <v-btn
@@ -74,21 +78,21 @@
         DataParkir: [
           {
             id: 1811138,
-            name: 'Candra',
-            status: 'Siswa',
+            nama: 'Candra',
+            role: 'Siswa',
             tglmasuk: '21-07-2020',
             jammasuk: '06:32AM',
             jamkeluar: '04:00PM',
-            aktif: "Aktif"
+            status: "Aktif"
           },
           {
             id: 1111111,
-            name: 'Rudi Rahmayadi',
-            status: 'Guru',
+            nama: 'Rudi Rahmayadi',
+            role: 'Guru',
             tglmasuk: '29-08-2020',
             jammasuk: '08:45AM',
             jamkeluar: '13:00PM',
-            aktif: "Selesai"
+            status: "Selesai"
           },
         ],
       }

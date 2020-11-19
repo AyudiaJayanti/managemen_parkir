@@ -34,7 +34,7 @@
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
-                      v-model="editedItem.name"
+                      v-model="editedItem.nama"
                       label="Nama Guru"
                     ></v-text-field>
                   </v-col>
@@ -105,6 +105,7 @@
   </v-data-table>
 </template>
 <script>
+import TeachersService from "../services/TeachersService";
 export default {
   data: () => ({
     jurusan: [
@@ -127,7 +128,7 @@ export default {
       {
         text: "Nama Guru",
         sortable: false,
-        value: "name",
+        value: "nama",
       },
       { text: "Jurusan", value: "jurusan" },
       { text: "Tgl Registrasi", value: "tglRegis" },
@@ -174,30 +175,18 @@ export default {
   created() {
     this.initialize();
   },
+  mounted() {
+    TeachersService.getAll(1)
+      .then((res) => {
+        this.guru = res.data.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
 
   methods: {
-    initialize() {
-      this.guru = [
-        {
-          name: "Diky Ridwan",
-          nip: 1811138,
-          noKen: "D 2345 SU",
-          jurusan: "SIJA",
-          tglRegis: "12-05-2020",
-          noSTNK: "121212121",
-          noSIM: "121212121",
-        },
-        {
-          name: "Nandang",
-          nip: 1811138,
-          noKen: "D 3335 BF",
-          jurusan: "NA",
-          tglRegis: "12-06-2020",
-          noSTNK: "121212121",
-          noSIM: "121212121",
-        },
-      ];
-    },
+    initialize() {},
 
     editItem(item) {
       this.editedIndex = this.guru.indexOf(item);

@@ -4,16 +4,22 @@
       <h2>Dashboard</h2>
       <div class="py-5 px-5 mt-3 white">
         <v-row class="mt-2">
-          <v-col md="5"> </v-col>
-
-          <v-col md="4">
-            <v-card>
-              <LineChart />
+          <v-col md="3">
+            <v-card
+            class="px-2 py-2">
+            <div>
+              <v-icon
+              class="px-2 py-2"
+              style="background-color: grey; border-radius: 5px"
+              x-large>
+                mdi-school-outline
+              </v-icon>
+              <span class="d-inline">
+              <h3>333</h3>
+              <h6>Siswa</h6>
+              </span>
+            </div>
             </v-card>
-          </v-col>
-
-          <v-col cols="12" md="3">
-            <UserProfile />
           </v-col>
         </v-row>
       </div>
@@ -23,14 +29,10 @@
   </v-app>
 </template>
 <script>
-import LineChart from "../component/Card/LineChart";
-import UserProfile from "../component/Card/UserProfile";
 export default {
   name: "Dashboard",
 
   components: {
-    LineChart,
-    UserProfile,
   },
   data: () => ({}),
 };

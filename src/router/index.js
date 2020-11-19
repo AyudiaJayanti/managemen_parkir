@@ -64,7 +64,12 @@ const routes = [
     path: '/keluar',
     name: 'keluar',
     component: () => import('../components/KeluarCam')
-  }
+  },
+  {
+    path: '/Vehicle',
+    name: 'Vehicle',
+    component: () => import('../components/VehicleData')
+  },
 ]
 
 const router = new VueRouter({

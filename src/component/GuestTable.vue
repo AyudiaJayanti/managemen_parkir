@@ -105,7 +105,7 @@ export default {
       },
       { text: "Status", value: "status" },
       { text: "Tgl Registrasi", value: "tglRegis" },
-      
+
       { text: "Actions", value: "actions", sortable: false },
     ],
     tamu: [],

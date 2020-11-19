@@ -7,8 +7,7 @@
   >
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title>Data Siswa</v-toolbar-title>
-        <v-divider class="mx-4" inset vertical></v-divider>
+        
         <v-spacer></v-spacer>
 
         <v-dialog v-model="dialog" max-width="600px">
@@ -34,7 +33,7 @@
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
-                      v-model="editedItem.name"
+                      v-model="editedItem.nama"
                       label="Nama Siswa"
                     ></v-text-field>
                   </v-col>
@@ -123,6 +122,7 @@
   </v-data-table>
 </template>
 <script>
+import StudentsService from '../services/StudentsService'
 export default {
   data: () => ({
     tingkat: ["10", "11", "12"],
@@ -146,7 +146,7 @@ export default {
       {
         text: "Nama Siswa",
         sortable: false,
-        value: "name",
+        value: "nama",
       },
       { text: "Kelas", value: "kelas" },
       { text: "Tgl Registrasi", value: "tglRegis" },
@@ -158,7 +158,7 @@ export default {
     siswa: [],
     editedIndex: -1,
     editedItem: {
-      name: "",
+      nama: "",
       nis: "",
       noKen: "",
       tingkat: "",
@@ -168,7 +168,7 @@ export default {
       noSTNK: "",
     },
     defaultItem: {
-      name: "",
+      nama: "",
       nis: 0,
       noKen: 0,
       kelas: 0,
@@ -197,33 +197,18 @@ export default {
   created() {
     this.initialize();
   },
+  mounted() {
+    StudentsService.getAll(1)
+      .then((res) => {
+        this.siswa = res.data.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
 
   methods: {
     initialize() {
-      this.siswa = [
-        {
-          name: "Candra",
-          nis: 1811138,
-          noKen: "D 2345 SU",
-          jurusan: "RPL",
-          tingkat: "12",
-          kelas: "B",
-          tglRegis: "12-05-2020",
-          noSTNK: "STNK-Candra.jpg",
-          noSIM: "SIM-Candra.jpg",
-        },
-        {
-          name: "Ayudia",
-          nis: 1811138,
-          noKen: "D 3335 BF",
-          jurusan: "RPL",
-          tingkat: "12",
-          kelas: "A",
-          tglRegis: "12-06-2020",
-          noSTNK: "STNK-Ayudia.jpg",
-          noSIM: "SIM-Ayudia.jpg",
-        },
-      ];
     },
 
     editItem(item) {

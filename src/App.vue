@@ -9,7 +9,8 @@
         CheckIfRoute('Students') ||
         CheckIfRoute('Teacher') ||
         CheckIfRoute('Guest') ||
-        CheckIfRoute('User')
+        CheckIfRoute('User')||
+        CheckIfRoute('Vehicle')
       "
     />
     

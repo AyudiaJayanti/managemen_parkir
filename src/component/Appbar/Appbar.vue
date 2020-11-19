@@ -1,16 +1,16 @@
 <template>
   <v-app>
-  <div>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant.sync="mini"
-      permanent=""
-      color="#393939"
-      dark
-      app
-    >
-      <v-list-item class="px-2 pt-1">
-        <!-- <v-list-item-avatar>
+    <div>
+      <v-navigation-drawer
+        v-model="drawer"
+        :mini-variant.sync="mini"
+        permanent=""
+        color="#393939"
+        dark
+        app
+      >
+        <v-list-item class="px-2 pt-1">
+          <!-- <v-list-item-avatar>
           <v-img
             src="logo.png"
             alt="admin"
@@ -18,44 +18,43 @@
             class="mx-auto"
           />
         </v-list-item-avatar> -->
-        <v-list-item-title class="text-left text-capitalize display-1 pl-4 pt-4"
-          > Parkir</v-list-item-title>
-      </v-list-item>
-      <v-list shaped class="clickable pt-5">
-        <template v-for="item in items">
-          <!-- v-slot:activator-->
-          <v-list-item
-            :key="item.text"
-            active-class="white--text"
-            route
-            :to="item.route"
-            class="mt-2 font-weight-normal"
-             style="font-size: 18px"
-          >
-            <v-list-item-action>
-              <v-icon>{{ item.icon }} </v-icon>
-            </v-list-item-action>
-            <v-list-item-title>
-              {{ item.text }}
-            </v-list-item-title>
-          </v-list-item>
-        </template>
-      </v-list>
-    </v-navigation-drawer>
+          <v-list-item-title
+            class="text-left text-capitalize display-1 pl-4 pt-4"
+          >Parkir</v-list-item-title>
+        </v-list-item>
+        <v-list shaped class="clickable pt-5">
+          <template v-for="item in items">
+            <!-- v-slot:activator-->
+            <v-list-item
+              :key="item.text"
+              active-class="white--text"
+              route
+              :to="item.route"
+              class="mt-2 font-weight-normal"
+              style="font-size: 18px">
+              <v-list-item-action>
+                <v-icon>{{ item.icon }} </v-icon>
+              </v-list-item-action>
+              <v-list-item-title>
+                {{ item.text }}
+              </v-list-item-title>
+            </v-list-item>
+          </template>
+        </v-list>
+      </v-navigation-drawer>
 
-    <v-app-bar app color="#333" dark>
-      <v-app-bar-nav-icon
-        @click.stop="mini = !mini"
-        class="clickable"
-        left
-      ></v-app-bar-nav-icon>
+      <v-app-bar app color="#333" dark>
+        <v-app-bar-nav-icon
+          @click.stop="mini = !mini"
+          class="clickable"
+          left
+        ></v-app-bar-nav-icon>
 
-      <v-spacer></v-spacer>
-      <Avatar  class="mr-6"/>
-    </v-app-bar>
-  </div>
+        <v-spacer></v-spacer>
+        <Avatar class="mr-6" />
+      </v-app-bar>
+    </div>
     <v-main>
-      
       <router-view></router-view>
     </v-main>
   </v-app>
@@ -78,7 +77,11 @@ export default {
     mini: false,
     fab: false,
     items: [
-      { icon: "mdi-view-dashboard-outline", text: "Dashboard", route: "/Dashboard" },
+      {
+        icon: "mdi-view-dashboard-outline",
+        text: "Dashboard",
+        route: "/Dashboard",
+      },
       { icon: "mdi-parking", text: "Data Parkir", route: "/Parking" },
       { icon: "mdi-school-outline", text: "Data Siswa", route: "/Students" },
       {
@@ -88,6 +91,7 @@ export default {
       },
       { icon: "mdi-help-circle-outline", text: "Data Tamu", route: "/Guest" },
       { icon: "mdi-account-check-outline", text: "Data User", route: "/User" },
+      { icon: "mdi-car-estate", text: "Vehicle", route: "/Vehicle" },
     ],
   }),
 };
