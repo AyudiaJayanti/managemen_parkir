@@ -6,11 +6,11 @@
 </template>
 
 <script>
-import { StreamBarcodeReader } from "vue-barcode-reader"
-import ParkirService from '../services/ParkirService'
+import { StreamBarcodeReader } from "vue-barcode-reader";
+import ParkirService from "../services/ParkirService"
 
 export default {
-  name: 'KeluarCam',  
+  name: 'MasukMotorCam',
 
   components: {    
     StreamBarcodeReader
@@ -24,12 +24,12 @@ export default {
     onDecode(id) {
       if(!this.isPaused) {
         this.isPaused = true
-        ParkirService.keluar(id)
+        ParkirService.masuk(id, 1)
           .then(response => {
-            console.log(response.data.messages)                      
+            console.log(response.data.messages)          
             this.$swal({
-              title: 'Have a nice day ' + '!',
-              text: 'Silahkan Keluar',
+              title: response.data.messages,
+              text: 'Silahkan Masuk',
               icon: 'success',  
               showConfirmButton: false,
               timer: 1500               
@@ -39,7 +39,7 @@ export default {
             console.log(err.response.data.messages)                  
             this.$swal({
               title: err.response.data.messages,
-              text: 'Gagal Keluar',
+              text: 'Anda Tidak Diizinkan Masuk',
               icon: 'error',                    
               showConfirmButton: false,
               timer: 1500

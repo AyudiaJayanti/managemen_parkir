@@ -1,9 +1,10 @@
 import http from "../http-common"
 
 class ParkirService {
-    masuk(id) {
+    masuk(id, jenis) {
         return http.post("/parkir/enter", {
-            'visitor_id': id
+            'visitor_id': id,
+            'jenis': jenis
         })
     }
     keluar(id) {

@@ -7,7 +7,6 @@ import ParkingData from '../components/ParkingData.vue'
 import GuestData from '../components/GuestData.vue'
 import UserData from '../components/UserData.vue'
 import Dashboard from '../components/Dashboard'
-import Home from '../views/Home'
 // import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
@@ -67,9 +66,14 @@ const routes = [
   },
   {
     path: '/',
-    alias: '/masuk',
-    name: 'masuk',
-    component: () => import('../components/MasukCam')
+    alias: '/masuk_mobil',
+    name: 'masuk_mobil',
+    component: () => import('../components/MasukMobilCam')
+  },
+  {
+    path: '/masuk_motor',
+    name: 'masuk_motor',
+    component: () => import('../components/MasukMotorCam')
   },
   {
     path: '/keluar',

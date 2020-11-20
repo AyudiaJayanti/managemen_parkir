@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Siswa.hasMany(models.parkir, {foreignKey: 'visitor_id', as: 'parkirs'})
+      Siswa.hasMany(models.kendaraan, {foreignKey: 'owner_id', as: 'kendaraans'})
     }
   };
   Siswa.init({

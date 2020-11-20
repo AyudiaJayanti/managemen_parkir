@@ -10,7 +10,7 @@ import { StreamBarcodeReader } from "vue-barcode-reader";
 import ParkirService from "../services/ParkirService"
 
 export default {
-  name: 'MasukCam',
+  name: 'MasukMobilCam',
 
   components: {    
     StreamBarcodeReader
@@ -24,7 +24,7 @@ export default {
     onDecode(id) {
       if(!this.isPaused) {
         this.isPaused = true
-        ParkirService.masuk(id)
+        ParkirService.masuk(id, 2)
           .then(response => {
             console.log(response.data.messages)          
             this.$swal({

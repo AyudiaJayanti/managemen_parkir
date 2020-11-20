@@ -105,6 +105,9 @@
   </v-data-table>
 </template>
 <script>
+
+import GuruService from '../services/GuruService'
+
 export default {
   data: () => ({
     jurusan: [
@@ -129,13 +132,13 @@ export default {
         sortable: false,
         value: "name",
       },
-      { text: "Jurusan", value: "jurusan" },
-      { text: "Tgl Registrasi", value: "tglRegis" },
-      { text: "Jenis Kendaraan", value: "jenisKen" },
-      { text: "Nomor Kendaraan", value: "noKen" },
-      { text: "Nomor STNK", value: "noSTNK" },
-      { text: "Nomor SIM", value: "noSIM" },
-      { text: "Actions", value: "actions", sortable: false },
+      // { text: "Jurusan", value: "jurusan" },
+      // { text: "Tgl Registrasi", value: "tglRegis" },
+      // { text: "Jenis Kendaraan", value: "jenisKen" },
+      // { text: "Nomor Kendaraan", value: "noKen" },
+      // { text: "Nomor STNK", value: "noSTNK" },
+      // { text: "Nomor SIM", value: "noSIM" },
+      // { text: "Actions", value: "actions", sortable: false },
     ],
     guru: [],
     editedIndex: -1,
@@ -174,8 +177,17 @@ export default {
     },
   },
 
-  created() {
-    this.initialize();
+  // created() {
+  //   this.initialize();
+  // },
+
+  mounted() {
+    GuruService.getAll(1)
+      .then(res => {
+        this.guru = res.data.data
+      }).catch(err => {
+        console.log(err)
+      })
   },
 
   methods: {

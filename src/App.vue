@@ -1,5 +1,5 @@
 <template>
-  <v-app  style="-webkit-app-region: drag">
+  <v-app>
     <Appbar
       v-if="
         CheckIfRoute('Dashboard') ||
@@ -12,16 +12,17 @@
     />
     <Login v-else-if="CheckIfRoute('Login')" />
     <Home v-else/>
+    <Login/>    
     
-
     <v-main> </v-main>
+  </v-app>
   
 </template>
 
 <script>
-import Appbar from "../src/component/Appbar";
-import Login from "../src/components/Login.vue";
-import Home from "./views/Home";
+import Appbar from "./component/Appbar"
+import Login from "./components/Login"
+import Home from "./views/Home"
 
 export default {
   name: "App",
@@ -29,7 +30,7 @@ export default {
     CheckIfRoute: function (routeName) {
       console.log(this.$route.name === routeName);
       return this.$route.name === routeName;
-    },
+    },  
   },
   components: {
     Appbar,
@@ -37,5 +38,4 @@ export default {
     Home,
   },
 }
-
 </script>

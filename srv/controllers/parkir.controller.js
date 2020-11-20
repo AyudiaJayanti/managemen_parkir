@@ -20,7 +20,7 @@ exports.findAll = async function(req, res) {
             include: ['siswa', 'guru']
         }).then((parkirs) => {
             res.status(200).json({
-                'sucess': 1,
+                'success': 1,
                 'data': parkirs,             
             });
         });    
@@ -28,7 +28,7 @@ exports.findAll = async function(req, res) {
 
     }).catch(function (err) {
         res.status(400).json({
-            'success': 0,
+            'success': 0,   
             'messages': err.message,
             'data': {},
         });
@@ -117,99 +117,256 @@ exports.delete = async function(req, res) {
 exports.enter = async function(req, res) {
     const visitor_id = req.body.visitor_id;    
 
-    if (visitor_id.length > 9) {  // masuk guru
-        const guru = await model.guru.findOne({
-            where: {
-                nip: visitor_id
-            }, 
-            include: 'parkirs'
-        }).catch(function(err) {
+    if (req.body.jenis == 1) { // motor
+        if (visitor_id.length > 9) {  // masuk guru
+            const guru = await model.guru.findOne({
+                where: {
+                    nip: visitor_id
+                }, 
+                include: ['parkirs', 'kendaraans']
+            }).catch(function(err) {
+    
+            })
+            
+            if (guru){
 
-        })
-                
-        if (guru) { 
-            var parkir = false
-            guru.parkirs.forEach(function(element){                
-                parkir = element.keluar == null
-            });
-
-            if (!parkir) { 
-                await model.parkir.create({
-                    id: "",
-                    visitor_id: guru.nip,
-                    role: 2,
-                    masuk: new Date(),
-                    keluar: null
-                }).then((parkir) => {
-                    res.status(200).json({
-                        'success' : 1,
-                        'messages': 'Parkir Berhasil',
-                        'data': parkir,
-                    })
-                }).catch((err) => {
-                    
+                var kendaraans = []
+                guru.kendaraans.forEach(function(element){
+                    kendaraans.push(element.jenis)
                 })
+
+                if (kendaraans.includes(1)) {
+                    var parkir = false
+                    guru.parkirs.forEach(function(element){                
+                        parkir = element.keluar == null
+                    });
+        
+                    if (!parkir) {
+                        await model.parkir.create({
+                            id: "",
+                            visitor_id: guru.nip,
+                            role: 1,
+                            masuk: new Date(),
+                            keluar: null
+                        }).then((parkir) => {
+                            res.status(200).json({
+                                'success' : 1,
+                                'messages': 'Parkir Berhasil',
+                                'data': parkir,
+                            })
+                        }).catch((err) => {
+                            
+                        })
+                    } else {
+                        res.status(400).json({
+                            'success': 0,
+                            'messages': 'Anda sudah parkir',
+                            'data': {},
+                        }) 
+                    }
+                } else {
+                    res.status(400).json({
+                        'success': 0,
+                        'messages': 'Anda tidak memiliki akses untuk motor',
+                        'data': {},
+                    })
+                }
+
             } else {
                 res.status(400).json({
                     'success': 0,
-                    'messages': 'Anda sudah parkir',
+                    'messages': 'Anda belum terdaftar',
                     'data': {},
-                }) 
-            }
-        } else {
-            res.status(400).json({
-                'success': 0,
-                'messages': 'Anda belum terdaftar',
-                'data': {},
-            })
-        }
-
-    } else {  // masuk siswa 
-        const siswa = await model.siswa.findOne({
-            where: {
-                nis: visitor_id
-            }, 
-            include: 'parkirs'
-        }).catch((err) => {
-
-        })
-                
-        if (siswa) { 
-            var parkir = false
-            
-            siswa.parkirs.forEach(function(element){                
-                parkir = element.keluar == null
-            });
-
-            if (!parkir) {  
-                await model.parkir.create({
-                    id: '',
-                    visitor_id: siswa.nis,
-                    role: 1,
-                    masuk: new Date(),
-                    keluar: null
-                }).then((parkir) => {
-                    res.status(200).json({
-                        'success' : 1,
-                        'messages': 'Parkir Berhasil',
-                        'data': parkir,
-                    })
-                }).catch((err) => {
-
                 })
-            } else { 
+            }
+    
+        } else {  // masuk siswa 
+            const siswa = await model.siswa.findOne({
+                where: {
+                    nis: visitor_id
+                }, 
+                include: ['parkirs', 'kendaraans']
+            }).catch((err) => {
+    
+            })
+                    
+            if (siswa) { 
+
+                var kendaraans = []
+                siswa.kendaraans.forEach(function(element){
+                    kendaraans.push(element.jenis)
+                })
+
+                if (kendaraans.includes(1)) {
+                    var parkir = false
+                    
+                    siswa.parkirs.forEach(function(element){                
+                        parkir = element.keluar == null
+                    });
+        
+                    if (!parkir) {  
+                        await model.parkir.create({
+                            id: '',
+                            visitor_id: siswa.nis,
+                            role: 1,
+                            masuk: new Date(),
+                            keluar: null
+                        }).then((parkir) => {
+                            res.status(200).json({
+                                'success' : 1,
+                                'messages': 'Parkir Berhasil',
+                                'data': parkir,
+                            })
+                        }).catch((err) => {
+        
+                        })
+                    } else { 
+                        res.status(400).json({
+                            'success': 0,
+                            'messages': 'Anda sudah parkir',
+                            'data': {},
+                        }) 
+                    } 
+                } else {
+                    res.status(400).json({
+                        'success': 0,
+                        'messages': 'Anda Tidak Memiliki Akses Untuk Motor',
+                        'data': {},
+                    })
+                }
+            } else {
                 res.status(400).json({
                     'success': 0,
-                    'messages': 'Anda sudah parkir',
+                    'messages': 'Anda belum terdaftar',
                     'data': {},
-                }) 
+                })
             }
-        } else {
-            res.status(400).json({
-                'success': 0,
-                'messages': 'Anda belum terdaftar',
-                'data': {},
+        }
+
+    } else { // mobil
+        if (visitor_id.length > 9) {  // masuk guru
+            const guru = await model.guru.findOne({
+                where: {
+                    nip: visitor_id
+                }, 
+                include: ['parkirs', 'kendaraans']
+            }).catch(function(err) {
+    
             })
+            
+            if (guru){
+
+                var kendaraans = []
+                guru.kendaraans.forEach(function(element){
+                    kendaraans.push(element.jenis)
+                })
+
+                if (kendaraans.includes(2)) {
+                    var parkir = false
+                    guru.parkirs.forEach(function(element){                
+                        parkir = element.keluar == null
+                    });
+        
+                    if (!parkir) {
+                        await model.parkir.create({
+                            id: "",
+                            visitor_id: guru.nip,
+                            role: 2,
+                            masuk: new Date(),
+                            keluar: null
+                        }).then((parkir) => {
+                            res.status(200).json({
+                                'success' : 1,
+                                'messages': 'Parkir Berhasil',
+                                'data': parkir,
+                            })
+                        }).catch((err) => {
+                            
+                        })
+                    } else {
+                        res.status(400).json({
+                            'success': 0,
+                            'messages': 'Anda sudah parkir',
+                            'data': {},
+                        }) 
+                    }
+                } else {
+                    res.status(400).json({
+                        'success': 0,
+                        'messages': 'Anda tidak memiliki akses untuk Mobil',
+                        'data': {},
+                    })
+                }
+
+            } else {
+                res.status(400).json({
+                    'success': 0,
+                    'messages': 'Anda belum terdaftar',
+                    'data': {},
+                })
+            }
+    
+        } else {  // masuk siswa 
+            const siswa = await model.siswa.findOne({
+                where: {
+                    nis: visitor_id
+                }, 
+                include: ['parkirs', 'kendaraans']
+            }).catch((err) => {
+    
+            })
+                    
+            if (siswa) { 
+
+                var kendaraans = []
+                siswa.kendaraans.forEach(function(element){
+                    kendaraans.push(element.jenis)
+                })
+
+                if (kendaraans.includes(2)) {
+                    var parkir = false
+                    
+                    siswa.parkirs.forEach(function(element){                
+                        parkir = element.keluar == null
+                    });
+        
+                    if (!parkir) {  
+                        await model.parkir.create({
+                            id: '',
+                            visitor_id: siswa.nis,
+                            role: 2,
+                            masuk: new Date(),
+                            keluar: null
+                        }).then((parkir) => {
+                            res.status(200).json({
+                                'success' : 1,
+                                'messages': 'Parkir Berhasil',
+                                'data': parkir,
+                            })
+                        }).catch((err) => {
+        
+                        })
+                    } else { 
+                        res.status(400).json({
+                            'success': 0,
+                            'messages': 'Anda sudah parkir',
+                            'data': {},
+                        }) 
+                    } 
+                } else {
+                    res.status(400).json({
+                        'success': 0,
+                        'messages': 'Anda tidak memiliki akses untuk Mobil',
+                        'data': {},
+                    })
+                }
+            } else {
+                res.status(400).json({
+                    'success': 0,
+                    'messages': 'Anda belum terdaftar',
+                    'data': {},
+                })
+            }
         }
     }
         
