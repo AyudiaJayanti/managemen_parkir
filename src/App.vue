@@ -1,6 +1,5 @@
 <template>
   <v-app>
-    
     <WindowBar/>
     <Appbar
       v-if="
