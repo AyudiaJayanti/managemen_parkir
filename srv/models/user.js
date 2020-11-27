@@ -4,7 +4,6 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    
     static associate(models) {
       
     }
@@ -15,8 +14,14 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     name: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,         
+    email: {
+      type: Sequelize.UUID,
+      unique: true
+    },
+    password: {
+      type: Sequelize.UUID,
+      unique: true
+    },
   }, {
     sequelize,
     modelName: 'user',

@@ -1,10 +1,10 @@
 import http from "../http-common"
 
-class StudentsService {
+class SiswaService {
     getAll(page) {
         return  http.get("/siswa/page/" + page)
     }
 }
 
 
-export default new StudentsService
+export default new SiswaService

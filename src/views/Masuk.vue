@@ -1,36 +1,26 @@
 <template>
-  <v-carousel
-    cycle
-    height="100vh"
-    hide-delimiter-background
-    show-arrows-on-hover
-  >
-    <v-carousel-item v-for="(slide, i) in slides" :key="i" :src="slide.src">
-      <v-img />
-    </v-carousel-item>
-  </v-carousel>
+  <v-container fluid class="con-height">
+    <v-row class="row-width">
+      <v-col cols="12" md="6" lg="6" class="col-lp">
+        <img src="../assets/lp-card.svg" class="img-lp">
+      </v-col>
+      <v-col cols="12" md="6" lg="6">
+        
+        <h1 class="text-center lp">SCAN YOUR BARCODE</h1>
+        <!-- <masuk-cam class="cam-style"></masuk-cam> -->
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 <script>
+// import MasukCam from '../components/MasukMotorCam';
 export default {
+  components: { 
+    // MasukCam
+     },
   data() {
     return {
-      colors: [
-        "indigo",
-        "warning",
-        "pink darken-2",
-        "red lighten-1",
-        "deep-purple accent-4",
-      ],
-      slides: [
-        // { src: "../assets/LP-CAR.png" },
-        //{ src: './../assets/vehicle.png' },
-        {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-          },
-          {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-          },
-      ],
+      
     };
   },
 };

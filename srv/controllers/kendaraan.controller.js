@@ -1,24 +1,23 @@
 'use strict';
 const model = require('../models/index');
-const kendaraan = require('../models/kendaraan');
 
 exports.findAll = async function(req, res) {
     let limit = 10;   
     let offset = 0;
 
-    await model.siswa.findAndCountAll().then((data) => {
+    await model.kendaraan.findAndCountAll().then((data) => {
 
         let page = req.params.page;
         let pages = Math.ceil(data.count / limit);
             offset = limit * (page - 1);
             
-        model.siswa.findAll({                
+        model.kendaraan.findAll({                
             limit: limit,
             offset: offset,                            
-        }).then((siswas) => {
+        }).then((kendaraans) => {
             res.status(200).json({
                 'success': 1,
-                'data': siswas, 
+                'data': kendaraans, 
                 'count': data.count, 
                 'pages': pages
             });
@@ -36,37 +35,20 @@ exports.findAll = async function(req, res) {
 exports.create = async function(req, res) {    
 
     var {
-        nis, nama, no_sim, no_stnk, jenis
+        owner_id, no_sim, no_stnk, jenis
     } = req.body
     
-    await model.siswa.create({
-        nis,
-        nama,        
-    }).then((siswa) => {
+    await model.kendaraan.create({
+        owner_id,
+        no_sim,
+        no_stnk,
+        jenis
+    }).then((kendaraan) => {
         
-        model.kendaraan.create({
-            owner_id: nis,  
-            no_sim: no_sim,
-            no_stnk: no_stnk,
-            jenis: jenis
-        }).then((kendaraan) => {
-            res.status(200).json({
-                'success' : 1,
-                'messages': 'siswa & kendaraan berhasil ditambahkan',
-                'data': siswa,
-            })
-        }).catch((err) => {
-            res.status(400).json({
-                'success': 0,
-                'messages': 'kendaraan sudah ada',
-                'data': {},
-            })
-
-            model.siswa.destroy({
-                where: {
-                    nis: siswa.nis
-                }
-            })
+        res.status(200).json({
+            'success' : 1,
+            'messages': 'kendaraan berhasil ditambahkan',
+            'data': kendaraan,
         })
         
     }).catch(function(err) {
@@ -80,18 +62,17 @@ exports.create = async function(req, res) {
 
 exports.findById = async function(req, res) {
       
-    await model.siswa.findOne({
+    await model.kendaraan.findOne({
         where: {
-            nis: req.params.nis
+            id: req.params.id
         },
-        include: ['parkirs', 'kendaraans']
-    }).then((siswa) => {
+        include: ['siswa', 'guru']
+    }).then((kendaraan) => {
         res.json({
             'success': 1,
-            'messages': 'Siswa ditemukan',
-            'data': siswa,
+            'messages': 'kendaraan ditemukan',
+            'data': kendaraan,
         })
-
     }).catch(function(err) {
         res.status(400).json({
             'success': 0,
@@ -104,21 +85,27 @@ exports.findById = async function(req, res) {
 
 exports.update = async function(req, res) {
     const {   
-        nis,     
-        nama,                     
+        id,   
+        owner_id,  
+        no_sim,
+        no_stnk,
+        jenis,
     } = req.body;
     
-    await model.siswa.update({        
-        nama,            
+    await model.kendaraan.update({        
+        owner_id,
+        no_sim,
+        no_stnk,
+        jenis           
     }, {
         where: {
-            nis: nis
+            id: id
         }
-    }).then((siswa) => {
+    }).then((kendaraan) => {
         res.json({
             'success': 1,
-            'messages': 'Siswa berhasil diupdate',
-            'data': siswa,
+            'messages': 'kendaraan berhasil diupdate',
+            'data': kendaraan,
         })
     }).catch(function(err) {
         res.status(400).json({
@@ -126,20 +113,19 @@ exports.update = async function(req, res) {
             'messages': err.message,
             'data': {},
         })            
-    });  
-                    
+    });                  
 };
 
 exports.delete = async function(req, res) {
-    const nis = req.params.nis;
+    const id = req.params.id;
     
-    await model.siswa.destroy({ where: {
-        nis: nis
-    }}).then((siswa) => {
+    await model.kendaraan.destroy({ where: {
+        id: id
+    }}).then((kendaraan) => {
         res.json({
             'success': 1,
-            'messages': 'Siswa berhasil dihapus',
-            'data': siswa,
+            'messages': 'kendaraan berhasil dihapus',
+            'data': kendaraan,
         })        
     }).catch(function(err){
         res.status(400).json({
@@ -149,3 +135,5 @@ exports.delete = async function(req, res) {
         })
     });              
 };
+
+

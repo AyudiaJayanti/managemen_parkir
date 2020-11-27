@@ -10,3 +10,48 @@
 th .text-start{
     width: 48px !important;
 }
+.v-navigation-drawer, .v-toolbar{
+    top: 50px !important;
+    position: fixed !important;
+}
+.v-system-bar{
+    position: fixed !important;
+}
+.btn-add{
+    margin-top: 400px !important;
+    margin-left: 600px !important;
+    position: static;
+}
+.w-list-icon{
+    width: 50px;
+}
+.item-pos{
+    position: absolute !important;
+}
+.icon-set{
+    background-color: #E8E8E8;
+    border-radius: 5px;
+}
+.toolbar-display{
+    display: contents !important;
+}
+.con-height{
+    height: fit-content !important;
+}
+.lp{
+    top: 25% !important;
+    left: 25% !important;
+    position: relative !important;
+}
+.img-lp{
+    margin-top: 50px;
+    width: 200% !important;
+}
+.cam-style{
+    width:400px; top: 30%; left: 50%;
+}.col-lp{
+    max-width: 30% !important;
+}
+.row-width{
+    width: 100vw !important;
+}

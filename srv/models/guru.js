@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Guru.hasMany(models.parkir, {foreignKey: 'visitor_id', as: 'parkirs'})
+      Guru.hasMany(models.kendaraan, {foreignKey: 'owner_id', as: 'kendaraans'})
     }
   };
   Guru.init({

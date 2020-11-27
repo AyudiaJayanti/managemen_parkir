@@ -1,27 +1,108 @@
 <template>
   <v-app>
-    <v-main class="pr-5 pl-5 pt-5 pb-5 background-main">
+    <v-main class="px-5 py-5 mt-12 background-main">
       <h2>Dashboard</h2>
-      <div class="py-5 px-5 mt-3 white">
-        <v-row class="mt-2">
-          <v-col md="3">
-            <v-card
-            class="px-2 py-2">
-            <div>
+      <div class="py-5 px-5 mt-3 white mb-1">
+        <v-row class="mt-1">
+          <v-col cols="12" sm="12" md="3" lg="3">
+            <v-list>
+              <v-list-item-group>
+              <v-list-item-icon class="w-list-icon">
               <v-icon
-              class="px-2 py-2"
-              style="background-color: grey; border-radius: 5px"
-              x-large>
+                class="px-3 py-3 icon-set"
+                x-large
+                >
+                mdi-parking
+                </v-icon>
+              </v-list-item-icon>
+              <v-list-item-content class="d-inline-block mt-3 ml-1 pb-0 item-pos">
+                <v-list-item-subtitle>
+                  <h2 class="font-weight-medium">330</h2>
+                </v-list-item-subtitle>
+                <v-list-item-title>
+                  <h4 class="font-weight-regular pt-2">Parkir</h4>
+                </v-list-item-title>
+              </v-list-item-content>
+              </v-list-item-group>
+            </v-list>
+          </v-col>
+
+          <v-col cols="12" sm="12" md="3" lg="3">
+            <v-list>
+              <v-list-item-group>
+              <v-list-item-icon class="w-list-icon">
+              <v-icon
+                class="px-3 py-3 icon-set"
+                x-large
+                >
                 mdi-school-outline
-              </v-icon>
-              <span class="d-inline">
-              <h3>333</h3>
-              <h6>Siswa</h6>
-              </span>
-            </div>
-            </v-card>
+                </v-icon>
+              </v-list-item-icon>
+              <v-list-item-content class="d-inline-block mt-3 ml-1 pb-0 item-pos">
+                <v-list-item-subtitle>
+                  <h2 class="font-weight-medium">55555</h2>
+                </v-list-item-subtitle>
+                <v-list-item-title>
+                  <h4 class="font-weight-regular pt-2">Siswa</h4>
+                </v-list-item-title>
+              </v-list-item-content>
+              </v-list-item-group>
+            </v-list>
+          </v-col>
+          <v-col cols="12" sm="12" md="3" lg="3">
+            <v-list>
+              <v-list-item-group>
+              <v-list-item-icon class="w-list-icon">
+              <v-icon
+                class="px-3 py-3 icon-set"
+                x-large
+                >
+                fa fa-chalkboard-teacher
+                </v-icon>
+              </v-list-item-icon>
+              <v-list-item-content class="d-inline-block mt-3 ml-1 pb-0 item-pos">
+                <v-list-item-subtitle>
+                  <h2 class="font-weight-medium">201</h2>
+                </v-list-item-subtitle>
+                <v-list-item-title>
+                  <h4 class="font-weight-regular pt-2">Guru</h4>
+                </v-list-item-title>
+              </v-list-item-content>
+              </v-list-item-group>
+            </v-list>
+          </v-col>
+          <v-col cols="12" sm="12" md="3" lg="3">
+            <v-list>
+              <v-list-item-group>
+              <v-list-item-icon class="w-list-icon">
+              <v-icon
+                class="px-3 py-3 icon-set"
+                x-large
+                >
+                mdi-help-circle-outline
+                </v-icon>
+              </v-list-item-icon>
+              <v-list-item-content class="d-inline-block mt-3 ml-1 pb-0 item-pos">
+                <v-list-item-subtitle>
+                  <h2 class="font-weight-medium">324</h2>
+                </v-list-item-subtitle>
+                <v-list-item-title>
+                  <h4 class="font-weight-regular pt-2">Tamu</h4>
+                </v-list-item-title>
+              </v-list-item-content>
+              </v-list-item-group>
+            </v-list>
           </v-col>
         </v-row>
+          <parkir-chart></parkir-chart>
+          <v-row>
+            <v-col cols="12" md="8" lg="8">
+              <bar-chart></bar-chart>
+            </v-col>
+            <v-col cols="12" md="4" lg="4">
+              <pie-chart></pie-chart>
+            </v-col>
+          </v-row>
       </div>
 
       <router-view></router-view>
@@ -29,11 +110,12 @@
   </v-app>
 </template>
 <script>
+import BarChart from '../component/Chart/BarChart.vue';
+import ParkirChart from '../component/Chart/ParkirChart'
+import PieChart from '../component/Chart/PieChart.vue';
 export default {
+  components: { ParkirChart,PieChart, BarChart },
   name: "Dashboard",
-
-  components: {
-  },
   data: () => ({}),
 };
 </script>
