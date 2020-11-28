@@ -17,8 +17,8 @@
             v-on="on"
           >
             <v-avatar
-              color="brown"
-              size="48"
+              color="grey"
+              size="40"
             >
               <span class="white--text headline">{{ user.initials }}</span>
             </v-avatar>

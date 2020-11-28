@@ -1,29 +1,27 @@
 <template>
-  <v-app>
-    <v-row class="mx-0 my-0">
-      <v-col cols="6" class="mt-auto mb-auto">
-        <v-img src="../assets/tap card.svg" class="image"> </v-img>
-        <p>Ini kalau ada gif tap card gtu</p>
+  <v-container fluid class="con-height">
+    <v-row class="row-width">
+      <v-col cols="12" md="6" lg="6" class="col-lp">
+        <img src="../assets/lp-card.svg" class="img-lp">
       </v-col>
-      <v-col cols="6" md="6" class="mt-auto mb-auto">
-        <h1>SELAMAT DATANG DI SMK N 1 CIMAHI</h1>
-        <h2>SILAHKAN TAP KARTU ANDA</h2>
+      <v-col cols="12" md="6" lg="6">
+        
+        <h1 class="text-center lp">SCAN YOUR BARCODE</h1>
+        <!-- <masuk-cam class="cam-style"></masuk-cam> -->
       </v-col>
     </v-row>
-  </v-app>
+  </v-container>
 </template>
-<style type="text/css">
-* {
-  text-align: center;
-}
-.image {
-  height: 300px;
-  width: 500px;
-  margin: 20px 30px 20px;
-}
-</style>
 <script>
+// import MasukCam from '../components/MasukMotorCam';
 export default {
-  data: () => ({}),
+  components: { 
+    // MasukCam
+     },
+  data() {
+    return {
+      
+    };
+  },
 };
 </script>

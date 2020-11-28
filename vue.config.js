@@ -7,6 +7,9 @@ module.exports = {
     express: {
       shouldServeApp: true,
       serverDir: './srv'
+    },
+    electronBuilder: {
+      nodeIntegration: true
     }
   },
 
