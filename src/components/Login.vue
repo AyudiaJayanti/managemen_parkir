@@ -114,25 +114,6 @@ form h2 {
 .btn:hover {
   background-position: right;
 }
-@media screen and (max-width: 700px) {
-  .container{
-    text-align: center;
-    margin: auto;
-    padding: auto;
-    width: 100%;
-    height: 100%;
-  }
-  .login-container{
-    margin: auto;
-  }
-  form{
-    width: 300px;
-    padding: 20px;
-  }
-  .img{
-    display: none;
-  }
-}
 </style>
 
 <script>

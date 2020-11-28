@@ -1,5 +1,7 @@
-<template>
+<template style="-webkit-app-region: drag">
   <v-app>
+    <WindowBar />
+    <div>
     <Appbar
       v-if="
         CheckIfRoute('Dashboard') ||
@@ -10,17 +12,17 @@
         CheckIfRoute('User')
       "
     />
+    
     <Login v-else-if="CheckIfRoute('Login')" />
     <Home v-else/>
-    <Login/>    
-    
-    <v-main> </v-main>
+    </div>
   </v-app>
-  
 </template>
 
 <script>
-import Appbar from "./component/Appbar"
+import "./styles/style.css"
+import Appbar from "./component/Appbar/Appbar"
+import WindowBar from "./component/Appbar/WindowBar"
 import Login from "./components/Login"
 import Home from "./views/Home"
 
@@ -36,6 +38,7 @@ export default {
     Appbar,
     Login,
     Home,
+    WindowBar,
   },
 }
 </script>
