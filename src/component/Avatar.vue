@@ -34,9 +34,9 @@
               >
                 <span class="white--text headline">{{ user.initials }}</span>
               </v-avatar>
-              <h3>{{ user.fullName }}</h3>
+              <h3>{{ this.$session.get('name') }}</h3>
               <p class="caption mt-1">
-                {{ user.email }}
+                {{ this.$session.get('email') }}
               </p>
               <v-divider class="my-3"></v-divider>
               <v-btn
@@ -51,7 +51,7 @@
                 depressed
                 rounded
                 text
-                to="/"
+                @click="logout"
               >
                 Keluar
               </v-btn>
@@ -71,5 +71,11 @@
         email: 'john.doe@doe.com',
       },
     }),
+    methods: {
+      logout() {
+        this.$session.destroy()
+        this.$router.push('/')
+      }
+    },
   }
 </script>

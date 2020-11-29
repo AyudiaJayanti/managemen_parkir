@@ -34,7 +34,7 @@ exports.login = async function(req, res) {
         res.status(400).json({
             'success': 0,
             'data': null,
-            'error': 'email tidak ditemukan'
+            'message': 'Email Tidak Ditemukan',
         })
     });
 

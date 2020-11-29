@@ -11,10 +11,9 @@
           <h2>Welcome</h2>
           <div>
             <v-text-field
-              label="Username"
+              label="Email"
               prepend-icon="mdi-account"
-              v-model="username"
-              :rules="nameRules"
+              v-model="email"
               :counter="10"
               required
             ></v-text-field>
@@ -35,11 +34,25 @@
           <a class="a" href="#">Forgot Password?</a>
           <div class="text-center">
             <v-btn class="btn py-2" rounded dark
-            to="/Dashboard"> Login </v-btn>
+            @click="login"> Login </v-btn>
           </div>
         </v-form>
       </div>
     </div>
+    <v-snackbar v-model="snackbar">
+      {{ message }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="pink"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -117,13 +130,18 @@ form h2 {
 </style>
 
 <script>
+import AuthService from "../services/AuthService"
 export default {
+
   props: {
     source: String,
   },
   components: {
   },
   data: () => ({
+    snackbar: false,
+    message: ``,
+
       valid: false,
       username: '',
       nameRules: [
@@ -136,6 +154,38 @@ export default {
         v => !!v || 'password tidak boleh kosong',
         v => v.length >= 8 || 'Password harus lebih dari 8 karakter',
       ],
+      email: '',
     }),
+
+  methods: {
+    login() {
+      AuthService.login(this.email, this.password)
+        .then(response => {
+          if (response.status === 200) {
+            
+            this.$session.start()
+            this.$session.set("id", response.data.data.id)
+            this.$session.set("name", response.data.data.name)
+
+            console.log(response.data.message)
+            
+            this.$swal({
+              title: response.data.message,
+              text: 'Selamat datang',
+              icon: 'success',  
+              showConfirmButton: false,
+              timer: 1000      
+            })
+
+            this.$router.push('/dashboard')
+          }
+
+        })
+        .catch(err => {
+          this.snackbar = true
+          this.message = err.response.data.message
+        })
+    },
   }
+}
 </script>

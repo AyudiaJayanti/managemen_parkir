@@ -5,10 +5,15 @@ import Bars from 'vuebars'
 import store from './store'
 import vuetify from './plugins/vuetify';
 import VueSweetalert2 from 'vue-sweetalert2';
+import VueSession from 'vue-session'
+// import VueSessionStorage from 'vue-sessionstorage'
+
 
 Vue.config.productionTip = false
 Vue.use(VueSweetalert2)
 Vue.use(Bars)
+Vue.use(VueSession)
+// Vue.use(VueSessionStorage)
 
 new Vue({
   router,
