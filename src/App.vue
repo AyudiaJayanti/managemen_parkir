@@ -12,7 +12,6 @@
         CheckIfRoute('User')
       "
     />
-    
     <Login v-else-if="CheckIfRoute('Login')" />
     <Home v-else/>
     </div>
