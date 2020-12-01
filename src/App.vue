@@ -13,6 +13,7 @@
       "
     />
     <Login v-else-if="CheckIfRoute('Login')" />
+    <MasukTamu v-else-if="CheckIfRoute('MasukTamu')" />
     <Home v-else/>
     </div>
   </v-app>
@@ -24,6 +25,7 @@ import Appbar from "./component/Appbar/Appbar"
 import WindowBar from "./component/Appbar/WindowBar"
 import Login from "./components/Login"
 import Home from "./views/Home"
+import MasukTamu from "./components/MasukTamu"
 
 export default {
   name: "App",
@@ -37,6 +39,7 @@ export default {
     Appbar,
     Login,
     Home,
+    MasukTamu,
     WindowBar,
   },
 }

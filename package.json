@@ -38,7 +38,9 @@
     "vue-sessionstorage": "^1.0.0",
     "vue-sweetalert2": "^4.1.1",
     "vuebars": "^0.1.6",
+    "vuelidate": "^0.7.6",
     "vuetify": "^2.2.11",
+    "vuetify-confirm": "^2.0.6",
     "vuex": "^3.4.0"
   },
   "devDependencies": {

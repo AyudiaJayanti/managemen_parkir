@@ -14,7 +14,8 @@ exports.findAll = async function(req, res) {
             
         model.tamu.findAll({                
             limit: limit,
-            offset: offset,                            
+            offset: offset, 
+            include: ['parkirs']                           
         }).then((tamus) => {
             res.status(200).json({
                 'success': 1,
