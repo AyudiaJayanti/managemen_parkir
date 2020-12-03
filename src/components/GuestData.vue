@@ -34,7 +34,7 @@
               <v-spacer></v-spacer>
 
               <v-dialog v-model="dialog" max-width="600px" height="80vh">
-                <template v-slot:activator="{ on, attrs }">
+                <!-- <template v-slot:activator="{ on, attrs }">
                   <v-btn
                     color="primary"
                     dark
@@ -44,36 +44,39 @@
                   >
                     TAMBAH
                   </v-btn>
-                </template>
+                </template> -->
                 <v-card>
                   <v-card-title>
                     <span class="headline">{{ formTitle }}</span>
                   </v-card-title>
 
                   <v-card-text>
-                    <v-row style="height: 50vh">
+                    <v-row style="">
                       <v-col cols="12">
                         <v-text-field
                           v-model="editedItem.id"
                           type="phone"
                           label="ID"
                           required outlined
+                          disabled
+                          dense
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12">
                         <v-text-field
-                          v-model="editedItem.name"
+                          v-model="editedItem.nama"
                           label="Nama Tamu"
                           required outlined
+                          dense
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12">
                         <v-select
-                          :items="status"
-                          label="Status"
-                          v-model="editedItem.status"
+                          :items="instansi"
+                          label="Instansi"
+                          v-model="editedItem.instansi"
                           dense
-                          required outlined
+                          required 
                         >
                         </v-select>
                       </v-col>
@@ -114,18 +117,81 @@
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+            <v-icon small class="mr-2" @click="deleteItem(item)"> mdi-delete </v-icon>
+            <v-icon small @click="detailItem(item)"> mdi-information-outline </v-icon>
+          </template>
+          <template v-slot:[`item.status`]="{ item }">
+            <v-btn v-if="item.parkirs[0].keluar == null"
+              color="red"
+              dark
+              rounded
+              @click="guestExit(item.id)"
+            >Keluar</v-btn>
+            <v-btn v-else
+              disabled
+              depressed
+              rounded
+            >Selesai</v-btn>
           </template>
           <template v-slot:no-data>
             <v-btn color="primary" @click="initialize"> Reset </v-btn>
           </template>
         </v-data-table>
       </div>
+      <v-dialog v-model="dialogDetails" max-width="700px">
+        <v-card class="px-2">
+          <v-card-title>Detail Data</v-card-title>
+          <div>
+            <v-card-subtitle> Detail Parkir </v-card-subtitle>
+            <v-simple-table>
+              <template v-slot:default>
+                <thead class="orange">
+                  <tr>
+                    <th class="text-left white--text">Id Parkir</th>
+                    <th class="text-left">Jam Masuk</th>
+                    <th class="text-left">Jam Keluar</th>
+                    <th class="text-left">Jenis Kendaraan</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="item in editedItem.parkirs" :key="item.id">
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.masuk }}</td>
+                    <td>{{ item.keluar }}</td>
+                    <td>
+                      <p v-if="item.jenis == 2">Mobil</p>
+                      <p v-else>Motor</p>
+                    </td>
+                    <td>{{ item.jeniskendaraan }}</td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
+          </div>
+          <v-card-subtitle> </v-card-subtitle>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="blue darken-1"
+              class="mr-0"
+              text
+              @click="closeDetails()"
+            >
+              Cancel
+            </v-btn>
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
       <router-view></router-view>
   </v-app>
 </template>
 
 <script>
+import GuestService from "../services/GuestService";
+import ParkirService from "../services/ParkirService";
+
 export default {
   name: "Guest",
   components: {
@@ -145,35 +211,28 @@ export default {
       "November",
       "Desember",
     ],
-    status: ["Orangtua", "Perusahaan", "Sekolah"],
+    instansi: ["Orangtua", "Perusahaan", "Sekolah", "Umum"],
     search: "",
     dialog: false,
     dialogDelete: false,
-    headers: [
-      { text: "ID", align: "start", value: "id" },
-      {
-        text: "Nama",
-        sortable: false,
-        value: "name",
-      },
-      { text: "Status", value: "status" },
-      { text: "Tgl Registrasi", value: "tglRegis" },
+    dialogDetails: false,
 
+    headers: [
+      { text: "ID", align: "start", value: "id"},
+      { text: "Nama", value: "nama" },
+      { text: "Instansi", value: "instansi"},
       { text: "Actions", value: "actions", sortable: false },
+      { text: "Status", align: "center", value: "status", sortable: false },
     ],
     tamu: [],
     editedIndex: -1,
     editedItem: {
-      name: "",
-      nis: "",
-      noKen: "",
-      status: "",
+      nama: "",
+      instansi: "",
     },
     defaultItem: {
-      name: "",
-      nis: 0,
-      noKen: 0,
-      status: "",
+      nama: "",
+      instansi: 0,
     },
   }),
 
@@ -196,23 +255,25 @@ export default {
     this.initialize();
   },
 
+  mounted() {
+    GuestService.getAll(1)
+      .then((res) => {
+        this.tamu = res.data.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+
   methods: {
     initialize() {
-      this.tamu = [
-        {
-          name: "Candra",
-          id: "T-00001",
-          tglRegis: "12-05-2020",
-          status: "Orangtua",
-        },
-        {
-          name: "Candra",
-          id: "T-00002",
-          noKen: "D 2345 SU",
-          tglRegis: "12-05-2020",
-          status: "Perusahaan",
-        },
-      ];
+      GuestService.getAll(1)
+      .then((res) => {
+        this.tamu = res.data.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     },
 
     editItem(item) {
@@ -228,6 +289,26 @@ export default {
     },
 
     deleteItemConfirm() {
+      GuestService.delete(this.tamu[this.editedIndex].id)
+        .then(res => {
+          this.$swal({
+            title: 'Berhasil',
+            text: res.data.messages,
+            icon: 'success',  
+            showConfirmButton: false,
+            timer: 1000               
+          })
+        }).catch(err => {
+          this.$swal({
+            title: 'Gagal',
+            text: err.response.data.messages,
+            icon: 'error',                    
+            showConfirmButton: false,
+            timer: 1000
+          })
+        })
+
+
       this.tamu.splice(this.editedIndex, 1);
       this.closeDelete();
     },
@@ -250,12 +331,76 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
+        GuestService.edit(this.editedItem)
+          .then(res => {
+            this.$swal({
+              title: 'Berhasil',
+              text: res.data.messages,
+              icon: 'success',  
+              showConfirmButton: false,
+              timer: 1000               
+            })
+          }).catch(err => {
+            this.$swal({
+              title: 'Gagal',
+              text: err.response.data.messages,
+              icon: 'error',                    
+              showConfirmButton: false,
+              timer: 1000
+            })
+          })
+
         Object.assign(this.tamu[this.editedIndex], this.editedItem);
       } else {
         this.tamu.push(this.editedItem);
       }
       this.close();
     },
+
+    guestExit(id) {
+      this.$confirm("Yakin Tamu Ingin Keluar?").then(res => {
+        if(res) {
+          ParkirService.keluar(id)
+          .then(response => {
+            console.log(response.data.messages)                  
+            this.$swal({
+              title: 'Berhasil',
+              text: 'Berhasil Mengeluarkan Tamu',
+              icon: 'success',  
+              showConfirmButton: false,
+              timer: 1000               
+            })
+            GuestService.getAll(1)
+            .then((res) => {
+              this.tamu = res.data.data;
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+          })      
+          .catch(err => {
+            console.log(err.response.data.messages)                  
+            this.$swal({
+              title: 'Gagal',
+              text: 'Gagal Mengeluarkan Tamu',
+              icon: 'error',                    
+              showConfirmButton: false,
+              timer: 1000
+            })
+          })
+        }
+      })
+    },
+
+    detailItem(item) {
+      this.editedIndex = this.tamu.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogDetails = true;
+    },
+
+    closeDetails() {
+      this.dialogDetails = false
+    }
   },
 };
 </script>

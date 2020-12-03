@@ -5,6 +5,7 @@ import store from './store'
 import vuetify from './plugins/vuetify';
 import VueSweetalert2 from 'vue-sweetalert2';
 import VueSession from 'vue-session'
+import VuetifyConfirm from 'vuetify-confirm'
 import Bars from 'vuebars'
 import moment from 'moment'
 
@@ -15,6 +16,11 @@ Vue.use(Bars)
 Vue.config.productionTip = false
 Vue.use(VueSweetalert2)
 Vue.use(VueSession)
+Vue.use(VuetifyConfirm, {
+  vuetify,
+  buttonTrueText: 'Ya',
+  buttonFalseText: 'Tidak',
+})
 // Vue.use(VueSessionStorage)
 
 new Vue({

@@ -45,7 +45,7 @@ exports.findById = async function(req, res) {
         where: {
             id: req.params.id
         },
-        include: ['siswa', 'guru']
+        include: ['siswa', 'guru', 'tamu']
     }).then((parkir) => {
         res.json({
             'success': 1,

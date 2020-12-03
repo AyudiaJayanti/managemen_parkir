@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Parkir.belongsTo(models.siswa, {foreignKey: 'visitor_id', as: 'siswa'})
       Parkir.belongsTo(models.guru, {foreignKey: 'visitor_id', as: 'guru'})
+      Parkir.belongsTo(models.tamu, {foreignKey: 'visitor_id', as: 'tamu'})
     }
   };
   Parkir.init({
@@ -24,10 +25,10 @@ module.exports = (sequelize, DataTypes) => {
     // status: DataTypes.STRING,
     role: {
       type: Sequelize.ENUM,
-      values: ['1', '0']
+      values: ['1', '2', '3']
     },    
     masuk: DataTypes.DATE,
-    keluar: DataTypes.DATE,    
+    keluar: DataTypes.DATE,  
   }, {
     sequelize,
     modelName: 'parkir',

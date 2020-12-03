@@ -8,6 +8,7 @@ const siswaRoutes = require('./routes/siswa.routes')
 const guruRoutes = require('./routes/guru.routes')
 const loginRoutes = require('./routes/login.routes')
 const kendaraanRoutes = require('./routes/kendaraan.routes')
+const tamuRoutes = require('./routes/tamu.routes')
 
 const auth = require('./middleware/auth')
 
@@ -25,6 +26,7 @@ export default (app, http) => {
     app.use('/api/guru', auth, guruRoutes)
     app.use('/api/user', auth, userRoutes)
     app.use('/api/kendaraan', auth, kendaraanRoutes)
+    app.use('/api/tamu', auth, tamuRoutes)
 
     app.use('/api/auth', auth, loginRoutes)
     
