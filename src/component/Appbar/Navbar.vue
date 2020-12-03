@@ -3,7 +3,7 @@
     <v-icon class="clickable">mdi-cog-outline</v-icon>
     <v-spacer></v-spacer>
     <v-toolbar-title class="mr-0 pr-4">
-      <span class="hidden-sm-and-down">{{tanggal}}</span>
+      <span class="hidden-sm-and-down">{{moment().format('DD MMMM YYYY')}}</span>
     </v-toolbar-title>
     <Avatar />
   </v-app-bar>
@@ -20,7 +20,6 @@ export default {
   },
 
   data: () => ({
-    tanggal: new Date().toLocaleString()
   }),
 };
 </script>

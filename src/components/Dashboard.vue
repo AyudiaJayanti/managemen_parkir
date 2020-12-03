@@ -1,120 +1,87 @@
 <template>
-  <v-app>
-    <v-main class="px-5 py-5 mt-12 background-main">
-      <h2>Dashboard</h2>
-      <div class="py-5 px-5 mt-3 white mb-1">
-        <v-row class="mt-1">
-          <v-col cols="12" sm="12" md="3" lg="3">
-            <v-list>
-              <v-list-item-group>
-              <v-list-item-icon class="w-list-icon">
-              <v-icon
-                class="px-3 py-3 icon-set"
-                x-large
+  <v-app class="px-5 py-5 mt-12 background-main">
+      <h1>Dashboard</h1>
+        <div class="row" fluid>
+          <div class="col-md-8 col-sm-12 col-lg-8 px-0">
+            <div class="box-style-pad">
+            <div class="white box-style px-10 py-3">
+              <h2 class="welcome-text my-5">Welcome Back, {{ this.$session.get('name') }}</h2>
+              <img src="../assets/hallo.svg" class="img-size">
+            </div>
+            <h2 class="font-weight-medium mt-3">Parkir Data</h2>
+            <div class="row px-3">
+              <div class="col-md-3 col-sm-12 mr-md-2 white box-data">
+                <header class=" text--secondary">User</header>
+                <h1 class="font-weight-bold">3000</h1>
+              </div>
+              <div class="col-md-3 col-sm-12 mr-md-2 white box-data">
+                <header>Guru</header>
+                <h1 class="font-weight-bold">3000</h1>
+              </div>
+              <div class="col-md-3 col-sm-12 mr-md-2 white box-data">
+                <header>Siswa</header>
+                <h1 class="font-weight-bold">3000</h1>
+              </div> 
+              <div class="col-md-3 white box-data">
+                <header>Tamu</header>
+                <h1 class="font-weight-bold">3000</h1>
+              </div>
+            </div>
+            <div class="white line-style">
+              <parkir-chart style="height:100%"></parkir-chart>
+            </div>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-12 col-lg-4">
+            <div class="white box-style-scd">
+              <!-- Bar Chart -->
+              <div class="mt-3">
+                <h6 class="font-weight-medium">Jumlah Kendaraan</h6>
+                <h2>3000</h2>
+              <bars
+                :data="[5, 1, 7, 5, 6, 4, 10, 8, 6, 4, 10, 8 ]"
+                :gradient="['#ffbe88', '#ff93df']"
+                :barWidth="5.9"
+                :rounding="2.7"    
+                :growDuration="1"
+                style="height: 50%; width 30%"
                 >
-                mdi-parking
-                </v-icon>
-              </v-list-item-icon>
-              <v-list-item-content class="d-inline-block mt-3 ml-1 pb-0 item-pos">
-                <v-list-item-subtitle>
-                  <h2 class="font-weight-medium">330</h2>
-                </v-list-item-subtitle>
-                <v-list-item-title>
-                  <h4 class="font-weight-regular pt-2">Parkir</h4>
-                </v-list-item-title>
-              </v-list-item-content>
-              </v-list-item-group>
-            </v-list>
-          </v-col>
-
-          <v-col cols="12" sm="12" md="3" lg="3">
-            <v-list>
-              <v-list-item-group>
-              <v-list-item-icon class="w-list-icon">
-              <v-icon
-                class="px-3 py-3 icon-set"
-                x-large
-                >
-                mdi-school-outline
-                </v-icon>
-              </v-list-item-icon>
-              <v-list-item-content class="d-inline-block mt-3 ml-1 pb-0 item-pos">
-                <v-list-item-subtitle>
-                  <h2 class="font-weight-medium">55555</h2>
-                </v-list-item-subtitle>
-                <v-list-item-title>
-                  <h4 class="font-weight-regular pt-2">Siswa</h4>
-                </v-list-item-title>
-              </v-list-item-content>
-              </v-list-item-group>
-            </v-list>
-          </v-col>
-          <v-col cols="12" sm="12" md="3" lg="3">
-            <v-list>
-              <v-list-item-group>
-              <v-list-item-icon class="w-list-icon">
-              <v-icon
-                class="px-3 py-3 icon-set"
-                x-large
-                >
-                fa fa-chalkboard-teacher
-                </v-icon>
-              </v-list-item-icon>
-              <v-list-item-content class="d-inline-block mt-3 ml-1 pb-0 item-pos">
-                <v-list-item-subtitle>
-                  <h2 class="font-weight-medium">201</h2>
-                </v-list-item-subtitle>
-                <v-list-item-title>
-                  <h4 class="font-weight-regular pt-2">Guru</h4>
-                </v-list-item-title>
-              </v-list-item-content>
-              </v-list-item-group>
-            </v-list>
-          </v-col>
-          <v-col cols="12" sm="12" md="3" lg="3">
-            <v-list>
-              <v-list-item-group>
-              <v-list-item-icon class="w-list-icon">
-              <v-icon
-                class="px-3 py-3 icon-set"
-                x-large
-                >
-                mdi-help-circle-outline
-                </v-icon>
-              </v-list-item-icon>
-              <v-list-item-content class="d-inline-block mt-3 ml-1 pb-0 item-pos">
-                <v-list-item-subtitle>
-                  <h2 class="font-weight-medium">324</h2>
-                </v-list-item-subtitle>
-                <v-list-item-title>
-                  <h4 class="font-weight-regular pt-2">Tamu</h4>
-                </v-list-item-title>
-              </v-list-item-content>
-              </v-list-item-group>
-            </v-list>
-          </v-col>
-        </v-row>
-          <parkir-chart></parkir-chart>
-          <v-row>
-            <v-col cols="12" md="8" lg="8">
-              <bar-chart></bar-chart>
-            </v-col>
-            <v-col cols="12" md="4" lg="4">
-              <pie-chart></pie-chart>
-            </v-col>
-          </v-row>
-      </div>
-
+              </bars>
+            </div>
+            <!-- Donat Chart -->
+            <div class="mt-6">
+              <h3 class="mb-3">User Data</h3>
+              <doughnut-chart ></doughnut-chart>
+              <v-list>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-banner class="pb-2">
+                      <v-list-item-title class="font-weight-bold d-inline">Guru</v-list-item-title>
+                      <v-list-item-subtitle class="d-inline sub-item">15%</v-list-item-subtitle>
+                    </v-banner>
+                    <v-banner class="pb-2">
+                      <v-list-item-title class="font-weight-bold d-inline">Siswa</v-list-item-title>
+                      <v-list-item-subtitle class="d-inline sub-item">30%</v-list-item-subtitle>
+                    </v-banner>
+                    <v-banner class="pb-2">
+                      <v-list-item-title class="font-weight-bold d-inline">Tamu</v-list-item-title>
+                      <v-list-item-subtitle class="d-inline sub-item">65%</v-list-item-subtitle>
+                    </v-banner>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </div>
+            </div>
+          </div>
+        </div>
       <router-view></router-view>
-    </v-main>
   </v-app>
 </template>
 <script>
-import BarChart from '../component/Chart/BarChart.vue';
-import ParkirChart from '../component/Chart/ParkirChart'
-import PieChart from '../component/Chart/PieChart.vue';
+import DoughnutChart from '../component/Chart/DoughnutChart.vue';
+import ParkirChart from '../component/Chart/ParkirChart.vue';
 export default {
-  components: { ParkirChart,PieChart, BarChart },
+  components: {DoughnutChart, ParkirChart },
   name: "Dashboard",
   data: () => ({}),
 };

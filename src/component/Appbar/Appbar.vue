@@ -9,38 +9,37 @@
         dark
         app
       >
-        <v-list-item class="px-2 pt-1">
-          <v-list-item-avatar>
-          <img
-            src="./logo.png"
-            alt="admin"
-            style="width: 30px; height: auto"
-            class="mx-auto"
-          />
-        </v-list-item-avatar>
-          <v-list-item-title
-            class="text-left text-capitalize display-1 pl-4 pt-4"
-          >Parkir</v-list-item-title>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title class="title-size font-weight-medium ">
+            Parkir
+          </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-divider></v-divider>
+
+      <v-list
+        dense
+        nav
+        rounded
+        class="clickable mt-6"
+      >
+        <v-list-item
+          v-for="item in items"
+          :key="item.text"
+          :to="item.route"
+          link
+        >
+          <v-list-item-icon>
+            <v-icon size="20px">{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>{{ item.text }}</v-list-item-title>
+          </v-list-item-content>
         </v-list-item>
-        <v-list shaped class="clickable pt-5">
-          <template v-for="item in items">
-            <!-- v-slot:activator-->
-            <v-list-item
-              :key="item.text"
-              active-class="white--text"
-              route
-              :to="item.route"
-              class="mt-2 font-weight-normal"
-              style="font-size: 18px">
-              <v-list-item-action>
-                <v-icon>{{ item.icon }} </v-icon>
-              </v-list-item-action>
-              <v-list-item-title>
-                {{ item.text }}
-              </v-list-item-title>
-            </v-list-item>
-          </template>
-        </v-list>
+      </v-list>
       </v-navigation-drawer>
 
       <v-app-bar app color="#333" dark>
@@ -52,7 +51,7 @@
 
         <v-spacer></v-spacer>
         <v-toolbar-title class="mr-0 pr-4">
-          <span class="hidden-sm-and-down">{{tanggal}}</span>
+          <span class="hidden-sm-and-down">{{moment().format('DD MMMM YYYY')}}</span>
         </v-toolbar-title>
         <Avatar class="mr-6" />
       </v-app-bar>
@@ -100,8 +99,3 @@ export default {
 };
 </script>
 
-<style>
-.clickable {
-  -webkit-app-region: no-drag;
-}
-</style>

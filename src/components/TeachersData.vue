@@ -1,6 +1,5 @@
 <template>
-  <v-app>
-    <v-main class="px-5 py-5 mt-12 background-main">
+  <v-app class="px-5 py-5 mt-12 background-main"> 
       <h2>Data Guru</h2>
       <div class="py-5 px-5 mt-3 white">
         <v-row class="mt-2">
@@ -239,8 +238,7 @@
             </template>
           </v-data-table>
         </template>
-      </div>
-    </v-main>
+      </div> 
   </v-app>
 </template>
 

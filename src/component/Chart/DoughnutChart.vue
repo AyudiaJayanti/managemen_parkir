@@ -1,33 +1,32 @@
 <script>
-  import { Pie } from 'vue-chartjs'
+  import { Doughnut } from 'vue-chartjs'
 
   export default {
-    extends: Pie,
+    extends: Doughnut,
     data () {
       return {
         chartData: {
-          labels: ["Siswa", "Guru", "Tamu"],
           datasets: [{
               borderWidth: 1,
               borderColor: [
-              '#34626c',
+              '#a06cb8',
               '#839b97',
               '#cfd3ce)'          
               ],
               backgroundColor: [
-              '#34626c',
-              '#839b97',
-              '#cfd3ce)'                
+              '#6a197d',
+              '#ffa5b0',
+              '#efbbcf)'                
               ],
               data: [1000,	500,	1500]
-            }]
+            }],
+            labels: ["Siswa", "Guru", "Tamu"],
         },
         options: {
           legend: {
-            display: true
+            display: true,
           },
-          responsive: true,
-          maintainAspectRatio: false
+          maintainAspectRatio: false,
         }
       }
     },

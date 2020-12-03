@@ -1,12 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-// import TeachersData from '../components/TeachersData.vue'
-// import StudentsData from '../components/StudentsData.vue'
-// import Login from '../components/Login.vue'
-// import ParkingData from '../components/ParkingData.vue'
-// import GuestData from '../components/GuestData.vue'
-// import UserData from '../components/UserData.vue'
-// import Dashboard from '../components/Dashboard'
 import Home from '../views/Home'
 
 Vue.use(VueRouter)
@@ -99,8 +92,6 @@ const router = new VueRouter({
   mode: 'history',
   routes
 })
-
-// melindungi dari yg belum login
 router.beforeEach((to, from, next) => {
 
   if (to.matched.some(record => record.meta.auth)) {

@@ -1,6 +1,5 @@
 <template>
-  <v-app>
-    <v-main class="px-5 py-5 mt-12 background-main">
+  <v-app  class="px-5 py-5 mt-12 background-main">
       <h2>Data Parkir</h2>
       <div class="py-5 px-5 mt-3 white">
         <v-row class="mt-2">
@@ -81,7 +80,6 @@
         
       </div>
       <router-view></router-view>
-    </v-main>
   </v-app>
 </template>
 
@@ -96,7 +94,7 @@ export default {
     getColor (status) {
         if (status == "Selesai") return 'green'
         else if (status == "Aktif") return 'blue'
-  },
+    },
   },
 
   data: () => ({
