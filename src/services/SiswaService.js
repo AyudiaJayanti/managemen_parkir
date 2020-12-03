@@ -5,6 +5,4 @@ class SiswaService {
         return  http.get("/siswa/page/" + page)
     }
 }
-
-
 export default new SiswaService

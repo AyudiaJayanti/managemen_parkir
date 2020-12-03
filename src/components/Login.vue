@@ -5,8 +5,7 @@
         <img src="../assets/vehicle.svg" />
       </div>
       <div class="login-container">
-        <v-form
-        v-model="valid">
+        <form method="post" @submit="login">
           <img class="avatar" src="../assets/avatar.svg" />
           <h2>Welcome</h2>
           <div>
@@ -33,22 +32,16 @@
           </div>
           <a class="a" href="#">Forgot Password?</a>
           <div class="text-center">
-            <v-btn class="btn py-2" rounded dark
-            @click="login"> Login </v-btn>
+            <v-btn class="btn py-2" rounded dark @click="login" @keyup.enter="login"> Login </v-btn>
           </div>
-        </v-form>
+        </form>
       </div>
     </div>
     <v-snackbar v-model="snackbar">
       {{ message }}
 
       <template v-slot:action="{ attrs }">
-        <v-btn
-          color="pink"
-          text
-          v-bind="attrs"
-          @click="snackbar = false"
-        >
+        <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
           Close
         </v-btn>
       </template>
@@ -73,7 +66,6 @@ body {
   grid-gap: 7rem;
   padding: 0 2 rem;
 }
-
 .img img {
   width: 100%;
   margin-top: 230px;
@@ -127,65 +119,72 @@ form h2 {
 .btn:hover {
   background-position: right;
 }
+@media screen and (max-width: 1000px) {
+  .img {
+    display: none;
+  }
+  .container {
+    height: 100vh;
+    width: fit-content !important;
+    align-items: center;
+    display: flex;
+    text-align: center;
+  }
+  .form {
+    text-align: center;
+    align-items: center;
+  }
+}
 </style>
 
 <script>
-import AuthService from "../services/AuthService"
+import AuthService from "../services/AuthService";
 export default {
-
   props: {
     source: String,
   },
-  components: {
-  },
+  components: {},
   data: () => ({
     snackbar: false,
     message: ``,
-
-      valid: false,
-      username: '',
-      nameRules: [
-        v => !!v || 'username tidak boleh kosong',
-        v => v.length <= 10 || 'Name must be less than 10 characters',
-      ],
-      password: '',
-      show: false,
-      passRules: [
-        v => !!v || 'password tidak boleh kosong',
-        v => v.length >= 8 || 'Password harus lebih dari 8 karakter',
-      ],
-      email: '',
-    }),
-
+    valid: false,
+    username: "",
+    nameRules: [
+      (v) => !!v || "username tidak boleh kosong",
+    ],
+    password: "",
+    show: false,
+    passRules: [
+      (v) => !!v || "password tidak boleh kosong",
+      (v) => v.length >= 8 || "Password harus lebih dari 8 karakter",
+    ],
+    email: "",
+  }),
   methods: {
     login() {
       AuthService.login(this.email, this.password)
-        .then(response => {
+        .then((response) => {
           if (response.status === 200) {
-            
-            this.$session.start()
-            this.$session.set("id", response.data.data.id)
-            this.$session.set("name", response.data.data.name)
+            this.$session.start();
+            this.$session.set("id", response.data.data.id);
+            this.$session.set("name", response.data.data.name);
+            console.log(response.data.message);
 
-            console.log(response.data.message)
-            
             this.$swal({
               title: response.data.message,
-              text: 'Selamat datang',
-              icon: 'success',  
+              text: "Selamat datang",
+              icon: "success",
               showConfirmButton: false,
-              timer: 1000      
-            })
-
-            this.$router.push('/dashboard')
+              timer: 1000,
+            });
+            this.$router.push("/dashboard");
           }
-
         })
-        .catch(err => {
-          this.snackbar = true
-          this.message = err.response.data.message
-        })
+        .catch((err) => {
+          this.snackbar = true;
+          this.message = err.response.data.message;
+        });
     },
-  }
-}
+  },
+};
 </script>

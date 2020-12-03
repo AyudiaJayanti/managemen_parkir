@@ -1,7 +1,9 @@
-<template style="-webkit-app-region: drag">
+<template>
   <v-app>
     <WindowBar />
+    
     <div>
+      <transition name="fade">
     <Appbar
       v-if="
         CheckIfRoute('Dashboard') ||
@@ -13,8 +15,10 @@
       "
     />
     
+    
+    
     <Login v-else-if="CheckIfRoute('Login')" />
-    <Home v-else/>
+    <Home v-else/></transition>
     </div>
   </v-app>
 </template>
@@ -30,7 +34,6 @@ export default {
   name: "App",
   methods: {
     CheckIfRoute: function (routeName) {
-      console.log(this.$route.name === routeName);
       return this.$route.name === routeName;
     },  
   },
@@ -42,3 +45,11 @@ export default {
   },
 }
 </script>
+<style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active di bawah versi 2.1.8 */ {
+  opacity: 0;
+}
+</style>

@@ -24,8 +24,7 @@
             </v-avatar>
           </v-btn>
         </template>
-        <v-card
-        dark>
+        <v-card dark>
           <v-list-item-content class="justify-center">
             <div class="mx-auto text-center">
               <v-avatar

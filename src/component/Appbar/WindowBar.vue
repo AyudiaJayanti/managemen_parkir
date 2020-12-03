@@ -1,4 +1,4 @@
-<template  style="-webkit-app-region: drag">
+<template>
   <div>
     <v-system-bar
       window
@@ -7,13 +7,13 @@
       class="py-2 px-2"
       height="50px"
     >
-      <v-btn rounded color="grey" class="mx-2 btn-bar" height="30px" to="/Dashboard"> 
+      <v-btn rounded :active="$route.name == 'Dashboard'" class="mx-2 btn-bar" height="30px"  to="/Dashboard"> 
           Admin
       </v-btn>
-      <v-btn rounded color="grey" class="mx-2 btn-bar" height="30px" to="/Login">
+      <v-btn rounded :active="$route.name=='Login'" class="mx-2 btn-bar" height="30px" to="/Login">
           Masuk
       </v-btn>
-      <v-btn rounded color="grey" class="mx-2 btn-bar" height="30px" to="/">
+      <v-btn rounded class="mx-2 btn-bar" height="30px" to="/">
           Keluar
       </v-btn>
       <v-spacer></v-spacer>
@@ -41,14 +41,7 @@ const remote = require('electron').remote
             },
             maxWin(){
               this.w.isMaximized()?this.w.unmaximize():this.w.maximize()
-            }
+            },
         }
     }
-
 </script>
-<style scoped>
-.btn-bar{
-    width: 80px;
-    font-size: 0.7rem;
-}
-</style>
