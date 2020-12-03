@@ -75,7 +75,6 @@
                 <span>Download Bulan Agustus</span>
               </v-tooltip>
             </tbody>
-            
           </template>
         </v-simple-table>
         
