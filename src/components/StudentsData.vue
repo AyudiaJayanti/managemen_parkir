@@ -1,6 +1,5 @@
 <template>
-  <v-app>
-    <v-main class="px-5 py-5 mt-12 background-main">
+  <v-app class="px-5 py-5 mt-12 background-main"> 
       <h2>Data Siswa</h2>
       <div class="py-5 px-5 mt-3 white">
         <v-row class="mt-2">
@@ -227,10 +226,8 @@
             <v-btn color="primary" @click="initialize"> Reset </v-btn>
           </template>
         </v-data-table>
-      </div>
-
-      <router-view></router-view>
-    </v-main>
+      </div> 
+      <router-view></router-view> 
   </v-app>
 </template>
 
