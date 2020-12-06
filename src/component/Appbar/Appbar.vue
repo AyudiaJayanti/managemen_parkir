@@ -93,6 +93,7 @@ export default {
         route: "/Teacher",
       },
       { icon: "mdi-help-circle-outline", text: "Data Tamu", route: "/Guest" },
+      { icon: "mdi-car-outline", text: "Data Kendaraan", route: "/Vehicle" },
       { icon: "mdi-account-check-outline", text: "Data User", route: "/User" },
     ],
   }),

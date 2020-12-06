@@ -3,7 +3,7 @@ const router = express.Router()
 const siswaController = require('../controllers/siswa.controller');
 const { route } = require('./user.routes');
 
-router.get('/page/:page', siswaController.findAll);
+router.get('/', siswaController.findAll);
 
 router.post('/', siswaController.create);
 

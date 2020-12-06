@@ -5,7 +5,9 @@
         <v-card-title>Data Tamu</v-card-title>
         <v-card-subtitle>Isi Data Untuk Parkir</v-card-subtitle>
         <v-form
-          v-model="valid">
+          v-model="valid"
+          ref="form"
+          lazy-validation>
           <v-text-field
             label="Nama"
             prepend-icon="mdi-account"
@@ -74,6 +76,7 @@ export default {
         snackbar: false,
         nameRules: [
           v => !!v || 'Name is required',
+          v => (v && v.length > 2) || 'Name must be more than 2 characters'
         ],
         instansiRules: [
           v => !!v || 'Instansi is required',
@@ -86,32 +89,35 @@ export default {
     },
     methods: {
       submit() {
-        GuestService.add(this.tamu)
-          .then(res => {
-            this.$swal({
-              title: 'Berhasil',
-              text: res.data.message,
-              icon: 'success',  
-              showConfirmButton: false,
-              timer: 1000               
+        if (this.$refs.form.validate()) {
+          GuestService.add(this.tamu)
+            .then(res => {
+              this.$swal({
+                title: 'Berhasil',
+                text: res.data.message,
+                icon: 'success',  
+                showConfirmButton: false,
+                timer: 1000               
+              })
+              this.clear()
+              this.$refs.form.reset()
+              this.$refs.form.resetValidation()
             })
-            this.clear()
-          })
-          .catch(err => {
-            this.$swal({
-              title: 'Gagal',
-              text: err.res.data.message,
-              icon: 'error',  
-              showConfirmButton: false,
-              timer: 1000               
+            .catch(err => {
+              this.$swal({
+                title: 'Gagal',
+                text: err.res.data.message,
+                icon: 'error',  
+                showConfirmButton: false,
+                timer: 1000               
+              })
             })
-          })
+        }
       },
 
       clear () {
-        this.tamu.nama = ''
-        this.tamu.instansi = ''
-        this.tamu.jenis = ''
+        this.$refs.form.reset()
+        this.$refs.form.resetValidation()
       },
 
     },

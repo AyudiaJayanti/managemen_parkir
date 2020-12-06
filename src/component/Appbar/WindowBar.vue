@@ -12,13 +12,12 @@
         <v-icon class="mx-2">mdi-home</v-icon>
       </a>
       <v-btn rounded :active="$route.name == 'Dashboard'" class="mx-2 btn-bar" height="30px"  to="/Dashboard"> 
-
           Admin
       </v-btn>
-      <v-btn rounded :active="$route.name=='Login'" class="mx-2 btn-bar" height="30px" to="/Login">
+      <v-btn rounded :active="$route.name=='MasukMobil'" class="mx-2 btn-bar" height="30px" to="/MasukMobil">
           Masuk
       </v-btn>
-      <v-btn rounded class="mx-2 btn-bar" height="30px" to="/">
+      <v-btn rounded class="mx-2 btn-bar" height="30px" to="/Keluar">
           Keluar
       </v-btn>
       <v-btn rounded color="grey" class="mx-2 btn-bar" height="30px" to="/MasukTamu">

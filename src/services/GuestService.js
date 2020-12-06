@@ -1,8 +1,8 @@
 import http from "../http-common"
 
 class GuestService {
-    getAll(page) {
-        return http.get("/tamu/page/" + page)
+    getAll() {
+        return http.get("/tamu")
     }
     delete(id) {
         return http.delete("/tamu/" + id)
@@ -18,7 +18,7 @@ class GuestService {
         return http.post("/tamu", {
             "nama": tamu.nama,
             "instansi": tamu.instansi,
-            "jenis": tamu.jenis
+            "jenis": tamu.jenis == 'motor'? 1 : 2
         })
     }
 }

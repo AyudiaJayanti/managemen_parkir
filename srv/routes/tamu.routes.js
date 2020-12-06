@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const tamuController =   require('../controllers/tamu.controller');
 
-router.get('/page/:page', tamuController.findAll);
+router.get('/', tamuController.findAll);
 
 router.post('/', tamuController.create);
 

@@ -3,25 +3,16 @@ const model = require('../models/index');
 const kendaraan = require('../models/kendaraan');
 
 exports.findAll = async function(req, res) {
-    let limit = 10;   
-    let offset = 0;
 
     await model.tamu.findAndCountAll().then((data) => {
-
-        let page = req.params.page;
-        let pages = Math.ceil(data.count / limit);
-            offset = limit * (page - 1);
             
-        model.tamu.findAll({                
-            limit: limit,
-            offset: offset, 
+        model.tamu.findAll({                 
             include: ['parkirs']                           
         }).then((tamus) => {
             res.status(200).json({
                 'success': 1,
                 'data': tamus, 
                 'count': data.count, 
-                'pages': pages
             });
         });    
 
@@ -40,16 +31,18 @@ exports.create = async function(req, res) {
         nama, instansi, jenis
     } = req.body
     
+    
     await model.tamu.create({
         nama,
         instansi,        
     }).then((tamu) => {
-        
+
         model.parkir.create({
-            'visitor_id': tamu.id,
-            'role': jenis,
-            'masuk': new Date(),
-            'keluar': null
+            id: '',
+            visitor_id: tamu.id,            
+            role: jenis,
+            masuk: new Date(),
+            keluar: null
         }).then((parkir) => {
             res.status(200).json({
                 'success': 1,

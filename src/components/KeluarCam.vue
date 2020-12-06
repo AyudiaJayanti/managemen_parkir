@@ -1,8 +1,20 @@
-<template>
-    <StreamBarcodeReader
-      @decode="onDecode"
-      @loaded="onLoaded"
-    ></StreamBarcodeReader>
+<template >
+  <v-container fill-height fluid >
+    <v-row align="center" justify="center">
+      <v-card color="basil border" width="625" elevation="20" class="py-5" >
+        <v-card-title class="mb-5 mx-5">
+          <v-avatar color="primary" class="mr-5">
+            <v-icon dark >mdi-parking</v-icon>
+          </v-avatar>
+          <h2>Scan Your Barcode!</h2></v-card-title>
+        <StreamBarcodeReader 
+          @decode="onDecode"
+          @loaded="onLoaded"
+        ></StreamBarcodeReader>
+      </v-card>
+      
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -26,13 +38,13 @@ export default {
         this.isPaused = true
         ParkirService.keluar(id)
           .then(response => {
-            console.log(response.data.messages)                      
+            var nama = response.data.data.guru != null? response.data.data.guru.nama : response.data.data.siswa.nama
             this.$swal({
-              title: 'Have a nice day ' + '!',
+              title: 'Have a nice day ' + nama + '!',
               text: 'Silahkan Keluar',
               icon: 'success',  
               showConfirmButton: false,
-              timer: 1500               
+              timer: 1500
             })
           })      
           .catch(err => {

@@ -8,22 +8,15 @@
               filled
               rounded
               placeholder="Search"
+              v-model="search"
               prepend-inner-icon="mdi-magnify"
             ></v-text-field>
-          </v-col>
-          <v-col lg="3" md="3" sm="12">
-            <v-select
-              :items="items"
-              label="Bulan"
-              solo
-              rounded
-              background-color="#E5E5E5"
-            ></v-select>
           </v-col>
         </v-row>
         <v-data-table
           :headers="headers"
           :items="tamu"
+          :search="search"
           sort-by="id"
           class="elevation-1"
         >
@@ -51,7 +44,12 @@
                   </v-card-title>
 
                   <v-card-text>
-                    <v-row style="">
+                    <v-form
+                      v-model="valid"
+                      ref="form"
+                      lazy-validation
+                      style="width: 100% !important"
+                      >
                       <v-col cols="12">
                         <v-text-field
                           v-model="editedItem.id"
@@ -59,7 +57,6 @@
                           label="ID"
                           required outlined
                           disabled
-                          dense
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12">
@@ -67,20 +64,21 @@
                           v-model="editedItem.nama"
                           label="Nama Tamu"
                           required outlined
-                          dense
+                          :rules="nameRules"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12">
                         <v-select
                           :items="instansi"
                           label="Instansi"
+                          :rules="instansiRules"
                           v-model="editedItem.instansi"
-                          dense
+                          outlined
                           required 
                         >
                         </v-select>
                       </v-col>
-                    </v-row>
+                    </v-form>
                   </v-card-text>
 
                   <v-card-actions>
@@ -120,7 +118,7 @@
             <v-icon small class="mr-2" @click="deleteItem(item)"> mdi-delete </v-icon>
             <v-icon small @click="detailItem(item)"> mdi-information-outline </v-icon>
           </template>
-          <template v-slot:[`item.status`]="{ item }">
+          <template v-slot:[`item.createdAt`]="{ item }">
             <v-btn v-if="item.parkirs[0].keluar == null"
               color="red"
               dark
@@ -142,7 +140,7 @@
         <v-card class="px-2">
           <v-card-title>Detail Data</v-card-title>
           <div>
-            <v-card-subtitle> Detail Parkir </v-card-subtitle>
+            <v-card-subtitle>Detail Parkir</v-card-subtitle>
             <v-simple-table>
               <template v-slot:default>
                 <thead class="orange">
@@ -158,11 +156,8 @@
                     <td>{{ item.id }}</td>
                     <td>{{ item.masuk }}</td>
                     <td>{{ item.keluar }}</td>
-                    <td>
-                      <p v-if="item.jenis == 2">Mobil</p>
-                      <p v-else>Motor</p>
-                    </td>
-                    <td>{{ item.jeniskendaraan }}</td>
+                    <td v-if="item.role == 2" >Mobil</td>
+                    <td v-else >Motor</td>
                   </tr>
                 </tbody>
               </template>
@@ -219,11 +214,12 @@ export default {
 
     headers: [
       { text: "ID", align: "start", value: "id"},
-      { text: "Nama", value: "nama" },
-      { text: "Instansi", value: "instansi"},
+      { text: "Nama", value: "nama",sortable: true },
+      { text: "Instansi", value: "instansi", sortable: true},
       { text: "Actions", value: "actions", sortable: false },
-      { text: "Status", align: "center", value: "status", sortable: false },
+      { text: "Status", align: "center", value: "createdAt", filterable:false},
     ],
+
     tamu: [],
     editedIndex: -1,
     editedItem: {
@@ -234,6 +230,18 @@ export default {
       nama: "",
       instansi: 0,
     },
+
+    valid: false,
+
+    nameRules: [
+      v => !!v || 'Name is required',
+      v => (v && v.length > 2) || 'Name must be more than 2 characters'
+    ],
+
+    instansiRules: [
+      v => !!v || 'Instansi is required',
+    ],
+    
   }),
 
   computed: {
@@ -256,7 +264,7 @@ export default {
   },
 
   mounted() {
-    GuestService.getAll(1)
+    GuestService.getAll()
       .then((res) => {
         this.tamu = res.data.data;
       })
@@ -267,7 +275,7 @@ export default {
 
   methods: {
     initialize() {
-      GuestService.getAll(1)
+      GuestService.getAll()
       .then((res) => {
         this.tamu = res.data.data;
       })
@@ -319,6 +327,10 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
+      
+      this.$refs.form.reset()
+      this.$refs.form.resetValidation()
+      
     },
 
     closeDelete() {
@@ -330,31 +342,34 @@ export default {
     },
 
     save() {
-      if (this.editedIndex > -1) {
-        GuestService.edit(this.editedItem)
-          .then(res => {
-            this.$swal({
-              title: 'Berhasil',
-              text: res.data.messages,
-              icon: 'success',  
-              showConfirmButton: false,
-              timer: 1000               
+      if (this.$refs.form.validate()) {
+        if (this.editedIndex > -1) {
+          GuestService.edit(this.editedItem)
+            .then(res => {
+              this.$swal({
+                title: 'Berhasil',
+                text: res.data.messages,
+                icon: 'success',  
+                showConfirmButton: false,
+                timer: 1000               
+              })
+              this.close();
+            }).catch(err => {
+              this.$swal({
+                title: 'Gagal',
+                text: err.response.data.messages,
+                icon: 'error',                    
+                showConfirmButton: false,
+                timer: 1000
+              })
             })
-          }).catch(err => {
-            this.$swal({
-              title: 'Gagal',
-              text: err.response.data.messages,
-              icon: 'error',                    
-              showConfirmButton: false,
-              timer: 1000
-            })
-          })
-
-        Object.assign(this.tamu[this.editedIndex], this.editedItem);
-      } else {
-        this.tamu.push(this.editedItem);
+  
+          Object.assign(this.tamu[this.editedIndex], this.editedItem);
+        } else {
+          this.tamu.push(this.editedItem);
+        }        
       }
-      this.close();
+
     },
 
     guestExit(id) {
@@ -370,7 +385,7 @@ export default {
               showConfirmButton: false,
               timer: 1000               
             })
-            GuestService.getAll(1)
+            GuestService.getAll()
             .then((res) => {
               this.tamu = res.data.data;
             })

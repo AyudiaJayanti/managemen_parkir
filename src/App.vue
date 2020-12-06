@@ -11,11 +11,16 @@
         CheckIfRoute('Students') ||
         CheckIfRoute('Teacher') ||
         CheckIfRoute('Guest') ||
-        CheckIfRoute('User')
+        CheckIfRoute('User') ||
+        CheckIfRoute('Vehicle')  
       "
     />
+
     <Login v-else-if="CheckIfRoute('Login')" />
     <MasukTamu v-else-if="CheckIfRoute('MasukTamu')" />
+    <MasukMobil v-else-if="CheckIfRoute('MasukMobil')" />
+    <!-- <MasukMotor v-else-if="CheckIfRoute('MasukMotor')" /> -->
+    <Keluar v-else-if="CheckIfRoute('Keluar')" />
     <Home v-else/></transition>
     </div>
   </v-app>
@@ -28,6 +33,10 @@ import WindowBar from "./component/Appbar/WindowBar"
 import Login from "./components/Login"
 import Home from "./views/Home"
 import MasukTamu from "./components/MasukTamu"
+import Keluar from './components/KeluarCam.vue'
+import MasukMobil from './components/MasukMobilCam.vue'
+// import MasukMotor from './components/MasukMotorCam.vue'
+
 
 export default {
   name: "App",
@@ -41,9 +50,13 @@ export default {
     Login,
     Home,
     MasukTamu,
+    MasukMobil,
+    // MasukMotor,
+    Keluar,
     WindowBar,
   },
 }
+
 </script>
 <style scoped>
 .fade-enter-active, .fade-leave-active {

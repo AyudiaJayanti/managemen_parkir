@@ -77,11 +77,43 @@ const routes = [
       auth: true
     }
   },
+  {
+    path: '/Vehicle',
+    name: 'Vehicle',
+    component: () => import('../components/VehicleData'),
+    meta: {
+      auth: true
+    }
+  },
 
   {
     path: '/MasukTamu',
     name: 'MasukTamu',
     component: () => import('../components/MasukTamu'),
+    meta: {
+      auth: true
+    }
+  },
+  {
+    path: '/MasukMobil',
+    name: 'MasukMobil',
+    component: () => import('../components/MasukMobilCam'),
+    meta: {
+      auth: true
+    }
+  },
+  {
+    path: '/MasukMotor',
+    name: 'MasukMotor',
+    component: () => import('../components/MasukMotorCam'),
+    meta: {
+      auth: true
+    }
+  },
+  {
+    path: '/Keluar',
+    name: 'Keluar',
+    component: () => import('../components/KeluarCam'),
     meta: {
       auth: true
     }
