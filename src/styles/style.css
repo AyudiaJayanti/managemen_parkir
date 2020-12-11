@@ -133,6 +133,25 @@ canvas{
     border-radius: 5px;
 
 }
+.btn-min, .btn-close{
+    height: 100%;
+    width: 3%;
+}
+.btn-min:hover{
+    background-color: grey;
+}
+.btn-close:hover{
+    background-color: red;
+}
+.rounded-circle{
+    width: 36px !important;
+    min-width: auto !important;
+    padding: 0;
+    position: absolute;
+    margin: 10px 20px;
+    top: 0;
+    right: 0;
+}
 .slide-fade-enter-active {
     transition: all .3s ease;
   }

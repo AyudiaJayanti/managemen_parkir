@@ -19,7 +19,7 @@ const routes = [
     component: () => import('../components/Dashboard'),
     meta: {
       auth: true
-  }
+    }
   },
   {
     path: '/about',
@@ -37,7 +37,7 @@ const routes = [
       auth: true
     }
   },
-  {
+  { 
     path: '/Login',
     name: 'Login',
     component: () => import('../components/Login'),
@@ -75,35 +75,16 @@ const routes = [
     component: () => import('../components/UserData'),
     meta: {
       auth: true
-  }
-  },
-  {
-    path: '/',
-    alias: '/masuk_mobil',
-    name: 'masuk_mobil',
-    component: () => import('../components/MasukMobilCam'),
-    meta: {
-      guest: true
     }
   },
+
   {
-    path: '/',
-    alias: '/masuk_mobil',
-    name: 'masuk_mobil',
-    component: () => import('../components/MasukMobilCam')
-  },
-  {
-    path: '/masuk_motor',
-    name: 'masuk_motor',
-    component: () => import('../components/MasukMotorCam')
-  },
-  {
-    path: '/keluar',
-    name: 'keluar',
-    component: () => import('../components/KeluarCam'),
+    path: '/MasukTamu',
+    name: 'MasukTamu',
+    component: () => import('../components/MasukTamu'),
     meta: {
-      guest: true
-  }
+      auth: true
+    }
   },
 ]
 

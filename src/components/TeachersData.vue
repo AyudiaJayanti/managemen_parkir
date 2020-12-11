@@ -195,12 +195,14 @@
                     <v-card-actions>
                       <v-spacer></v-spacer>
                       <v-btn
-                        color="blue darken-1"
-                        class="mr-0"
-                        text
-                        @click="closeDetails"
+                      color="red"
+                      class="rounded-circle"
+                      outlined
+                      absolute
+                      text
+                      @click="closeDetails"
                       >
-                        Cancel
+                        <v-icon>mdi-close</v-icon>
                       </v-btn>
                       <v-spacer></v-spacer>
                     </v-card-actions>
@@ -239,6 +241,10 @@
           </v-data-table>
         </template>
       </div> 
+      <v-progress-circular
+      indeterminate
+      color="primary"
+    ></v-progress-circular>
   </v-app>
 </template>
 
@@ -431,3 +437,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.v-progress-circular {
+  margin: 1rem;
+}
+</style>

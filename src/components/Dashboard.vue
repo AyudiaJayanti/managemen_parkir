@@ -12,19 +12,19 @@
             <div class="row px-3">
               <div class="col-md-3 col-sm-12 mr-md-2 white box-data">
                 <header class=" text--secondary">User</header>
-                <h1 class="font-weight-bold">3000</h1>
+                <h1 class="font-weight-bold">10</h1>
               </div>
               <div class="col-md-3 col-sm-12 mr-md-2 white box-data">
                 <header>Guru</header>
-                <h1 class="font-weight-bold">3000</h1>
+                <h1 class="font-weight-bold">15</h1>
               </div>
               <div class="col-md-3 col-sm-12 mr-md-2 white box-data">
                 <header>Siswa</header>
-                <h1 class="font-weight-bold">3000</h1>
+                <h1 class="font-weight-bold">7</h1>
               </div> 
               <div class="col-md-3 white box-data">
                 <header>Tamu</header>
-                <h1 class="font-weight-bold">3000</h1>
+                <h1 class="font-weight-bold">12</h1>
               </div>
             </div>
             <div class="white line-style">
@@ -37,7 +37,7 @@
               <!-- Bar Chart -->
               <div class="mt-3">
                 <h6 class="font-weight-medium">Jumlah Kendaraan</h6>
-                <h2>3000</h2>
+                <h2>20</h2>
               <bars
                 :data="[5, 1, 7, 5, 6, 4, 10, 8, 6, 4, 10, 8 ]"
                 :gradient="['#ffbe88', '#ff93df']"

@@ -199,12 +199,15 @@
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
-                      color="blue darken-1"
-                      class="mr-0"
+                      color="red"
+                      class="rounded-circle"
+                      outlined
+                      absolute
                       text
                       @click="closeDetails"
-                      >Cancel</v-btn
-                    >
+                      >
+                      <v-icon>mdi-close</v-icon>
+                    </v-btn>
                     <v-spacer></v-spacer>
                   </v-card-actions>
                 </v-card>
@@ -307,7 +310,7 @@ export default {
         value: "nama",
       },
       { text: "Kelas", value: "kelas" },
-      { text: "Tgl Registrasi", value: "tglRegis" },
+      { text: "Tgl Registrasi", value: "createdAt" },
       { text: "Actions", value: "actions", sortable: false },
     ],
     siswa: [],

@@ -16,10 +16,13 @@
       <v-btn rounded class="mx-2 btn-bar" height="30px" to="/">
           Keluar
       </v-btn>
+      <v-btn rounded color="grey" class="mx-2 btn-bar" height="30px" to="/MasukTamu">
+          Tamu
+      </v-btn>
       <v-spacer></v-spacer>
-      <v-icon @click="minWindow">mdi-minus</v-icon>
-      <v-icon @click="maxWin">mdi-checkbox-blank-outline</v-icon>
-      <v-icon @click="close">mdi-close</v-icon>
+      <v-icon @click="minWindow" class="btn-min">mdi-minus</v-icon>
+      <v-icon @click="maxWin" class="btn-min">mdi-checkbox-blank-outline</v-icon>
+      <v-icon @click="close" class="btn-close">mdi-close</v-icon>
     </v-system-bar>
   </div>
 </template>
