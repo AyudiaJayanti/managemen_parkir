@@ -2,24 +2,16 @@
 const model = require('../models/index');
 
 exports.findAll = async function(req, res) {
-    let limit = 10;   
-    let offset = 0;
 
     await model.kendaraan.findAndCountAll().then((data) => {
-
-        let page = req.params.page;
-        let pages = Math.ceil(data.count / limit);
-            offset = limit * (page - 1);
             
         model.kendaraan.findAll({                
-            limit: limit,
-            offset: offset,                            
+            include: ['siswa', 'guru', 'tamu']
         }).then((kendaraans) => {
             res.status(200).json({
                 'success': 1,
                 'data': kendaraans, 
                 'count': data.count, 
-                'pages': pages
             });
         });    
 
@@ -66,7 +58,7 @@ exports.findById = async function(req, res) {
         where: {
             id: req.params.id
         },
-        include: ['siswa', 'guru']
+        include: ['siswa', 'guru', 'tamu']
     }).then((kendaraan) => {
         res.json({
             'success': 1,

@@ -6,24 +6,14 @@ import bcryptjs from 'bcryptjs'
 var salt = 10;
 
 exports.findAll = async function(req, res) {
-    let limit = 10;   
-    let offset = 0;
 
     await model.user.findAndCountAll().then((data) => {
-
-        let page = req.params.page;
-        let pages = Math.ceil(data.count / limit);
-            offset = limit * (page - 1);
             
-        model.user.findAll({                
-            limit: limit,
-            offset: offset,                            
-        }).then((users) => {
+        model.user.findAll().then((users) => {
             res.status(200).json({
                 'sucess': 1,
                 'data': users, 
                 'count': data.count, 
-                'pages': pages
             });
         });    
 
@@ -91,15 +81,15 @@ exports.findById = async function(req, res) {
 exports.update = async function(req, res) {
     var {   
         id,     
-        nama,    
-        username,
+        name,    
+        email,
         password                 
     } = req.body;
     
     await bcryptjs.hash(password, salt, function(err, hash){
         model.user.update({        
-            nama, 
-            username,
+            name, 
+            email,
             password: hash
         }, {
             where: {

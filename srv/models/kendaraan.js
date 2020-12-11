@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Kendaraan.belongsTo(models.siswa, {foreignKey: 'owner_id', as: 'siswa'})
       Kendaraan.belongsTo(models.guru, {foreignKey: 'owner_id', as: 'guru'})
+      Kendaraan.belongsTo(models.tamu, {foreignKey: 'owner_id', as: 'tamu'})
     }
   };
   Kendaraan.init({

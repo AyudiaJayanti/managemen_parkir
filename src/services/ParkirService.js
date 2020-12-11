@@ -12,6 +12,20 @@ class ParkirService {
             'visitor_id': id
         })
     }
+    getAll(){
+        return http.get("parkir/")
+    }
+
+    getAllData(){
+        return http.get("/parkir")
+    }
+
+    laporan(from, to){
+        return http.post("/parkir/laporan", {
+            'from' : from,
+            'to': to
+        })
+    }
 }
 
 export default new ParkirService

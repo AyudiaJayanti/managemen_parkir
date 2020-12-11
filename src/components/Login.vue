@@ -5,7 +5,10 @@
         <img src="../assets/vehicle.svg" />
       </div>
       <div class="login-container">
-        <form method="post" @submit="login">
+        <v-form
+          v-model="valid"
+          ref="form"
+          lazy-validation>
           <img class="avatar" src="../assets/avatar.svg" />
           <h2>Welcome</h2>
           <div>
@@ -13,8 +16,8 @@
               label="Email"
               prepend-icon="mdi-account"
               v-model="email"
-              :counter="10"
               required
+              :rules="passwordRules"
             ></v-text-field>
           </div>
           <div>
@@ -22,8 +25,7 @@
               label="Password"
               prepend-icon="mdi-lock"
               v-model="password"
-              :rules="passRules"
-              :counter="8"
+              :rules="passwordRules"
               :type="show ? 'text' : 'password'"
               :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
               @click:append="show = !show"
@@ -34,7 +36,7 @@
           <div class="text-center">
             <v-btn class="btn py-2" rounded dark @click="login" @keyup.enter="login"> Login </v-btn>
           </div>
-        </form>
+        </v-form>
       </div>
     </div>
     <v-snackbar v-model="snackbar">
@@ -154,36 +156,40 @@ export default {
     ],
     password: "",
     show: false,
-    passRules: [
-      (v) => !!v || "password tidak boleh kosong",
-      (v) => v.length >= 8 || "Password harus lebih dari 8 karakter",
+    emailRules: [
+      v => !!v || 'Email is required',
+    ],
+    passwordRules: [
+      v => !!v || 'Password is required',
     ],
     email: "",
   }),
   methods: {
     login() {
-      AuthService.login(this.email, this.password)
-        .then((response) => {
-          if (response.status === 200) {
-            this.$session.start();
-            this.$session.set("id", response.data.data.id);
-            this.$session.set("name", response.data.data.name);
-            console.log(response.data.message);
-
-            this.$swal({
-              title: response.data.message,
-              text: "Selamat datang",
-              icon: "success",
-              showConfirmButton: false,
-              timer: 1000,
-            });
-            this.$router.push("/dashboard");
-          }
-        })
-        .catch((err) => {
-          this.snackbar = true;
-          this.message = err.response.data.message;
-        });
+      if(this.$refs.form.validate()) {
+        AuthService.login(this.email, this.password)
+          .then((response) => {
+            if (response.status === 200) {
+              this.$session.start();
+              this.$session.set("id", response.data.data.id);
+              this.$session.set("name", response.data.data.name);
+              console.log(response.data.message);
+  
+              this.$swal({
+                title: response.data.message,
+                text: "Selamat datang",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1000,
+              });
+              this.$router.push("/dashboard");
+            }
+          })
+          .catch((err) => {
+            this.snackbar = true;
+            this.message = err.response.data.message;
+          });
+      }
     },
   },
 };

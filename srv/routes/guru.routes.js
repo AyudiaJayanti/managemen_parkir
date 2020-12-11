@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const guruController =   require('../controllers/guru.controller');
 
-router.get('/page/:page', guruController.findAll);
+router.get('/', guruController.findAll);
 
 router.post('/', guruController.create);
 

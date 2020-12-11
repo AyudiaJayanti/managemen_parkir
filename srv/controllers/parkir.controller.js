@@ -4,28 +4,19 @@ const { stat } = require('fs');
 const model = require('../models/index');
 
 exports.findAll = async function(req, res) {
-    let limit = 10;   
-    let offset = 0;
 
     await model.parkir.findAndCountAll().then((data) => {
-
-        let page = req.params.page;
-        let pages = Math.ceil(data.count / limit);
-
-        offset = limit * (page - 1);
             
-        model.parkir.findAll({
-            limit: limit,
-            offset: offset,                          
-            include: ['siswa', 'guru']
+        model.parkir.findAll({                        
+            include: ['siswa', 'guru', 'tamu']
         }).then((parkirs) => {
             res.status(200).json({
                 'success': 1,
                 'data': parkirs,             
+                'count': data.count, 
             });
         });    
-           
-
+        
     }).catch(function (err) {
         res.status(400).json({
             'success': 0,   
@@ -411,6 +402,53 @@ exports.exit = async function(req, res) {
             'success': 0,
             'messages': 'Anda Belum Parkir',
             'data': {}
+        })
+    })
+};
+
+exports.getAll = async function(req, res) {    
+    await model.parkir.findAll({                      
+        include: ['siswa', 'guru', 'tamu']
+    }).then((parkirs) => {
+        res.status(200).json({
+            'success': 1,
+            'data': parkirs,      
+        });
+    }).catch((err) => {
+        res.status(400).json({
+            'success': 0,
+            'data': null,      
+            'message': err.message, 
+        });
+    })
+};
+
+const { Op } = require('sequelize')
+
+exports.laporan = async function(req, res) {
+    
+    await model.parkir.findAndCountAll().then((data) => {
+
+        model.parkir.findAll({                     
+            where: {
+                masuk: {
+                    [Op.gte]: req.body.from,
+                    [Op.lt]: req.body.to
+                }
+            },
+            include: ['siswa', 'guru', 'tamu']
+        }).then((parkirs) => {
+            res.status(200).json({
+                'success': 1,
+                'data': parkirs,   
+                'count': data.count, 
+            });
+        }).catch((err) => {
+            res.status(400).json({
+                'success': 0,
+                'data': null,      
+                'message': err.message, 
+            });
         })
     })
 };
