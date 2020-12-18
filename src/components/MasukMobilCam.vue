@@ -25,6 +25,7 @@
           @decode="onDecode"
           @loaded="onLoaded"
         ></StreamBarcodeReader>
+        
       </v-card>
       
     </v-row>

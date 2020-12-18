@@ -21,6 +21,7 @@ Vue.use(VueSweetalert2)
 Vue.use(VueSession)
 Vue.use(vuetify)
 Vue.use(Vuelidate)
+
 Vue.use(jspdf)
 Vue.use(html2canvas)
 

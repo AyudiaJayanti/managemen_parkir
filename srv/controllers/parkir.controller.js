@@ -423,7 +423,7 @@ exports.getAll = async function(req, res) {
     })
 };
 
-const { Op } = require('sequelize')
+const { Op, DATE } = require('sequelize')
 
 exports.laporan = async function(req, res) {
     
@@ -432,8 +432,8 @@ exports.laporan = async function(req, res) {
         model.parkir.findAll({                     
             where: {
                 masuk: {
-                    [Op.gte]: req.body.from,
-                    [Op.lt]: req.body.to
+                    [Op.gt]: req.body.from,
+                    [Op.lte]: req.body.to
                 }
             },
             include: ['siswa', 'guru', 'tamu']
@@ -450,5 +450,66 @@ exports.laporan = async function(req, res) {
                 'message': err.message, 
             });
         })
+    })
+};
+
+import moment from 'moment'
+
+exports.parkingOfTheWeek = async function(req, res) {
+    
+    await model.parkir.findAndCountAll().then((data) => {
+
+        var parkir = []
+
+        // for (let i = 1; i <= 1; i++) {
+        //     model.parkir.findAll({                     
+        //         where: {
+        //             masuk: {
+        //                 [Op.gte]: moment().weekday(i) +,
+        //                 [Op.lt]: moment().set({hour:0,minute:0,second:0,millisecond:0}).weekday(i+1)
+        //             }
+        //         },
+        //         include: ['siswa', 'guru', 'tamu']
+        //     }).then((parkirs) => {
+        //         parkir.push(parkirs)
+        //         console.log(parkirs.length)
+        //     }).catch((err) => {
+        //         parkir.push(null)
+        //         console.log(err)
+        //     })
+        // }
+
+        res.status(200).json({
+            'success': 1,
+            'data': parkir,
+            'count': parkir.length,
+        });
+        
+        // model.parkir.findAll({                     
+        //     where: {
+        //         masuk: {
+        //             [Op.gte]: moment().weekday(1).format('L'),
+        //             [Op.lte]: moment().weekday(7).format('L')
+        //         }
+        //     },
+        //     include: ['siswa', 'guru', 'tamu']
+        // }).then((parkirs) => {
+        //     res.status(200).json({
+        //         'success': 1,
+        //         'data': parkirs,
+        //         'count': parkirs.length,
+        //     });
+        // }).catch((err) => {
+        //     res.status(400).json({
+        //         'success': 0,
+        //         'data': null,      
+        //         'message': err.message, 
+        //     });
+        // })
+
+        //rudiaditya2009@gmail.com
+
+    }).catch((err) => {
+        console.log(err)
     })
 };

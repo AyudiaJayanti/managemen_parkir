@@ -18,8 +18,12 @@
           :items="guru"
           :search="search"
           sort-by="createdAt"
+          sort-desc
           class="elevation-1"
         >
+          <template v-slot:[`item.createdAt`]="{ item }">
+            {{ item.createdAt.replace(/[TZ]/g, ' ').slice(0, 11) }}
+          </template>
           <template v-slot:top>
             <v-toolbar class="toolbar-display" flat>
               <v-spacer></v-spacer>

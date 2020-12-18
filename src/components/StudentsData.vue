@@ -18,6 +18,7 @@
           :items="siswa"
           :search="search"
           sort-by="createdAt"
+          sort-desc
           class="elevation-1"
         >
           <template v-slot:top>
@@ -209,6 +210,9 @@
               </v-dialog>
             </v-toolbar>
           </template>
+          <template v-slot:[`item.createdAt`]="{ item }">
+            {{ item.createdAt.replace(/[T]/g, ' ').slice(0, 11) }}
+          </template>
           <template v-slot:[`item.actions`]="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil 
@@ -313,6 +317,7 @@
 <script>
 import SiswaService from "../services/SiswaService";
 import KendaraanService from "../services/KendaraanService";
+
 export default {
   name: "Student",
 

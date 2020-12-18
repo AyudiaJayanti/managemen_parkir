@@ -22,7 +22,7 @@
             },
             {
               label: 'Guru',
-              data: [1621,	252,	515,	62,	2522,	3241,	1259,],
+              data: [1621,	252,	0,	0,	2522,	3241,	1259,],
               fill: false,
               borderColor: '#2564FF',
               backgroundColor: '#2554FF',
@@ -64,7 +64,7 @@
     },
     mounted () {
       this.renderChart(this.chartData, this.options)
-      ParkirService.getAllData()
+      ParkirService.parkingOfTheWeek()
         .then(res => {
           this.parkir = res.data.data
         })

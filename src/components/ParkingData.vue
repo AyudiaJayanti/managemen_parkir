@@ -61,13 +61,20 @@
           :items="parkir"
           :search="search"
           ref="content"
-          sort-by="nis"
+          sort-by="masuk"
+          sort-desc
           class="elevation-1"
         >
           <template v-slot:[`item.nama`]="{ item }">
             <td v-if="item.siswa != null">{{item.siswa.nama}}</td>
             <td v-else-if="item.guru != null">{{item.guru.nama}}</td>
             <td v-else-if="item.tamu != null">{{item.tamu.nama}}</td>
+          </template>
+          <template v-slot:[`item.masuk`]="{ item }">
+            {{ item.masuk != null? item.masuk.replace(/[T]/g, ' ').slice(0, 19) : item.masuk }}
+          </template>
+          <template v-slot:[`item.keluar`]="{ item }">
+            {{ item.keluar != null? item.keluar.replace(/[TZ]/g, ' ').slice(0, 19) : item.keluar}}
           </template>
           <template v-slot:[`item.visitor_id`]="{ item }">
             <v-btn v-if="item.tamu != null" color="cyan" dark rounded @click="detailsItem(item)">Tamu</v-btn>
@@ -153,12 +160,14 @@
 
 <script>
 import ParkirService from "../services/ParkirService";
-import jspdf from 'jspdf'
-import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
-// const monthNames = ["January", "February", "March", "April", "May", "June",
-//   "July", "August", "September", "October", "November", "December"
-// ];
+// import html2canvas from 'html2canvas'
+
+const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
 // const d = new Date();
 
 export default {
@@ -304,41 +313,84 @@ export default {
     },
 
     download_laporan() {
+
       if(this.$refs.form.validate()){
         if(typeof this.parkir !== 'undefined' && this.parkir.length > 0) {
-          
-          const doc = new jspdf('l', 'in');
-          // let el = this.$refs.content.$el;
 
-          // html2canvas(el).then((canvas) => {
-          //   const img = canvas.toDataURL("image/jpeg", 0.8);
-          //   doc.addImage(img,'JPEG',20,20);
-          //   doc.output('dataurlnewwindow');     //opens the data uri in new window
-          //   doc.save('data.pdf')
+          // var source =  this.$refs["content"];
+          let rows = [];
+          let columnHeader = ['ID', 'Jenis', 'Nama', 'Role', 'Tgl Masuk', 'Jam Masuk', 'Tgl Keluar', 'Jam Keluar', 'Status'];
+          let pdfName = 'LAPORAN_PARKIR_'+(this.items.indexOf(this.download.bulan) + 1)+'/'+this.download.tahun;
+          var tamu = 0
+          var guru = 0
+          var siswa = 0
 
-          // })
+          this.parkir.forEach(element => {
+            var temp = []
+            if(element.siswa != null) {
+              siswa++
+              temp = [
+                element.id,
+                element.role == 1? 'Motor' : 'Mobil',
+                element.siswa.nama,
+                'Siswa',
+                element.masuk != null? element.masuk.replace(/[T]/g, ' ').slice(0, 11) : element.masuk,
+                element.masuk != null? element.masuk.replace(/[T]/g, ' ').slice(10, 19) : element.masuk,
+                element.keluar != null? element.keluar.replace(/[T]/g, ' ').slice(0, 11) : element.keluar,
+                element.keluar != null? element.keluar.replace(/[T]/g, ' ').slice(10, 19) : element.keluar,
+                element.keluar == null? 'Aktif' : 'Selesai'
+              ];
+            } else if(element.guru != null) {
+              guru++
+              temp = [
+                element.id,
+                element.role == 1? 'Motor' : 'Mobil',
+                element.guru.nama,
+                'Guru',
+                element.masuk != null? element.masuk.replace(/[T]/g, ' ').slice(0, 11) : element.masuk,
+                element.masuk != null? element.masuk.replace(/[T]/g, ' ').slice(10, 19) : element.masuk,
+                element.keluar != null? element.keluar.replace(/[T]/g, ' ').slice(0, 11) : element.keluar,
+                element.keluar != null? element.keluar.replace(/[T]/g, ' ').slice(10, 19) : element.keluar,
+                element.keluar == null? 'Aktif' : 'Selesai'
+              ];
+            } else if(element.tamu != null) {
+              tamu++
+              temp = [
+                element.id,
+                element.tamu == 1? 'Motor' : 'Mobil',
+                element.tamu.nama,
+                'Tamu',
+                element.masuk != null? element.masuk.replace(/[T]/g, ' ').slice(0, 11) : element.masuk,
+                element.masuk != null? element.masuk.replace(/[T]/g, ' ').slice(10, 19) : element.masuk,
+                element.keluar != null? element.keluar.replace(/[T]/g, ' ').slice(0, 11) : element.keluar,
+                element.keluar != null? element.keluar.replace(/[T]/g, ' ').slice(10, 19) : element.keluar,
+                element.keluar == null? 'Aktif' : 'Selesai'
+              ];
+            }
+            rows.push(temp);
+          });
 
-          // const doc = new jsPDF();
+          var doc = new jsPDF();
+          doc.text(15, 20, 'LAPORAN PARKIR')
+          doc.setFontSize(9);
+          doc.text(15, 25, this.download.bulan.toUpperCase() + ' ' +this.download.tahun)
 
-          // var canvasElement = document.createElement('canvas')[0];
-          // html2canvas(this.$refs.content, { canvas: canvasElement })
-          //   .then(function (canvas) {
-          //     const img = canvas.toDataURL("image/jpeg", 0.8);
-          //     doc.addImage(img,'JPEG',20,20);
-          //     doc.save("sample.pdf");
-          //   });
-          var imgData = null
+          doc.autoTable(columnHeader, rows, { startY: 35 });
 
-          html2canvas(this.$refs.content.$el)
-          .then((canvas) => {
-            imgData = canvas.toDataURL('image/jpeg');
-            doc.addImage(imgData,'JPEG',20,20)
-            doc.save("sample.pdf")
-          })
-              
-          
+          doc.text(15, doc.autoTable.previous.finalY + 10, 'Jumlah : ' + this.parkir.length)
+          doc.text(15, doc.autoTable.previous.finalY + 15, 'Guru : ' + guru)
+          doc.text(15, doc.autoTable.previous.finalY + 20, 'Siswa : ' + siswa)
+          doc.text(15, doc.autoTable.previous.finalY + 25, 'Tamu : ' + tamu)
 
-          this.message = 'Downloading'
+          var date = new Date();
+          doc.text(140, doc.autoTable.previous.finalY + 10, 'Tanggal Download : ' +date.getDate()+' '+monthNames[date.getMonth()-1]+' '+date.getFullYear())
+
+          doc.text(140, doc.autoTable.previous.finalY + 20, 'ID Admin : ' + this.$session.get('id'))
+          doc.text(140, doc.autoTable.previous.finalY + 25, 'Nama Admin : ' + this.$session.get('name'))
+          doc.save(pdfName + '.pdf');
+
+
+          this.message = 'Downloaded'
           this.snackbar = true
         } else {
           this.message = 'Data Kosong'

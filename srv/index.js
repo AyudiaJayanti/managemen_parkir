@@ -27,7 +27,6 @@ export default (app, http) => {
     app.use('/api/user', auth, userRoutes)
     app.use('/api/kendaraan', auth, kendaraanRoutes)
     app.use('/api/tamu', auth, tamuRoutes)
-
     app.use('/api/auth', auth, loginRoutes)
     
 }

@@ -17,7 +17,8 @@
           :headers="headers"
           :items="tamu"
           :search="search"
-          sort-by="id"
+          sort-by="createdAt"
+          sort-desc
           class="elevation-1"
         >
           <template v-slot:top>
