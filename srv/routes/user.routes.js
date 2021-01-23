@@ -10,6 +10,8 @@ router.get('/:id', userController.findById);
 
 router.put('/', userController.update);
 
+router.put('/changePassword', userController.changePassword);
+
 router.delete('/:id', userController.delete);
 
 module.exports = router

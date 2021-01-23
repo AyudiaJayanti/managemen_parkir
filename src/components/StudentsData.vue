@@ -227,6 +227,8 @@
               <v-icon left small color="primary">mdi-information</v-icon>
               Detail
             </v-btn>
+          </template>
+          <template v-slot:[`item.action2`]="{ item }">
             <v-btn 
               rounded
               color="teal"
@@ -361,6 +363,7 @@ export default {
       },
       { text: "Tgl Registrasi", value: "createdAt", filterable: false},
       { text: "Actions", value: "actions", sortable: false, align: "center"},
+      { text: "", value: "action2", sortable: false},
     ],
     siswa: [],
     editedIndex: -1,

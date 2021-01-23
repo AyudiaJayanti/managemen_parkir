@@ -1,7 +1,8 @@
 'use strict';
 
-const { stat } = require('fs');
 const model = require('../models/index');
+
+var server = require('../index');
 
 exports.findAll = async function(req, res) {
 
@@ -27,8 +28,9 @@ exports.findAll = async function(req, res) {
 
 };
 
+
 exports.create = async function(req, res) {    
-              
+    server.io.sockets.emit('newChange')
 };
 
 exports.findById = async function(req, res) { 
@@ -140,6 +142,7 @@ exports.enter = async function(req, res) {
                             masuk: new Date(),
                             keluar: null
                         }).then((parkir) => {
+                            server.io.sockets.emit('newParkir', parkir)
                             res.status(200).json({
                                 'success' : 1,
                                 'messages': 'Parkir Berhasil',
@@ -203,6 +206,7 @@ exports.enter = async function(req, res) {
                             masuk: new Date(),
                             keluar: null
                         }).then((parkir) => {
+                            server.io.sockets.emit('newParkir', parkir)
                             res.status(200).json({
                                 'success' : 1,
                                 'messages': 'Parkir Berhasil',
@@ -266,6 +270,7 @@ exports.enter = async function(req, res) {
                             masuk: new Date(),
                             keluar: null
                         }).then((parkir) => {
+                            server.io.sockets.emit('newParkir', parkir)
                             res.status(200).json({
                                 'success' : 1,
                                 'messages': 'Parkir Berhasil',
@@ -329,6 +334,7 @@ exports.enter = async function(req, res) {
                             masuk: new Date(),
                             keluar: null
                         }).then((parkir) => {
+                            server.io.sockets.emit('newParkir', parkir)
                             res.status(200).json({
                                 'success' : 1,
                                 'messages': 'Parkir Berhasil',
@@ -382,12 +388,14 @@ exports.exit = async function(req, res) {
             where: { id: parkir.id },
             returning: true,
             plain: true
-        }).then((parkir) => {                           
+        }).then((parkir) => {   
+            server.io.sockets.emit('exitParkir', parkir)
             res.status(200).json({
                 'success': 1,
                 'messages': 'Berhasil Keluar',
                 'data': updated_parkir
             })
+            
         }).catch(function(err) {
             res.status(400).json({
                 'success': 0,
@@ -403,23 +411,6 @@ exports.exit = async function(req, res) {
             'messages': 'Anda Belum Parkir',
             'data': {}
         })
-    })
-};
-
-exports.getAll = async function(req, res) {    
-    await model.parkir.findAll({                      
-        include: ['siswa', 'guru', 'tamu']
-    }).then((parkirs) => {
-        res.status(200).json({
-            'success': 1,
-            'data': parkirs,      
-        });
-    }).catch((err) => {
-        res.status(400).json({
-            'success': 0,
-            'data': null,      
-            'message': err.message, 
-        });
     })
 };
 
@@ -456,60 +447,54 @@ exports.laporan = async function(req, res) {
 import moment from 'moment'
 
 exports.parkingOfTheWeek = async function(req, res) {
-    
-    await model.parkir.findAndCountAll().then((data) => {
 
-        var parkir = []
+    var parkir = {
+        siswa: [],
+        guru: [],
+        tamu: []
+    }
 
-        // for (let i = 1; i <= 1; i++) {
-        //     model.parkir.findAll({                     
-        //         where: {
-        //             masuk: {
-        //                 [Op.gte]: moment().weekday(i) +,
-        //                 [Op.lt]: moment().set({hour:0,minute:0,second:0,millisecond:0}).weekday(i+1)
-        //             }
-        //         },
-        //         include: ['siswa', 'guru', 'tamu']
-        //     }).then((parkirs) => {
-        //         parkir.push(parkirs)
-        //         console.log(parkirs.length)
-        //     }).catch((err) => {
-        //         parkir.push(null)
-        //         console.log(err)
-        //     })
-        // }
+    var siswa=0, guru=0, tamu=0
 
-        res.status(200).json({
-            'success': 1,
-            'data': parkir,
-            'count': parkir.length,
-        });
+    for (let i = 1; i <= 7; i++) {
         
-        // model.parkir.findAll({                     
-        //     where: {
-        //         masuk: {
-        //             [Op.gte]: moment().weekday(1).format('L'),
-        //             [Op.lte]: moment().weekday(7).format('L')
-        //         }
-        //     },
-        //     include: ['siswa', 'guru', 'tamu']
-        // }).then((parkirs) => {
-        //     res.status(200).json({
-        //         'success': 1,
-        //         'data': parkirs,
-        //         'count': parkirs.length,
-        //     });
-        // }).catch((err) => {
-        //     res.status(400).json({
-        //         'success': 0,
-        //         'data': null,      
-        //         'message': err.message, 
-        //     });
-        // })
+        siswa=0 
+        guru=0 
+        tamu=0
 
-        //rudiaditya2009@gmail.com
+        await model.parkir.findAll({
+            include: ['siswa', 'guru', 'tamu'],
+            where: {
+                masuk: {
+                    [Op.gte]: moment().startOf('isoWeek').weekday(i).hour(6).minute(59),
+                    [Op.lte]: moment().startOf('isoWeek').weekday(i+1).hour(6).minute(59),
+                }, 
+            },
+        }).then((parkirs) => {
+            parkirs.forEach(element => {
+                if(element.siswa != null) {
+                    siswa++
+                } else if(element.guru != null) {
+                    guru++
+                } else {
+                    tamu++
+                }
+            });
 
-    }).catch((err) => {
-        console.log(err)
-    })
+            parkir.guru.push(guru)
+            parkir.siswa.push(siswa)
+            parkir.tamu.push(tamu)
+        }).catch(function(err) {
+            res.status(400).json({
+                'success': 0,
+                'messages': err.message,
+                'data': {},
+            })
+        });
+    }
+
+    // rudiaditya2009@gmail.com
+
+    res.json(parkir)
+    
 };

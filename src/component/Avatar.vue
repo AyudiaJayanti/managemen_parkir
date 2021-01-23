@@ -72,8 +72,12 @@
     }),
     methods: {
       logout() {
-        this.$session.destroy()
-        this.$router.push('/')
+        this.$confirm("Yakin Ingin Logout?").then(res => {
+          if(res) {
+            this.$session.destroy()
+            this.$router.push('/')
+          }
+        })
       }
     },
   }

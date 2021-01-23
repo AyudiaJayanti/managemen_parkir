@@ -39,6 +39,32 @@
             <v-list-item-title>{{ item.text }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-divider class="mt-2"></v-divider>
+
+        <v-list-item 
+          to="Profile"
+          link
+          class="mt-2">
+          <v-list-item-icon>
+            <v-icon size="20px">mdi-account</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>Profil</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item 
+          @click="logout()"
+          link>
+          <v-list-item-icon>
+            <v-icon size="20px">mdi-logout</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>Keluar</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
       </v-navigation-drawer>
 
@@ -97,6 +123,16 @@ export default {
       { icon: "mdi-account-check-outline", text: "Data User", route: "/User" },
     ],
   }),
+  methods: {
+    logout() {
+      this.$confirm("Yakin Ingin Keluar?").then(res => {
+        if(res) {
+          this.$session.destroy()
+          this.$router.push('/')
+        }
+      })
+    }
+  },
 };
 </script>
 

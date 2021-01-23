@@ -16,7 +16,7 @@
           <v-col lg="6" md="6" sm="12">
             <v-form
               style="width: 100% !important"
-              ref="form"
+              ref="form1"
               lazy-validation
               v-model="valid"
               >
@@ -26,12 +26,10 @@
                     :items="items"
                     :rules="bulanRules"
                     label="Bulan"
-                    solo
                     v-model="download.bulan"
+                    @change="$refs.form1.validate()"
                     rounded
-                    placeholder="Bulan" 
-                    @input="filterData(download.bulan, download.tahun)"
-                    background-color="#E5E5E5"
+                    filled
                   ></v-select>
                 </v-col>
                 <v-col lg="5" md="5" sm="12" class="ml-md-4 my-0 pa-0">
@@ -39,29 +37,133 @@
                     v-model="download.tahun"
                     :items="tahun"
                     :rules="tahunRules"
-                    placeholder="Tahun" 
+                    @change="$refs.form1.validate()"
                     label="Tahun"
-                    solo
-                    @change="filterData(download.bulan, download.tahun)"
                     rounded
-                    background-color="#E5E5E5"
+                    filled
                   ></v-select>
                 </v-col>
               </v-row>
             </v-form>
           </v-col>
           <v-col lg="1" md="1" sm="12">
-            <v-btn rounded small fab color="primary" dark @click="initialize()">
+            <v-btn rounded small depressed fab color="cyan" dark @click="initialize()">
               <v-icon>mdi-reload</v-icon>
             </v-btn>
           </v-col>
         </v-row>
+        <div class="text-right  mb-3">
+          <v-menu 
+            offset-y 
+            left
+            dark
+            :close-on-content-click="false"
+            v-model="menuDownload">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                v-on="on"
+                dark
+                color="primary"
+                depressed>
+                <v-icon left small>mdi-download</v-icon>
+                Download Laporan
+              </v-btn>
+            </template>
+            <v-card >
+              <v-list >
+                <v-list-item >
+                  <v-list-item-avatar color="primary">
+                    <v-icon>mdi-file-pdf</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>Download Laporan</v-list-item-title>
+                    <v-list-item-subtitle>Pilih Bulan, Tahun, dan Pekan</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+
+              <v-divider></v-divider>
+
+              <v-list>
+                <v-list-item>
+                  <v-form
+                    ref="form"
+                  >
+                    <v-select 
+                      :items="tahun"
+                      placeholder="Tahun"
+                      label="Tahun"
+                      v-model="laporan.tahun"
+                      :rules="tahunRules">
+                    </v-select>
+                    <v-select 
+                      :items="items"
+                      placeholder="Bulan"
+                      label="Bulan"
+                      v-model="laporan.bulan"
+                      :rules="bulanRules">
+                    </v-select>
+                    <v-radio-group
+                      v-model="laporan.pekan"
+                      row
+                      label="Pekan"
+                      :rules="pekanRules">
+                      <v-radio
+                        label="All"
+                        value="All"
+                        color="primary"
+                      ></v-radio>
+                      <v-radio
+                        label="1"
+                        value="1"
+                        color="primary"
+                      ></v-radio>
+                      <v-radio
+                        label="2"
+                        value="2"
+                        color="primary"
+                      ></v-radio>
+                      <v-radio
+                        label="3"
+                        value="3"
+                        color="primary"
+                      ></v-radio>
+                      <v-radio
+                        label="4"
+                        value="4"
+                        color="primary"
+                      ></v-radio>
+                    </v-radio-group>
+
+                  </v-form>
+                </v-list-item>
+              </v-list>
+
+              <v-card-actions>
+                <v-btn
+                  text
+                  @click="menuDownload = false"
+                >
+                  Cancel
+                </v-btn>
+                <v-btn
+                  color="primary"
+                  text
+                  @click="download_laporan(laporan.tahun, laporan.bulan, laporan.pekan)"
+                >
+                  Download
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-menu>
+        </div>
         <v-data-table
           :headers="headers"
           :items="parkir"
           :search="search"
           ref="content"
-          sort-by="masuk"
+          sort-by="createdAt"
           sort-desc
           class="elevation-1"
         >
@@ -81,7 +183,7 @@
             <v-btn v-if="item.guru != null" color="teal" dark rounded @click="detailsItem(item)">Guru</v-btn>
             <v-btn v-if="item.siswa != null" color="purple" dark rounded @click="detailsItem(item)">Siswa</v-btn>
           </template>
-          <template v-slot:[`item.status`]="{ item }">
+          <template v-slot:[`item.createdAt`]="{ item }">
             <v-chip v-if="item.keluar == null" dark color="red">Aktif</v-chip>
             <v-chip v-else dark outlined color="red">Selesai</v-chip>
           </template>
@@ -120,68 +222,138 @@
               color="blue darken-1"
               text
               @click="closeDetails"
-              >Close</v-btn
-            >
+              >Close</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <v-tooltip top>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            v-bind="attrs"
-            v-on="on"
-            color="orange"
-            right
-            fixed
-            fab
-            dark
-            bottom
-            class="ma-7"
-            @click="download_laporan()"
-          >
-            <v-icon> mdi-arrow-collapse-down </v-icon>
+      <v-snackbar v-model="snackbar">
+        {{ message }}
+        <template v-slot:action="{ attrs }">
+          <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
+            Close
           </v-btn>
         </template>
-        <span v-if="typeof this.parkir !== 'undefined' && this.parkir.length > 0">{{ (download.bulan != '' && download.tahun != '') ? 'Download ' + download.bulan + ' ' + download.tahun : 'Pilih Bulan dan Tahun'}}</span>
-        <span v-else>Data Kosong</span> 
-      </v-tooltip>
-      <v-snackbar v-model="snackbar">
-      {{ message }}
+      </v-snackbar>
+      <!-- <template>
+        <div >
+          <v-menu offset-y rounded="l" offset-overflow>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                v-on="on"
+                color="orange"
+                dark
+                fab
+                class="mr-3 mb-12"
+                bottom
+                right
+                fixed>
+                <v-icon> mdi-arrow-collapse-down </v-icon>
+              </v-btn>
+            </template>
+            <v-card >
+              <v-list >
+                <v-list-item >
+                  <v-list-item-avatar>
+                    <img
+                      src="https://cdn.vuetifyjs.com/images/john.jpg"
+                      alt="John"
+                    >
+                  </v-list-item-avatar>
 
-      <template v-slot:action="{ attrs }">
-        <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
-          Close
-        </v-btn>
-      </template>
-    </v-snackbar>
-      <router-view></router-view> 
+                  <v-list-item-content>
+                    <v-list-item-title>John Leider</v-list-item-title>
+                    <v-list-item-subtitle>Founder of Vuetify</v-list-item-subtitle>
+                  </v-list-item-content>
+
+                  <v-list-item-action>
+                    <v-btn
+                      :class="fav ? 'red--text' : ''"
+                      icon
+                      @click="fav = !fav"
+                    >
+                      <v-icon>mdi-heart</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
+                </v-list-item>
+              </v-list>
+
+              <v-divider></v-divider>
+
+              <v-list>
+                <v-list-item>
+                  <v-list-item-action>
+                    <v-switch
+                      v-model="message"
+                      color="purple"
+                    ></v-switch>
+                  </v-list-item-action>
+                  <v-list-item-title>Enable messages</v-list-item-title>
+                </v-list-item>
+
+                <v-list-item>
+                  <v-list-item-action>
+                    <v-switch
+                      v-model="hints"
+                      color="purple"
+                    ></v-switch>
+                  </v-list-item-action>
+                  <v-list-item-title>Enable hints</v-list-item-title>
+                </v-list-item>
+              </v-list>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+
+                <v-btn
+                  text
+                  @click="menu = false"
+                >
+                  Cancel
+                </v-btn>
+                <v-btn
+                  color="primary"
+                  text
+                  @click="menu = false"
+                >
+                  Save
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-menu>
+        </div>
+      </template> -->
+    <router-view></router-view> 
   </v-app>
 </template>
 
 <script>
 import ParkirService from "../services/ParkirService";
 import jsPDF from 'jspdf';
+import moment from 'moment';
 import 'jspdf-autotable';
-
-// import html2canvas from 'html2canvas'
 
 const monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
-// const d = new Date();
+const d = new Date();
 
 export default {
-  name: "Student",
+  name: "ParkingData",
   components: {},
 
   data: () => ({
     snackbar: false,
+    menuDownload: false,
     message: '',
     bulanRules: [
       v => !!v || 'Bulan is required',
     ],
     tahunRules: [
       v => !!v || 'Tahun is required',
+    ],
+    pekanRules: [
+      v => !!v || 'Pekan is required',
     ],
     title: '',
     valid: false,
@@ -210,31 +382,57 @@ export default {
       bulan: 0,
       tahun: 0,
     },
+
+    laporan: {
+      bulan: monthNames[d.getMonth()],
+      tahun: d.getFullYear(),
+      pekan: 'All',
+    },
       
     IdentitasKendaraan: [
       
     ],
 
-    search: "",
+    start_date: null,
+    end_date: null,
+
+    search: '',
+
     dialogDetails: false,
-    headers: [
-      { text: "Id", align: "start", value: "id" },
-      {
-        text: "Nama",
-        sortable: true,
-        value: "nama",
-        filterable: false
-      },
-      { text: "Detail", value: "visitor_id", align:"center", filterable: false},
-      { text: "Jenis", align: "center", value: "role", filterable: false},
-      { text: "Tanggal Masuk", value: "masuk", sortable: true, filterable: false },
-      { text: "Tanggal Keluar", value: "keluar", sortable: true, filterable: false },
-      { text: "Status", align: "center", value: "status" , filterable: false},
-    ],
+    dialogLaporan: false,
     parkir: [],
+    laporanParkir: [],
   }),
 
   computed: {
+    headers () {
+      return [
+        { text: "Id", align: "start", value: "id" },
+        {
+          text: "Nama",
+          sortable: true,
+          value: "nama",
+          filterable: false
+        },
+        { text: "Detail", value: "visitor_id", align:"center", filterable: false},
+        { text: "Jenis", align: "center", value: "role", filterable: false},
+        { 
+          text: "Tanggal Masuk", 
+          value: "masuk", 
+          sortable: true, 
+          filter: value => {
+            if (!this.download.bulan && !this.download.tahun) return true
+
+            var from = new Date(this.download.tahun, this.items.indexOf(this.download.bulan), 1).setHours(7)
+            var to = new Date(this.download.tahun, this.items.indexOf(this.download.bulan) + 1, 1).setHours(7)
+
+            return new Date(value) >= from && new Date(value) <= to
+          } 
+        },
+        { text: "Tanggal Keluar", value: "keluar", sortable: true, filterable: false },
+        { text: "Status", align: "center", value: "createdAt" , sortable: false, filterable: false},
+      ]
+    },
     formTitle() {
       return this.editedIndex === -1 ? "Tambah parkir" : "Edit Data parkir";
     },
@@ -247,6 +445,7 @@ export default {
   },
 
   mounted() {
+    
     ParkirService.getAll()
       .then((res) => {
         this.parkir = res.data.data;
@@ -254,6 +453,28 @@ export default {
       .catch((err) => {
         console.log(err);
       });
+
+  },
+
+  sockets: {
+    newParkir: function () {
+      ParkirService.getAll()
+        .then((res) => {
+          this.parkir = res.data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    exitParkir: function () {
+      ParkirService.getAll()
+        .then((res) => {
+          this.parkir = res.data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
 
   methods: {
@@ -262,15 +483,7 @@ export default {
       this.download.tahun = 0
       this.search = ''
 
-      this.$refs.form.resetValidation()
-
-      ParkirService.getAll()
-        .then((res) => {
-          this.parkir = res.data.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.$refs.form1.resetValidation()
     },
     getColor(status) {
       if (status == "Selesai") return "green";
@@ -297,10 +510,11 @@ export default {
 
       this.dialogDetails = true;
     },
+    
     filterData(bulan, tahun) {
-      if(this.$refs.form.validate()) {
-        var from = new Date(tahun, this.items.indexOf(bulan), 1)
-        var to = new Date(tahun, this.items.indexOf(bulan) + 1, 1)
+      if(this.$refs.form1.validate()) {
+        var from = new Date(tahun, this.items.indexOf(bulan), 1).setHours(7)
+        var to = new Date(tahun, this.items.indexOf(bulan) + 1, 1).setHours(7)
   
         ParkirService.laporan(from, to)
           .then(res => {
@@ -312,95 +526,111 @@ export default {
       }
     },
 
-    download_laporan() {
+    download_laporan(tahun, bulan, pekan) {
+      
+      console.log(tahun, bulan, pekan)
+      console.log(moment().year(tahun).month(this.items.indexOf(bulan)).startOf('month').toDate())
 
       if(this.$refs.form.validate()){
-        if(typeof this.parkir !== 'undefined' && this.parkir.length > 0) {
 
-          // var source =  this.$refs["content"];
-          let rows = [];
-          let columnHeader = ['ID', 'Jenis', 'Nama', 'Role', 'Tgl Masuk', 'Jam Masuk', 'Tgl Keluar', 'Jam Keluar', 'Status'];
-          let pdfName = 'LAPORAN_PARKIR_'+(this.items.indexOf(this.download.bulan) + 1)+'/'+this.download.tahun;
-          var tamu = 0
-          var guru = 0
-          var siswa = 0
-
-          this.parkir.forEach(element => {
-            var temp = []
-            if(element.siswa != null) {
-              siswa++
-              temp = [
-                element.id,
-                element.role == 1? 'Motor' : 'Mobil',
-                element.siswa.nama,
-                'Siswa',
-                element.masuk != null? element.masuk.replace(/[T]/g, ' ').slice(0, 11) : element.masuk,
-                element.masuk != null? element.masuk.replace(/[T]/g, ' ').slice(10, 19) : element.masuk,
-                element.keluar != null? element.keluar.replace(/[T]/g, ' ').slice(0, 11) : element.keluar,
-                element.keluar != null? element.keluar.replace(/[T]/g, ' ').slice(10, 19) : element.keluar,
-                element.keluar == null? 'Aktif' : 'Selesai'
-              ];
-            } else if(element.guru != null) {
-              guru++
-              temp = [
-                element.id,
-                element.role == 1? 'Motor' : 'Mobil',
-                element.guru.nama,
-                'Guru',
-                element.masuk != null? element.masuk.replace(/[T]/g, ' ').slice(0, 11) : element.masuk,
-                element.masuk != null? element.masuk.replace(/[T]/g, ' ').slice(10, 19) : element.masuk,
-                element.keluar != null? element.keluar.replace(/[T]/g, ' ').slice(0, 11) : element.keluar,
-                element.keluar != null? element.keluar.replace(/[T]/g, ' ').slice(10, 19) : element.keluar,
-                element.keluar == null? 'Aktif' : 'Selesai'
-              ];
-            } else if(element.tamu != null) {
-              tamu++
-              temp = [
-                element.id,
-                element.tamu == 1? 'Motor' : 'Mobil',
-                element.tamu.nama,
-                'Tamu',
-                element.masuk != null? element.masuk.replace(/[T]/g, ' ').slice(0, 11) : element.masuk,
-                element.masuk != null? element.masuk.replace(/[T]/g, ' ').slice(10, 19) : element.masuk,
-                element.keluar != null? element.keluar.replace(/[T]/g, ' ').slice(0, 11) : element.keluar,
-                element.keluar != null? element.keluar.replace(/[T]/g, ' ').slice(10, 19) : element.keluar,
-                element.keluar == null? 'Aktif' : 'Selesai'
-              ];
+        var from, to
+  
+        ParkirService.laporan(from, to)
+          .then(res => {
+            this.laporanParkir = res.data.data;
+            console.log(this.laporanParkir)
+            if(typeof this.laporanParkir !== 'undefined' && this.laporanParkir.length > 0) {
+              
+              // var source =  this.$refs["content"];
+              let rows = [];
+              let columnHeader = ['ID', 'Jenis', 'Nama', 'Role', 'Tgl Masuk', 'Jam Masuk', 'Tgl Keluar', 'Jam Keluar', 'Status'];
+              let pdfName = 'LAPORAN_PARKIR_'+(this.items.indexOf(bulan) + 1)+'/'+tahun;
+              var tamu = 0
+              var guru = 0
+              var siswa = 0
+    
+              this.laporanParkir.forEach(element => {
+                var temp = []
+                if(element.siswa != null) {
+                  siswa++
+                  temp = [
+                    element.id,
+                    element.role == 1? 'Motor' : 'Mobil',
+                    element.siswa.nama,
+                    'Siswa',
+                    element.masuk != null? element.masuk.replace(/[T]/g, ' ').slice(0, 11) : element.masuk,
+                    element.masuk != null? element.masuk.replace(/[T]/g, ' ').slice(10, 19) : element.masuk,
+                    element.keluar != null? element.keluar.replace(/[T]/g, ' ').slice(0, 11) : element.keluar,
+                    element.keluar != null? element.keluar.replace(/[T]/g, ' ').slice(10, 19) : element.keluar,
+                    element.keluar == null? 'Aktif' : 'Selesai'
+                  ];
+                } else if(element.guru != null) {
+                  guru++
+                  temp = [
+                    element.id,
+                    element.role == 1? 'Motor' : 'Mobil',
+                    element.guru.nama,
+                    'Guru',
+                    element.masuk != null? element.masuk.replace(/[T]/g, ' ').slice(0, 11) : element.masuk,
+                    element.masuk != null? element.masuk.replace(/[T]/g, ' ').slice(10, 19) : element.masuk,
+                    element.keluar != null? element.keluar.replace(/[T]/g, ' ').slice(0, 11) : element.keluar,
+                    element.keluar != null? element.keluar.replace(/[T]/g, ' ').slice(10, 19) : element.keluar,
+                    element.keluar == null? 'Aktif' : 'Selesai'
+                  ];
+                } else if(element.tamu != null) {
+                  tamu++
+                  temp = [
+                    element.id,
+                    element.tamu == 1? 'Motor' : 'Mobil',
+                    element.tamu.nama,
+                    'Tamu',
+                    element.masuk != null? element.masuk.replace(/[T]/g, ' ').slice(0, 11) : element.masuk,
+                    element.masuk != null? element.masuk.replace(/[T]/g, ' ').slice(10, 19) : element.masuk,
+                    element.keluar != null? element.keluar.replace(/[T]/g, ' ').slice(0, 11) : element.keluar,
+                    element.keluar != null? element.keluar.replace(/[T]/g, ' ').slice(10, 19) : element.keluar,
+                    element.keluar == null? 'Aktif' : 'Selesai'
+                  ];
+                }
+                rows.push(temp);
+              });
+    
+              var doc = new jsPDF();
+              doc.text(15, 20, 'LAPORAN PARKIR')
+              doc.setFontSize(9);
+              doc.text(15, 25, bulan.toUpperCase() + ' ' +tahun)
+    
+              doc.autoTable(columnHeader, rows, { startY: 35 });
+    
+              doc.text(15, doc.autoTable.previous.finalY + 10, 'Jumlah : ' + this.laporanParkir.length)
+              doc.text(15, doc.autoTable.previous.finalY + 15, 'Guru : ' + guru)
+              doc.text(15, doc.autoTable.previous.finalY + 20, 'Siswa : ' + siswa)
+              doc.text(15, doc.autoTable.previous.finalY + 25, 'Tamu : ' + tamu)
+    
+              var date = new Date();
+              doc.text(140, doc.autoTable.previous.finalY + 10, 'Tanggal Download : ' +date.getDate()+' '+monthNames[date.getMonth()]+' '+date.getFullYear())
+    
+              doc.text(140, doc.autoTable.previous.finalY + 20, 'ID Admin : ' + this.$session.get('id'))
+              doc.text(140, doc.autoTable.previous.finalY + 25, 'Nama Admin : ' + this.$session.get('name'))
+              doc.save(pdfName + '.pdf');
+    
+    
+              this.message = 'Berhasil Mendownload'
+              this.snackbar = true
+            } else {
+              this.message = 'Data Kosong'
+              this.snackbar = true
             }
-            rows.push(temp);
-          });
+          })
+          .catch(err => {
+            console.log(err)
+          })
 
-          var doc = new jsPDF();
-          doc.text(15, 20, 'LAPORAN PARKIR')
-          doc.setFontSize(9);
-          doc.text(15, 25, this.download.bulan.toUpperCase() + ' ' +this.download.tahun)
-
-          doc.autoTable(columnHeader, rows, { startY: 35 });
-
-          doc.text(15, doc.autoTable.previous.finalY + 10, 'Jumlah : ' + this.parkir.length)
-          doc.text(15, doc.autoTable.previous.finalY + 15, 'Guru : ' + guru)
-          doc.text(15, doc.autoTable.previous.finalY + 20, 'Siswa : ' + siswa)
-          doc.text(15, doc.autoTable.previous.finalY + 25, 'Tamu : ' + tamu)
-
-          var date = new Date();
-          doc.text(140, doc.autoTable.previous.finalY + 10, 'Tanggal Download : ' +date.getDate()+' '+monthNames[date.getMonth()-1]+' '+date.getFullYear())
-
-          doc.text(140, doc.autoTable.previous.finalY + 20, 'ID Admin : ' + this.$session.get('id'))
-          doc.text(140, doc.autoTable.previous.finalY + 25, 'Nama Admin : ' + this.$session.get('name'))
-          doc.save(pdfName + '.pdf');
-
-
-          this.message = 'Downloaded'
-          this.snackbar = true
-        } else {
-          this.message = 'Data Kosong'
-          this.snackbar = true
-        }
       } else {
         this.message = 'Pilih Bulan dan Tahun Terlebih Dahulu'
         this.snackbar = true
       }
-    }
+    },
+    
   },
   
 };

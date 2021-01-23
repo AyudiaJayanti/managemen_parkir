@@ -9,14 +9,19 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
-    meta: {
-      guest: true
-    }
   },
   {
     path: '/Dashboard',
     name: 'Dashboard',
     component: () => import('../components/Dashboard'),
+    meta: {
+      auth: true
+    }
+  },
+  {
+    path: '/Profile',
+    name: 'Profile',
+    component: () => import('../components/Profile1'),
     meta: {
       auth: true
     }
@@ -67,7 +72,7 @@ const routes = [
     component: () => import('../components/GuestData'),
     meta: {
       auth: true
-  }
+    }
   },
   {
     path: '/User',

@@ -58,10 +58,10 @@ exports.create = async function(req, res) {
 exports.findById = async function(req, res) {
       
     await model.user.findOne({
+        attributes: ['id', 'name', 'email'],
         where: {
             id: req.params.id
         },
-        include: 'parkirs'
     }).then((user) => {
         res.json({
             'success': 1,
@@ -78,36 +78,82 @@ exports.findById = async function(req, res) {
 
 };
 
+exports.changePassword = async function(req, res) {
+    var {
+        id,
+        oldPassword,
+        newPassword
+    } = req.body
+
+    await model.user.findOne({
+        attributes: ['id', 'password'],
+        where: {
+            id: id
+        },
+    }).then((user) => {
+        bcryptjs.compare(oldPassword, user.password, function (err, result) {
+            if (result == true) {
+                bcryptjs.hash(newPassword, salt, function(err, hash){
+                    model.user.update({        
+                        password: hash
+                    }, {
+                        where: {
+                            id: id
+                        }
+                    }).then((user) => {
+                        res.status(200).json({
+                            'success': 1,
+                            'messages': 'Password berhasil diupdate',
+                            'data': user,
+                        })
+                    }).catch(function(err) {
+                        res.status(400).json({
+                            'success': 0,
+                            'messages': err.message,
+                            'data': {},
+                        })            
+                    })  
+                })
+            } else {
+                res.status(400).json({
+                    'success': 0,
+                    'data': null,
+                    'message': 'Password Lama Tidak Valid',
+                    'error': err
+                })
+            }
+        })
+    }).catch(function(err) {
+        
+    }); 
+};
+
 exports.update = async function(req, res) {
     var {   
         id,     
         name,    
-        email,
-        password                 
+        email,             
     } = req.body;
     
-    await bcryptjs.hash(password, salt, function(err, hash){
-        model.user.update({        
-            name, 
-            email,
-            password: hash
-        }, {
-            where: {
-                id: id
-            }
-        }).then((user) => {
-            res.json({
-                'success': 1,
-                'messages': 'user berhasil diupdate',
-                'data': user,
-            })
-        }).catch(function(err) {
-            res.status(400).json({
-                'success': 0,
-                'messages': err.message,
-                'data': {},
-            })            
-        }) 
+    model.user.update({        
+        name, 
+        email,
+    }, {
+        where: {
+            id: id
+        }
+    }).then((user) => {
+        res.json({
+            'success': 1,
+            'messages': 'user berhasil diupdate',
+            'data': user,
+        })
+    }).catch(function(err) {
+        res.status(400).json({
+            'success': 0,
+            'messages': err.message,
+            'data': {},
+        })            
     })    
 };
 

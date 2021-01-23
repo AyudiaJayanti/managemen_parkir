@@ -27,7 +27,7 @@
                 <h1 class="font-weight-bold">{{ tamu }}</h1>
               </div>
             </div>
-            <h3 class="font-weight-medium mt-3">Data Parkir </h3>
+            <h3 class="font-weight-medium mt-3">Statistik Parkir Minggu Ini</h3>
 
             <div class="white line-style">
               <parkir-chart style="height:100%"></parkir-chart>
@@ -52,7 +52,7 @@
             </div>
             <!-- Donat Chart -->
             <div class="mt-6">
-              <h3 class="mb-3">User Data</h3>
+              <h3 class="mb-3">Statistik Parkir Minggu Ini</h3>
               <doughnut-chart ></doughnut-chart>
               <v-list>
                 <v-list-item>
