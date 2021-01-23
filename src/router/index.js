@@ -21,7 +21,7 @@ const routes = [
   {
     path: '/Profile',
     name: 'Profile',
-    component: () => import('../components/Profile1'),
+    component: () => import('../components/Profile'),
     meta: {
       auth: true
     }
