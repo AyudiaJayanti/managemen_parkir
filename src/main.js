@@ -5,18 +5,12 @@ import store from './store'
 import vuetify from './plugins/vuetify';
 import VueSweetalert2 from 'vue-sweetalert2';
 import VueSession from 'vue-session'
-<<<<<<< HEAD
-import Bars from 'vuebars'
-import moment from 'moment'
-import VuetifyConfirm from 'vuetify-confirm'
-=======
 import VuetifyConfirm from 'vuetify-confirm'
 import Bars from 'vuebars'
 import moment from 'moment'
 import Vuelidate from 'vuelidate'
 import html2canvas from 'html2canvas'
 import jspdf from 'jspdf'
->>>>>>> candra/master
 
 // import VueSessionStorage from 'vue-sessionstorage'
 

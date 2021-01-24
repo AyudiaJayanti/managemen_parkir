@@ -15,20 +15,12 @@
         CheckIfRoute('Vehicle')  
       "
     />
-<<<<<<< HEAD
-    
-    
-    
-    <Login v-else-if="CheckIfRoute('Login')" />
-    <MasukTamu v-else-if="CheckIfRoute('MasukTamu')" />
-=======
 
     <Login v-else-if="CheckIfRoute('Login')" />
     <MasukTamu v-else-if="CheckIfRoute('MasukTamu')" />
     <MasukMobil v-else-if="CheckIfRoute('MasukMobil')" />
     <!-- <MasukMotor v-else-if="CheckIfRoute('MasukMotor')" /> -->
     <Keluar v-else-if="CheckIfRoute('Keluar')" />
->>>>>>> candra/master
     <Home v-else/></transition>
     </div>
   </v-app>

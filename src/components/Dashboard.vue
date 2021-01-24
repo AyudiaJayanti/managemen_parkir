@@ -12,21 +12,6 @@
             <div class="row px-3">
               <div class="col-md-3 col-sm-12 mr-md-2 white box-data">
                 <header class=" text--secondary">User</header>
-<<<<<<< HEAD
-                <h1 class="font-weight-bold">10</h1>
-              </div>
-              <div class="col-md-3 col-sm-12 mr-md-2 white box-data">
-                <header>Guru</header>
-                <h1 class="font-weight-bold">15</h1>
-              </div>
-              <div class="col-md-3 col-sm-12 mr-md-2 white box-data">
-                <header>Siswa</header>
-                <h1 class="font-weight-bold">7</h1>
-              </div> 
-              <div class="col-md-3 white box-data">
-                <header>Tamu</header>
-                <h1 class="font-weight-bold">12</h1>
-=======
                 <h1 class="font-weight-bold">{{ user }}</h1>
               </div>
               <div class="col-md-3 col-sm-12 mr-md-2 white box-data">
@@ -40,7 +25,6 @@
               <div class="col-md-3 white box-data">
                 <header>Tamu</header>
                 <h1 class="font-weight-bold">{{ tamu }}</h1>
->>>>>>> candra/master
               </div>
             </div>
             <h3 class="font-weight-medium mt-3">Data Parkir </h3>
@@ -54,15 +38,9 @@
             <div class="white box-style-scd">
               <!-- Bar Chart -->
               <div class="mt-3">
-<<<<<<< HEAD
-                <h6 class="font-weight-medium">Jumlah Kendaraan</h6>
-                <h2>20</h2>
-              <bars
-=======
                 <h6 class="font-weight-medium">Kendaraan Terdaftar</h6>
                 <h2>{{kendaraan}}</h2>
               <!-- <bars
->>>>>>> candra/master
                 :data="[5, 1, 7, 5, 6, 4, 10, 8, 6, 4, 10, 8 ]"
                 :gradient="['#ffbe88', '#ff93df']"
                 :barWidth="5.9"
