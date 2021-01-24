@@ -3,24 +3,16 @@ const model = require('../models/index');
 const kendaraan = require('../models/kendaraan');
 
 exports.findAll = async function(req, res) {
-    let limit = 10;   
-    let offset = 0;
 
     await model.siswa.findAndCountAll().then((data) => {
-
-        let page = req.params.page;
-        let pages = Math.ceil(data.count / limit);
-            offset = limit * (page - 1);
             
         model.siswa.findAll({                
-            limit: limit,
-            offset: offset,                            
+            include: ['parkirs', 'kendaraans']                         
         }).then((siswas) => {
             res.status(200).json({
                 'success': 1,
                 'data': siswas, 
                 'count': data.count, 
-                'pages': pages
             });
         });    
 

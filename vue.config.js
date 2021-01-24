@@ -12,9 +12,8 @@ module.exports = {
       nodeIntegration: true
     }
   },
-
+  
   devServer: {
     proxy: 'https://localhost:8000'
   }
-
 }

@@ -2,24 +2,17 @@
 const model = require('../models/index');
 
 exports.findAll = async function(req, res) {
-    let limit = 10;   
-    let offset = 0;
 
     await model.guru.findAndCountAll().then((data) => {
 
-        let page = req.params.page;
-        let pages = Math.ceil(data.count / limit);
-            offset = limit * (page - 1);
-            
         model.guru.findAll({                
-            limit: limit,
-            offset: offset,                            
+      
+            include: ['parkirs', 'kendaraans']                     
         }).then((gurus) => {
             res.status(200).json({
                 'success': 1,
                 'data': gurus, 
                 'count': data.count, 
-                'pages': pages
             });
         });    
 
