@@ -1,5 +1,7 @@
 <template>
+
   <v-app>
+  <Navbar/>    
     <div class="container">
       <div class="img">
         <img src="../assets/vehicle.svg" />
@@ -32,7 +34,6 @@
               required
             ></v-text-field>
           </div>
-          <a class="a" href="#">Forgot Password?</a>
           <div class="text-center">
             <v-btn class="btn py-2" rounded dark @click="login" @keyup.enter="login"> Login </v-btn>
           </div>
@@ -140,12 +141,13 @@ form h2 {
 </style>
 
 <script>
+import Navbar from '../component/Appbar/Navbar.vue';
 import AuthService from "../services/AuthService";
 export default {
   props: {
     source: String,
   },
-  components: {},
+  components: {Navbar},
   data: () => ({
     snackbar: false,
     message: ``,
@@ -173,6 +175,7 @@ export default {
               this.$session.start();
               this.$session.set("id", response.data.data.id);
               this.$session.set("name", response.data.data.name);
+              this.$session.set("role", response.data.data.role);
               console.log(response.data.message);
   
               this.$swal({

@@ -13,13 +13,19 @@
             ></v-text-field>
           </v-col>
         </v-row>
+        <div>
         <v-data-table
           :headers="headers"
           :items="siswa"
           :search="search"
           sort-by="createdAt"
+          sort-desc
           class="elevation-1"
-        >
+          :page.sync="page"
+          :items-per-page="itemsPerPage"
+          hide-default-footer
+          @page-count="pageCount = $event"
+        > 
           <template v-slot:top>
             <v-toolbar class="toolbar-display" flat>
               <v-spacer></v-spacer>
@@ -61,7 +67,7 @@
                           v-model="editedItem.nis"  
                           label="NIS" 
                           type="number"
-                          outlined disabled 
+                          outlined disabled
                           :rules="nisRules"></v-text-field>
                       </v-col>
                       <v-col cols="12">
@@ -106,7 +112,7 @@
                     <v-btn color="blue darken-1" text @click="close">
                       Cancel
                     </v-btn>
-                    <v-btn color="blue darken-1" text @click="save">
+                    <v-btn color="primary" dark @click="save">
                       Save
                     </v-btn>
                   </v-card-actions>
@@ -212,6 +218,9 @@
               </v-dialog>
             </v-toolbar>
           </template>
+          <template v-slot:[`item.createdAt`]="{ item }">
+            {{ item.createdAt.replace(/[T]/g, ' ').slice(0, 11) }}
+          </template>
           <template v-slot:[`item.actions`]="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil 
@@ -226,6 +235,8 @@
               <v-icon left small color="primary">mdi-information</v-icon>
               Detail
             </v-btn>
+          </template>
+          <template v-slot:[`item.action2`]="{ item }">
             <v-btn 
               rounded
               color="teal"
@@ -238,9 +249,18 @@
             </v-btn>
           </template>
           <template v-slot:no-data>
-            <v-btn color="primary" @click="initialize"> Reset </v-btn>
+            No Data Found
           </template>
         </v-data-table>
+          <div class="text-center pt-2">
+            <v-pagination
+              v-model="page"
+              :length="pageCount"
+              color="orange"
+              tile
+            ></v-pagination>
+          </div>
+        </div>
       </div> 
       <v-dialog v-model="dialogKendaraan" max-width="700px">
         <v-card class="px-2">
@@ -302,7 +322,7 @@
               @click="closeKendaraan()"
               >Cancel</v-btn
             >
-            <v-btn color="blue darken-1" text @click="saveKendaraan()">
+            <v-btn color="blue darken-1" dark @click="saveKendaraan()">
               Save
             </v-btn>
 
@@ -316,12 +336,16 @@
 <script>
 import SiswaService from "../services/SiswaService";
 import KendaraanService from "../services/KendaraanService";
+
 export default {
   name: "Student",
 
   components: {},
 
   data: () => ({
+    page: 1,
+    pageCount: 0,
+    itemsPerPage: 10,
     valid: false,
     items: [
       "Januari",
@@ -357,9 +381,9 @@ export default {
         sortable: true,
         value: "nama",
       },
-      { text: "Kelas", value: "kelas" },
-      { text: "Tgl Registrasi", value: "createdAt" },
-      { text: "Actions", value: "actions", sortable: false },
+      { text: "Tgl Registrasi", value: "createdAt", filterable: false},
+      { text: "Actions", value: "actions", sortable: false, align: "center"},
+      { text: "", value: "action2", sortable: false},
     ],
     siswa: [],
     editedIndex: -1,
@@ -430,6 +454,9 @@ export default {
   },
 
   watch: {
+    items(){
+      this.progressBar = false
+    },
     dialog(val) {
       val || this.close();
     },
@@ -455,6 +482,7 @@ export default {
       .catch((err) => {
         console.log(err);
       });
+
   },
 
   methods: {
@@ -507,6 +535,7 @@ export default {
           })
           this.siswa.splice(this.editedIndex, 1);
           this.closeDelete();
+      
         }).catch(err => {
           this.$swal({
             title: 'Gagal',

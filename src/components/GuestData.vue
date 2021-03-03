@@ -13,12 +13,18 @@
             ></v-text-field>
           </v-col>
         </v-row>
+        <div>
         <v-data-table
           :headers="headers"
           :items="tamu"
           :search="search"
-          sort-by="id"
+          sort-by="createdAt"
+          sort-desc
           class="elevation-1"
+          :page.sync="page"
+          :items-per-page="itemsPerPage"
+          hide-default-footer
+          @page-count="pageCount = $event"
         >
           <template v-slot:top>
             <v-toolbar class="toolbar-display" flat>
@@ -86,7 +92,7 @@
                     <v-btn color="blue darken-1" text @click="close">
                       Cancel
                     </v-btn>
-                    <v-btn color="blue darken-1" text @click="save">
+                    <v-btn color="blue darken-1" @click="save">
                       Save
                     </v-btn>
                   </v-card-actions>
@@ -116,7 +122,13 @@
               mdi-pencil
             </v-icon>
             <v-icon small class="mr-2" @click="deleteItem(item)"> mdi-delete </v-icon>
-            <v-icon small @click="detailItem(item)"> mdi-information-outline </v-icon>
+            <v-btn 
+              rounded 
+              depressed 
+              @click="detailsItem(item)">
+              <v-icon left small color="primary">mdi-information</v-icon>
+              Detail
+            </v-btn>
           </template>
           <template v-slot:[`item.createdAt`]="{ item }">
             <v-btn v-if="item.parkirs[0].keluar == null"
@@ -132,9 +144,17 @@
             >Selesai</v-btn>
           </template>
           <template v-slot:no-data>
-            <v-btn color="primary" @click="initialize"> Reset </v-btn>
+            No Data Found
           </template>
         </v-data-table>
+        <div class="text-center pt-2">
+            <v-pagination
+              v-model="page"
+              :length="pageCount"
+              color="orange"
+            ></v-pagination>
+          </div>
+        </div>
       </div>
       <v-dialog v-model="dialogDetails" max-width="700px">
         <v-card class="px-2">
@@ -186,30 +206,40 @@
 <script>
 import GuestService from "../services/GuestService";
 import ParkirService from "../services/ParkirService";
-
 export default {
   name: "Guest",
   components: {
   },
   data: () => ({
+    page: 1,
+    pageCount: 0,
+    itemsPerPage: 10,
     items: [
-      "Januari", "Februari", "Maret", "April", "Mei", "Juni","Juli", "Agustus", "September",
-      "Oktober", "November", "Desember",
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
     ],
     instansi: ["Orangtua", "Perusahaan", "Sekolah", "Umum"],
     search: "",
     dialog: false,
     dialogDelete: false,
     dialogDetails: false,
-
     headers: [
-      { text: "ID", align: "start", value: "id"},
-      { text: "Nama", value: "nama",sortable: true },
+      { text: "ID", align: "center", value: "id"},
+      { text: "Nomor Kendaraan", value: "nama",sortable: true },
       { text: "Instansi", value: "instansi", sortable: true},
-      { text: "Actions", value: "actions", sortable: false },
+      { text: "Actions", value: "actions", sortable: false, align: "center" },
       { text: "Status", align: "center", value: "createdAt", filterable:false},
     ],
-
     tamu: [],
     editedIndex: -1,
     editedItem: {
@@ -220,26 +250,21 @@ export default {
       nama: "",
       instansi: 0,
     },
-
     valid: false,
-
     nameRules: [
       v => !!v || 'Name is required',
       v => (v && v.length > 2) || 'Name must be more than 2 characters'
     ],
-
     instansiRules: [
       v => !!v || 'Instansi is required',
     ],
     
   }),
-
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "Tambah Tamu" : "Edit Data Tamu";
     },
   },
-
   watch: {
     dialog(val) {
       val || this.close();
@@ -248,11 +273,9 @@ export default {
       val || this.closeDelete();
     },
   },
-
   created() {
     this.initialize();
   },
-
   mounted() {
     GuestService.getAll()
       .then((res) => {
@@ -262,7 +285,6 @@ export default {
         console.log(err);
       });
   },
-
   methods: {
     initialize() {
       GuestService.getAll()
@@ -273,19 +295,16 @@ export default {
         console.log(err);
       });
     },
-
     editItem(item) {
       this.editedIndex = this.tamu.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
-
     deleteItem(item) {
       this.editedIndex = this.tamu.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
-
     deleteItemConfirm() {
       GuestService.delete(this.tamu[this.editedIndex].id)
         .then(res => {
@@ -305,12 +324,9 @@ export default {
             timer: 1000
           })
         })
-
-
       this.tamu.splice(this.editedIndex, 1);
       this.closeDelete();
     },
-
     close() {
       this.dialog = false;
       this.$nextTick(() => {
@@ -322,7 +338,6 @@ export default {
       this.$refs.form.resetValidation()
       
     },
-
     closeDelete() {
       this.dialogDelete = false;
       this.$nextTick(() => {
@@ -330,7 +345,6 @@ export default {
         this.editedIndex = -1;
       });
     },
-
     save() {
       if (this.$refs.form.validate()) {
         if (this.editedIndex > -1) {
@@ -359,9 +373,7 @@ export default {
           this.tamu.push(this.editedItem);
         }        
       }
-
     },
-
     guestExit(id) {
       this.$confirm("Yakin Tamu Ingin Keluar?").then(res => {
         if(res) {
@@ -396,13 +408,11 @@ export default {
         }
       })
     },
-
     detailItem(item) {
       this.editedIndex = this.tamu.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDetails = true;
     },
-
     closeDetails() {
       this.dialogDetails = false
     }

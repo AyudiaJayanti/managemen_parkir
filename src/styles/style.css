@@ -13,8 +13,10 @@ body{
 .background-main{
     background-color: #E9E9E9 !important;
 }
-.v-data-table-header{
+.v-data-table-header,
+.oren{
     background-color: orange !important;
+    font-weight: 200 !important;
 }
 th .text-start{
     width: 48px !important;
@@ -63,9 +65,6 @@ th .text-start{
 .img-lp{
     margin-top: 50px;
     width: 200% !important;
-}
-.cam-style{
-    width:400px; top: 30%; left: 50%;
 }.col-lp{
     max-width: 30% !important;
 }
@@ -77,30 +76,6 @@ th .text-start{
 }
 .title-size{
     font-size: 35px !important;
-}
-.box-style{
-    border-radius: 5px !important;
-    width: 100%;
-}
-.img-size{
-    width: 30% !important;
-    margin-top: -140px;
-    margin-left: 300px;
-    margin-right: 30px;
-}
-.welcome-text{
-    width: 100px !important;
-    margin-left: 40px !important;
-}
-.box-style-scd{
-    border-radius: 5px;
-    height: fit-content;
-    padding: 5px 15px;
-}
-.box-style-thrd{
-    border-radius: 5px !important;
-    width: 100%;
-    position: absolute;
 }
 .clickable{
     -webkit-app-region: no-drag !important;
@@ -114,15 +89,6 @@ canvas{
 }
 #doughnut-chart{
     height: 235px !important;
-}
-.box-data{
-    margin-top: 10px;
-    border-radius: 10px;
-    height: 15vh;
-    max-width: 24% !important;
-}
-.box-style-pad{
-    padding: 0 20px;
 }
 .v-main__wrap{
     margin:auto;
@@ -164,21 +130,12 @@ canvas{
     opacity: 0;
   }
 @media screen and (max-width: 700px){
-    .img-size{
-        display: none;
-    }
     .box-style-pad{
         padding: 0 12px !important;
     }
     .box-data{
         max-width: 100% !important;
         display: flexbox;
-    }
-    .line-style{
-        height: 25vh !important;
-    }
-    .welcome-text{
-        margin-top: 20px !important;
     }
 }
 

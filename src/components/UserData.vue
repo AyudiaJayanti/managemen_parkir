@@ -13,12 +13,17 @@
             ></v-text-field>
           </v-col>
         </v-row>
+        <div>
         <v-data-table
-          :headers="headers"
+          :headers="superadmin? superHeaders : adminHeaders"
           :items="user"
           :search="search"
-          sort-by="nis"
+          sort-by="id"
           class="elevation-1"
+          :page.sync="page"
+          :items-per-page="itemsPerPage"
+          hide-default-footer
+          @page-count="pageCount = $event"
         >
           <template v-slot:top>
             <v-toolbar class="toolbar-display" flat>
@@ -32,6 +37,7 @@
                     class="mb-2"
                     v-bind="attrs"
                     v-on="on"
+                    v-if="superadmin"
                   >
                     TAMBAH
                   </v-btn>
@@ -57,6 +63,12 @@
                       <v-col cols="12">
                         <v-text-field v-model="editedItem.email" :rules="emailRules" type="email" label="Email" outlined></v-text-field>
                       </v-col>
+                      <v-col cols="12" v-if="formTitle != 'Edit Data user'">
+                        <v-select :items="role" :rules="roleRules" outlined v-model="editedItem.role" placeholder="Role">
+                          <option value="super">Super Admin</option>
+                          <option value="admin">Admin</option>
+                        </v-select>
+                      </v-col>
                       <v-col cols="12">
                         <v-text-field v-if="formTitle != 'Edit Data user'" 
                           :rules="passwordRules"
@@ -72,7 +84,7 @@
                     <v-btn color="blue darken-1" text @click="close">
                       Cancel
                     </v-btn>
-                    <v-btn color="blue darken-1" text @click="save">
+                    <v-btn color="blue darken-1" dark @click="save">
                       Save
                     </v-btn>
                   </v-card-actions>
@@ -97,19 +109,34 @@
               </v-dialog>
             </v-toolbar>
           </template>
-          <!-- <template v-slot:[`item.actions`]="{ item }">
+          <template v-slot:no-data>
+            No Data Found
+          </template>
+
+          <template v-slot:[`item.actions`]="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil 
             </v-icon>
             <v-icon small class="mr-2" @click="deleteItem(item)">
               mdi-delete
             </v-icon>
-          </template> -->
-          <template v-slot:no-data>
-            <v-btn color="primary" @click="initialize"> Reset </v-btn>
+          </template>
+          <template v-slot:[`item.roles`] ="{ item }">
+            <v-col >
+              <v-select :items="role" :rules="roleRules" :value="item.role" placeholder="Role" @change="changeRole(item.id, item.role)"/>
+            </v-col>
           </template>
         </v-data-table>
-      </div> 
+        <div class="text-center pt-2">
+            <v-pagination
+              v-model="page"
+              :length="pageCount"
+              color="orange"
+              tile
+            ></v-pagination>
+          </div>
+        </div>
+      </div>
       <router-view></router-view> 
   </v-app>
 </template>
@@ -117,11 +144,11 @@
 <script>
 import UsersService from "../services/UsersService";
 export default {
-  name: "User",
-
   components: {},
-
   data: () => ({
+    page: 1,
+    pageCount: 0,
+    itemsPerPage: 10,
     nameRules: [
       v => !!v || 'Name is required',
       v => (v && v.length > 2) || 'Name must be more than 2 characters'
@@ -129,12 +156,16 @@ export default {
     emailRules: [
       v => !!v || 'Email is required',
     ],
+    roleRules: [
+      v => !!v || 'Role is required',
+    ],
     passwordRules: [
       v => !!v || 'Password is required',
       v => (v && v.length >= 8) || 'Password must be more or equal to 8 characters'
     ],
     valid: false,
     show: false,
+    superadmin: false,
     items: [
       "Januari",
       "Februari",
@@ -149,19 +180,21 @@ export default {
       "November",
       "Desember",
     ],
-
+    role: [
+      "admin",
+      "super",
+    ],
     jenis: ['motor', 'mobil'],
   
     IdentitasKendaraan: [
     ],
     DataParkir: [
     ],
-
     search: "",
     dialog: false,
     dialogDelete: false,
     dialogDetails: false,
-    headers: [
+    adminHeaders: [
       { text: "Id", align: "start", value: "id" },
       {
         text: "Nama user",
@@ -169,30 +202,41 @@ export default {
         value: "name",
       },
       { text: "Email", value: "email" },
-      // { text: "Actions", value: "actions", sortable: false },
     ],
+    superHeaders: [
+      { text: "Id", align: "start", value: "id" },
+      {
+        text: "Nama user",
+        sortable: true,
+        value: "name",
+      },
+      { text: "Email", value: "email" },
+      { text: "Actions", value: "actions", sortable: "false" },
+      { text: "Roles", value: "roles", sortable: "false" },
+    ],
+    
     user: [],
     editedIndex: -1,
     editedItem: {
       id: "",
       name: "",
       email: "",
+      role: "",
       password: "",
     },
     defaultItem: {
       id: "",
       name: "",
       email: "",
+      role: "",
       password: "",
     },
   }),
-
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "Tambah user" : "Edit Data user";
     },
   },
-
   watch: {
     dialog(val) {
       val || this.close();
@@ -204,7 +248,6 @@ export default {
       val || this.closeDetails();
     },
   },
-
   mounted() {
     UsersService.getAll()
       .then((res) => {
@@ -213,8 +256,11 @@ export default {
       .catch((err) => {
         console.log(err);
       });
+      if(this.$session.get("role") == "super") {
+        this.superadmin = true
+      }
+      console.log(this.$session.get("role"))
   },
-
   methods: {
     initialize() {
       UsersService.getAll()
@@ -229,27 +275,23 @@ export default {
       if (status == "Selesai") return "green";
       else if (status == "Aktif") return "blue";
     },
-
     editItem(item) {
       this.editedIndex = this.user.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
-
     detailsItem(item) {
       this.IdentitasKendaraan = item.kendaraans
       this.DataParkir = item.parkirs
       this.dialogDetails = true;
     },
-
     deleteItem(item) {
       this.editedIndex = this.user.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
-
     deleteItemConfirm() {
-      UsersService.delete(this.user[this.editedIndex].nis) 
+      UsersService.delete(this.user[this.editedIndex].id) 
         .then(res => {
           this.$swal({
             title: 'Berhasil',
@@ -270,22 +312,18 @@ export default {
           })
         })
     },
-
     close() {
       this.dialog = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
-
-      this.$refs.form.reset()
+      // this.$refs.form.reset()
       this.$refs.form.resetValidation()
     },
-
     closeDetails() {
       this.dialogDetails = false;
     },
-
     closeDelete() {
       this.dialogDelete = false;
       this.$nextTick(() => {
@@ -293,7 +331,6 @@ export default {
         this.editedIndex = -1;
       });
     },
-
     save() {
       if(this.$refs.form.validate()) {
         if (this.editedIndex > -1) {
@@ -308,11 +345,10 @@ export default {
                 timer: 1000               
               })
               this.close();
-
             }).catch(err => {
               this.$swal({
                 title: 'Gagal',
-                text: err.response.messages,
+                text: err.messages,
                 icon: 'error',                    
                 showConfirmButton: false,
                 timer: 1000
@@ -340,7 +376,7 @@ export default {
             }).catch(err => {
               this.$swal({
                 title: 'Gagal',
-                text: err.response.messages,
+                text: err.messages,
                 icon: 'error',                    
                 showConfirmButton: false,
                 timer: 1000
@@ -353,6 +389,26 @@ export default {
       }
       
     },
+    changeRole(id, roleuser) {
+      let thisrole = ''
+      if (roleuser == 'admin') {
+        thisrole = 'super'
+      } else {
+        thisrole = 'admin'
+      }
+      UsersService.editRole(id, thisrole)
+        .then((res) => {
+          this.$swal({
+              title: 'Berhasil',
+              text: res.messages,
+              icon: 'success',  
+              showConfirmButton: false,
+              timer: 1000               
+            })
+            this.close();
+        })
+      this.initialize()
+    }
   },
 };
 </script>

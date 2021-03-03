@@ -14,26 +14,26 @@
           datasets: [
             {
               label: 'Siswa',
-              data: [600,	1150,	342,	3050,	2522,	3241,	1259,],
+              data: [],
               fill: false,
-              borderColor: '#2554FF',
-              backgroundColor: '#2554FF',
+              borderColor: 'purple',
+              backgroundColor: 'purple',
               borderWidth: 1
             },
             {
               label: 'Guru',
-              data: [1621,	252,	515,	62,	2522,	3241,	1259,],
+              data: [],
               fill: false,
-              borderColor: '#2564FF',
-              backgroundColor: '#2554FF',
+              borderColor: 'teal',
+              backgroundColor: 'teal',
               borderWidth: 1
             },
             {
               label: 'Tamu',
-              data: [1621,	252,	515,	62,	2522,	3241,	1259,],
+              data: [],
               fill: false,
-              borderColor: '#2564FF',
-              backgroundColor: '#2554FF',
+              borderColor: 'cyan',
+              backgroundColor: 'cyan',
               borderWidth: 1
             },
           ]
@@ -63,17 +63,43 @@
       }
     },
     mounted () {
-      this.renderChart(this.chartData, this.options)
-      ParkirService.getAllData()
+      this.initialize()
+    },
+    created() {
+      this.initialize()
+    },
+    methods: {
+      async initialize() {
+        console.log('hi')
+        await ParkirService.parkingOfTheWeek()
         .then(res => {
-          this.parkir = res.data.data
+          res.data.siswa.forEach(element => {
+            if(element == 0) {
+              this.chartData.datasets[0].data.push(null)
+            } else {
+              this.chartData.datasets[0].data.push(element)
+            }
+          });
+          res.data.guru.forEach(element => {
+            if(element == 0) {
+              this.chartData.datasets[1].data.push(null)
+            } else {
+              this.chartData.datasets[1].data.push(element)
+            }
+          });
+          res.data.tamu.forEach(element => {
+            if(element == 0) {
+              this.chartData.datasets[2].data.push(null)
+            } else {
+              this.chartData.datasets[2].data.push(element)
+            }
+          });
+
+          this.renderChart(this.chartData, this.options)
         })
         .catch(err => {
           console.log(err)
         })
-    },
-    methods: {
-      initialize() {
         
       }
     },

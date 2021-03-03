@@ -13,12 +13,18 @@
             ></v-text-field>
           </v-col>
         </v-row>
+        <div>
         <v-data-table
           :headers="headers"
           :items="kendaraan"
           :search="search"
-          sort-by="nis"
+          sort-by="createdAt"
+          sort-desc
           class="elevation-1"
+          :page.sync="page"
+          :items-per-page="itemsPerPage"
+          hide-default-footer
+          @page-count="pageCount = $event"
         >
           <template v-slot:top>
             <v-toolbar class="" flat>
@@ -61,7 +67,7 @@
                     <v-btn color="blue darken-1" text @click="close">
                       Cancel
                     </v-btn>
-                    <v-btn color="blue darken-1" text @click="save">
+                    <v-btn color="blue darken-1" dark @click="save">
                       Save
                     </v-btn>
                   </v-card-actions>
@@ -99,13 +105,22 @@
           </template>
           <template v-slot:[`item.owner_id`]="{ item }">
             <v-btn v-if="item.guru != null" color="teal" dark rounded @click="detailsItem(item)">Guru</v-btn>
-            <v-btn v-if="item.siswa != null" color="purple" dark rounded @click="detailsItem(item)">Siswa</v-btn>
+            <v-btn v-else-if="item.siswa != null" color="purple" dark rounded @click="detailsItem(item)">Siswa</v-btn>
+            <v-btn v-else outlined color="grey" dark rounded>Deleted</v-btn>
           </template>
           <template v-slot:no-data>
-            <v-btn color="primary" @click="initialize"> Reset </v-btn>
+            No Data Found
           </template>
         </v-data-table>
-      </div> 
+        <div class="text-center pt-2">
+            <v-pagination
+              v-model="page"
+              :length="pageCount"
+              color="orange"
+            ></v-pagination>
+          </div>
+        </div>
+      </div>
       <v-dialog v-model="dialogDetails" max-width="500">
         <v-card class="pt-5 px-8">
       
@@ -146,10 +161,12 @@
 import KendaraanService from "../services/KendaraanService";
 export default {
   name: "Vehicle",
-
   components: {},
 
   data: () => ({
+    page: 1,
+    pageCount: 0,
+    itemsPerPage: 10,
     simRules: [
       v => !!v || 'SIM is required',
       v => (v && v.length == 14) || 'SIM must be 14 characters'
@@ -200,17 +217,17 @@ export default {
     dialogDelete: false,
     dialogDetails: false,
     headers: [
-      { text: "Id", align: "start", value: "id" },
+      { text: "Id", align: "center", value: "id" },
       {
         text: "Pemilik",
         sortable: true,
         value: "owner_id",
-        align: "start"
+        align: "center"
       },
       { text: "Nomor SIM", value: "no_sim" },
       { text: "Nomor STNK", value: "no_stnk" },
-      { text: "Jenis", value: "jenis", sortable: true, filterable: false },
-      { text: "Actions", value: "actions", sortable: false},
+      { text: "Jenis", value: "jenis", sortable: true, filterable: false, align: "center" },
+      { text: "Actions", value: "actions", sortable: false, align:"center"},
     ],
     kendaraan: [],
     editedIndex: -1,
@@ -328,7 +345,10 @@ export default {
       else if (item.tamu != null){
         this.title = "Tamu"
         this.detailParkir = item.tamu;
-      } 
+      }
+      else{
+        this.title = "Deleted"
+      }
 
       this.dialogDetails = true;
     },

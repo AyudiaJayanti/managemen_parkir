@@ -1,6 +1,8 @@
 'use strict';
 const model = require('../models/index');
-const kendaraan = require('../models/kendaraan');
+
+var server = require('../index');
+
 
 exports.findAll = async function(req, res) {
 
@@ -44,6 +46,7 @@ exports.create = async function(req, res) {
             masuk: new Date(),
             keluar: null
         }).then((parkir) => {
+            server.io.sockets.emit('newParkir', parkir) 
             res.status(200).json({
                 'success': 1,
                 'messages': 'Berhasil Ditambahkan',
@@ -133,5 +136,3 @@ exports.delete = async function(req, res) {
         })
     });              
 };
-
-

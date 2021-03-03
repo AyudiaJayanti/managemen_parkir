@@ -1,14 +1,16 @@
 const express = require('express')
 const router = express.Router()
-const parkirController =   require('../controllers/parkir.controller');
+const parkirController = require('../controllers/parkir.controller');
 
 router.get('/', parkirController.findAll);
 
 router.post('/', parkirController.create);
 
+router.get('/create', parkirController.create);
+
 router.post('/laporan', parkirController.laporan);
 
-router.get('/', parkirController.getAll);
+router.get('/parkingOfTheWeek', parkirController.parkingOfTheWeek);
 
 router.get('/:id', parkirController.findById);
 

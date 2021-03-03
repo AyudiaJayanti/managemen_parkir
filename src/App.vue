@@ -1,45 +1,53 @@
 <template>
   <v-app>
-    <WindowBar />
-    
+    <Bar/>
     <div>
       <transition name="fade">
-    <Appbar
-      v-if="
-        CheckIfRoute('Dashboard') ||
-        CheckIfRoute('Parking') ||
-        CheckIfRoute('Students') ||
-        CheckIfRoute('Teacher') ||
-        CheckIfRoute('Guest') ||
-        CheckIfRoute('User') ||
-        CheckIfRoute('Vehicle')  
-      "
-    />
+      <Appbar
+        v-if="
+          CheckIfRoute('Dashboard') ||
+          CheckIfRoute('Parking') ||
+          CheckIfRoute('Students') ||
+          CheckIfRoute('Teacher') ||
+          CheckIfRoute('Guest') ||
+          CheckIfRoute('User') ||
+          CheckIfRoute('Vehicle') || 
+          CheckIfRoute('Profile') 
+        "
+      />
 
-    <Login v-else-if="CheckIfRoute('Login')" />
-    <MasukTamu v-else-if="CheckIfRoute('MasukTamu')" />
-    <MasukMobil v-else-if="CheckIfRoute('MasukMobil')" />
-    <!-- <MasukMotor v-else-if="CheckIfRoute('MasukMotor')" /> -->
-    <Keluar v-else-if="CheckIfRoute('Keluar')" />
-    <Home v-else/></transition>
+      <Login v-else-if="CheckIfRoute('Login')" />
+      <MasukTamu v-else-if="CheckIfRoute('MasukTamu')" />
+      <MasukMobil v-else-if="CheckIfRoute('MasukMobil')" />
+      <!-- <MasukMotor v-else-if="CheckIfRoute('MasukMotor')" /> -->
+      <Keluar v-else-if="CheckIfRoute('Keluar')" />
+      <Home v-else/>
+    </transition>
     </div>
   </v-app>
+  
 </template>
 
 <script>
 import "./styles/style.css"
 import Appbar from "./component/Appbar/Appbar"
-import WindowBar from "./component/Appbar/WindowBar"
+// import WindowBarBrowser from "./component/Appbar/WindowBarBrowser"
+// import WindowBar from "./component/Appbar/WindowBar"
 import Login from "./components/Login"
 import Home from "./views/Home"
 import MasukTamu from "./components/MasukTamu"
 import Keluar from './components/KeluarCam.vue'
 import MasukMobil from './components/MasukMobilCam.vue'
-// import MasukMotor from './components/MasukMotorCam.vue'
 
+var userAgent = navigator.userAgent.toLowerCase()
 
 export default {
   name: "App",
+  data() {
+    return {
+  
+    }
+  },
   methods: {
     CheckIfRoute: function (routeName) {
       return this.$route.name === routeName;
@@ -53,7 +61,8 @@ export default {
     MasukMobil,
     // MasukMotor,
     Keluar,
-    WindowBar,
+
+    Bar: () => (userAgent.indexOf(' electron/') > -1)? import('./component/Appbar/WindowBar') : import('./component/Appbar/WindowBarBrowser')
   },
 }
 

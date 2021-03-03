@@ -1,3 +1,4 @@
+// import { DESCRIBE } from 'sequelize/types/lib/query-types';
 
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -12,12 +13,14 @@ const tamuRoutes = require('./routes/tamu.routes')
 
 const auth = require('./middleware/auth')
 
+const socket = require('socket.io')
+let io = 1
+
 export default (app, http) => {
     
     app.use(cors());
     app.use(bodyParser.urlencoded({ extended: true }))
     app.use(bodyParser.json())
-
     
     app.options('*', cors())
     
@@ -27,7 +30,21 @@ export default (app, http) => {
     app.use('/api/user', auth, userRoutes)
     app.use('/api/kendaraan', auth, kendaraanRoutes)
     app.use('/api/tamu', auth, tamuRoutes)
-
     app.use('/api/auth', auth, loginRoutes)
+
+    io = socket(http, {
+        'reconnection delay' : 0, 
+        'reopen delay' : 0, 
+        'force new connection' : true,
+        cors: {
+            origin: '*',
+        },
+        transports: ['websocket', 'polling']
+    })
     
+    exports.io = io
+
+    io.on('connection', function(socket){
+        console.log('connection established by id '+ socket.id)
+    })
 }

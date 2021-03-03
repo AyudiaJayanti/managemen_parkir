@@ -13,13 +13,22 @@
             ></v-text-field>
           </v-col>
         </v-row>
+        <div>
         <v-data-table
           :headers="headers"
           :items="guru"
           :search="search"
           sort-by="createdAt"
+          sort-asc
           class="elevation-1"
+          :page.sync="page"
+          :items-per-page="itemsPerPage"
+          hide-default-footer
+          @page-count="pageCount = $event"
         >
+          <template v-slot:[`item.createdAt`]="{ item }">
+            {{ item.createdAt.replace(/[TZ]/g, ' ').slice(0, 11) }}
+          </template>
           <template v-slot:top>
             <v-toolbar class="toolbar-display" flat>
               <v-spacer></v-spacer>
@@ -105,7 +114,7 @@
                     <v-btn color="blue darken-1" text @click="close">
                       Cancel
                     </v-btn>
-                    <v-btn color="blue darken-1" text @click="save">
+                    <v-btn color="primary" dark @click="save">
                       Save
                     </v-btn>
                   </v-card-actions>
@@ -138,19 +147,23 @@
                         <template v-slot:default>
                           <thead class="orange">
                             <tr>
-                              <th class="text-left">Jenis Kendaraan</th>
+                              <th class="text-left">ID</th>
                               <th class="text-left">Nomor STNK</th>
                               <th class="text-left">Nomor SIM</th>
+                              <th class="text-left">Tanggal Registrasi</th>
+                              <th class="text-left">Jenis Kendaraan</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr
-                              v-for="item in IdentitasKendaraan"
-                              :key="item.id"
-                            >
-                              <td>{{ item.jk }}</td>
-                              <td>{{ item.sim }}</td>
-                              <td>{{ item.stnk }}</td>
+                            <tr v-for="item in IdentitasKendaraan" :key="item.id">
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.no_sim }}</td>
+                            <td>{{ item.no_stnk }}</td>
+                            <td>{{ item.createdAt }}</td>
+                            <td>
+                              <v-chip v-if="item.jenis == 1">Motor</v-chip>
+                              <v-chip v-else-if="item.jenis == 2">Mobil</v-chip>
+                            </td>
                             </tr>
                           </tbody>
                         </template>
@@ -171,18 +184,17 @@
                           </thead>
                           <tbody>
                             <tr v-for="item in DataParkir" :key="item.id">
-                              <td>{{ item.tglmasuk }}</td>
-                              <td>{{ item.jammasuk }}</td>
-                              <td>{{ item.jamkeluar }}</td>
-                              <td>{{ item.jeniskendaraan }}</td>
-                              <td class="text-center">
-                                <v-chip
-                                  :color="getColor(item.status)"
-                                  dark
-                                >
-                                  {{ item.status }}
-                                </v-chip>
+                              <td>{{ item.id }}</td>
+                              <td>{{ item.masuk }}</td>
+                              <td>{{ item.keluar }}</td>
+                              <td>
+                                <v-chip v-if="item.role == 1">Motor</v-chip>
+                                <v-chip v-else-if="item.role == 2">Mobil</v-chip>
                               </td>
+                              <td class="text-center">
+                                <v-chip v-if="item.keluar == null" dark  color="red">Aktif</v-chip>
+                                <v-chip v-else dark outlined color="red">Selesai</v-chip>                              
+                              </td> 
                             </tr>
                           </tbody>
                         </template>
@@ -208,9 +220,18 @@
                 <v-dialog v-model="dialogDelete" max-width="500px">
                   <v-card>
                     <v-card-title class="headline"
-                      >Are you sure you want to delete this item?</v-card-title
+                    >Are you sure you want to delete this item?</v-card-title
+                  >
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="closeDelete"
+                      >Cancel</v-btn
+                    >
+                    <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                      >OK</v-btn
                     >
                     <v-spacer></v-spacer>
+                  </v-card-actions>
                 </v-card>
               </v-dialog>
             </v-toolbar>
@@ -229,6 +250,8 @@
               <v-icon left small color="primary">mdi-information</v-icon>
               Detail
             </v-btn>
+          </template>
+          <template v-slot:[`item.action2`]="{ item }">
             <v-btn 
               rounded
               color="teal"
@@ -241,10 +264,88 @@
             </v-btn>
           </template>
           <template v-slot:no-data>
-            <v-btn color="primary" @click="initialize"> Reset </v-btn>
+             No Data Found
           </template>
         </v-data-table>
+        <div class="text-center pt-2">
+            <v-pagination
+              v-model="page"
+              :length="pageCount"
+              color="orange"
+              tile
+            ></v-pagination>
+          </div>
+        </div>
       </div>
+      <!-- Dialog Tambah Kendaraan -->
+      <v-dialog v-model="dialogKendaraan" max-width="700px">
+        <v-card class="px-2">
+          <v-card-title>Tambah Kendaraan</v-card-title>
+          <v-card-text>
+            <v-form
+              v-model="valid_kendaraan"
+              ref="form_kendaraan"
+              lazy-validation
+              style="width: 100% !important"
+              >
+              <v-col cols="12">
+                <v-text-field 
+                  v-model="kendaraan.nip"
+                  type="number" 
+                  label="NIP"
+                  :rules="nipRules"
+                  :counter="18"
+                  disabled
+                  outlined></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  label="Nomor SIM"
+                  :rules="simRules"
+                  :counter="14"
+                  v-model="kendaraan.noSIM"
+                  outlined
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  label="Nomor STNK"
+                  :rules="stnkRules"
+                  :counter="8"
+                  v-model="kendaraan.noSTNK"
+                  outlined
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-select
+                  :items="jenis"
+                  :rules="jenisRules"
+                  label="Jenis Kendaraan"
+                  v-model="kendaraan.jenis"
+                  outlined>
+                </v-select>
+              </v-col>
+            </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="blue darken-1"
+              class="mr-0"
+              text
+              @click="closeKendaraan()"
+              >Cancel</v-btn
+            >
+            <v-btn color="blue darken-1" dark @click="saveKendaraan()">
+              Save
+            </v-btn>
+
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
   </v-app>
 </template>
 
@@ -257,6 +358,9 @@ export default {
   components: {},
 
   data: () => ({
+    page: 1,
+    pageCount: 0,
+    itemsPerPage: 10,
     items: [
       "Januari",
       "Februari",
@@ -293,6 +397,7 @@ export default {
       },
       { text: "Tgl Registrasi", value: "createdAt", filterable: false },
       { text: "Actions", value: "actions", align: "center", sortable: false },
+      { text: "", value: "action2", sortable: false },
     ],
     guru: [],
     editedIndex: -1,
@@ -362,6 +467,10 @@ export default {
   },
 
   watch: {
+    loading (val) {
+        if (!val) return
+        setTimeout(() => (this.loading = false), 3000)
+    },
     dialog(val) {
       val || this.close();
     },
@@ -379,6 +488,14 @@ export default {
     GuruService.getAll()
       .then((res) => {
         this.guru = res.data.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+      KendaraanService.getAll()
+      .then((res) => {
+        this.kendaraan = res.data.count;
       })
       .catch((err) => {
         console.log(err);

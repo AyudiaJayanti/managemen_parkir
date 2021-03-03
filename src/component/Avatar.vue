@@ -20,7 +20,7 @@
               color="grey"
               size="40"
             >
-              <span class="white--text headline">{{ user.initials }}</span>
+              <span class="white--text headline">{{speakerInitials(name)}}</span>
             </v-avatar>
           </v-btn>
         </template>
@@ -31,7 +31,7 @@
                 dark
                 width="200px"
               >
-                <span class="white--text headline">{{ user.initials }}</span>
+                <span class="white--text headline">{{ speakerInitials(name) }}</span>
               </v-avatar>
               <h3>{{ this.$session.get('name') }}</h3>
               <p class="caption mt-1">
@@ -42,6 +42,7 @@
                 depressed
                 rounded
                 text
+                to="/profile"
               >
                 Profil
               </v-btn>
@@ -64,16 +65,23 @@
 <script>
   export default {
     data: () => ({
-      user: {
-        initials: 'JD',
-        fullName: 'John Doe',
-        email: 'john.doe@doe.com',
-      },
+      name: '',
     }),
+    mounted() {
+      
+  },
     methods: {
+      speakerInitials() {
+        const name = this.$session.get('name').split(' ');
+        return `${name[0].charAt(0)}${name[1] ? name[1].charAt(0) : '' }`;
+      },
       logout() {
-        this.$session.destroy()
-        this.$router.push('/')
+        this.$confirm("Yakin Ingin Logout?").then(res => {
+          if(res) {
+            this.$session.destroy()
+            this.$router.push('/')
+          }
+        })
       }
     },
   }

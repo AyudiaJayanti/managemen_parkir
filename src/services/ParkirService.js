@@ -26,6 +26,11 @@ class ParkirService {
             'to': to
         })
     }
+    
+    parkingOfTheWeek(){
+        return http.get("/parkir/parkingOfTheWeek")
+    }
+    
 }
 
 export default new ParkirService

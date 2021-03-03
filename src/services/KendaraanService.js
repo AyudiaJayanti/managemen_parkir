@@ -16,7 +16,6 @@ class KendaraanService {
     delete(id) {
         return http.delete("/kendaraan/" + id)
     }
-
     add(kendaraan) {
         return http.post("/kendaraan", {
             'id': '',

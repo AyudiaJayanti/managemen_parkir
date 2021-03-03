@@ -5,18 +5,15 @@
     <v-toolbar-title class="mr-0 pr-4">
       <span class="hidden-sm-and-down">{{moment().format('DD MMMM YYYY')}}</span>
     </v-toolbar-title>
-    <Avatar />
   </v-app-bar>
 </template>
 <script>
-import Avatar from "../Avatar";
 export default {
   name: "App",
   props: {
     source: String,
   },
   components: {
-    Avatar,
   },
 
   data: () => ({
