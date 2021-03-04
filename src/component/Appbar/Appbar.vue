@@ -9,7 +9,7 @@
         dark
         app
       >
-      <v-list-item>
+      <v-list-item class="mt-6 mb-4">
         <v-list-item-avatar>
           <img src="@/assets/light.png" height="30" width="30" />
           </v-list-item-avatar>
@@ -128,7 +128,7 @@ export default {
   }),
   methods: {
     logout() {
-      this.$confirm("Yakin Ingin Keluar?").then(res => {
+      this.$confirm("Apakah anda yakin ingin keluar ?").then(res => {
         if(res) {
           this.$session.destroy()
           this.$router.push('/')

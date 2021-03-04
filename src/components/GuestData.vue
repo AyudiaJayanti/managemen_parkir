@@ -86,34 +86,31 @@
                       </v-col>
                     </v-form>
                   </v-card-text>
-
-                  <v-card-actions>
+                  <v-card-actions class="mr-6">
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="close">
+                    <v-btn class="blue--text text-capitalize" depressed @click="close">
                       Cancel
                     </v-btn>
-                    <v-btn color="blue darken-1" @click="save">
+                    <v-btn color="primary" class="text-capitalize" dark @click="save">
                       Save
                     </v-btn>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
-              <v-dialog v-model="dialogDelete" max-width="500px">
-                <v-card>
-                  <v-card-title class="headline"
-                    >Are you sure you want to delete this item?</v-card-title
-                  >
-                  <v-card-actions>
+              <v-dialog v-model="dialogDelete" max-width="600px">
+                <v-sheet
+                  class="px-7 pt-7 white pb-4 mx-auto text-center d-inline-block"
+                  dark
+                >
+                  <div class="black--text font-weight-bold text-heading-6 mb-4">
+                    Apakah anda yakin ingin menghapus data ini ?
+                  </div>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="closeDelete"
-                      >Cancel</v-btn
-                    >
-                    <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                      >OK</v-btn
-                    >
+                    <v-btn color="blue darken-1" class="mr-3" outlined @click="closeDelete"
+                      ><strong>Cancel</strong></v-btn>
+                    <v-btn color="red" @click="deleteItemConfirm"><v-icon>mdi-delete</v-icon><strong>DELETE</strong></v-btn>
                     <v-spacer></v-spacer>
-                  </v-card-actions>
-                </v-card>
+                </v-sheet>
               </v-dialog>
             </v-toolbar>
           </template>
@@ -165,7 +162,7 @@
               <template v-slot:default>
                 <thead class="orange">
                   <tr>
-                    <th class="text-left white--text">Id Parkir</th>
+                    <th class="text-left white--text">ID Parkir</th>
                     <th class="text-left">Jam Masuk</th>
                     <th class="text-left">Jam Keluar</th>
                     <th class="text-left">Jenis Kendaraan</th>
@@ -187,9 +184,8 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-              color="blue darken-1"
-              class="mr-0"
-              text
+              class="mr-0 blue--text font-weight-bold"
+              depressed
               @click="closeDetails()"
             >
               Cancel
@@ -408,7 +404,7 @@ export default {
         }
       })
     },
-    detailItem(item) {
+    detailsItem(item) {
       this.editedIndex = this.tamu.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDetails = true;

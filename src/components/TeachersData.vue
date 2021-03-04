@@ -1,6 +1,6 @@
 <template>
   <v-app class="px-5 py-5 mt-12 background-main"> 
-      <h2>Data guru</h2>
+      <h2>Data Guru</h2>
       <div class="py-5 px-5 mt-3 white">
         <v-row class="mt-2">
           <v-col lg="6" md="6" sm="12">
@@ -109,33 +109,31 @@
                       </v-col>
                     </v-form>
                   </v-card-text>
-                  <v-card-actions>
+                  <v-card-actions class="mr-6">
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="close">
+                    <v-btn class="blue--text text-capitalize" depressed @click="close">
                       Cancel
                     </v-btn>
-                    <v-btn color="primary" dark @click="save">
+                    <v-btn color="primary" class="text-capitalize" dark @click="save">
                       Save
                     </v-btn>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
-              <v-dialog v-model="dialogDelete" max-width="500px">
-                <v-card>
-                  <v-card-title class="headline"
-                    >Are you sure you want to delete this item?</v-card-title
-                  >
-                  <v-card-actions>
+              <v-dialog v-model="dialogDelete" max-width="600px">
+                <v-sheet
+                  class="px-7 pt-7 white pb-4 mx-auto text-center d-inline-block"
+                  dark
+                >
+                  <div class="black--text font-weight-bold text-heading-6 mb-4">
+                    Apakah anda yakin ingin menghapus data ini ?
+                  </div>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="closeDelete"
-                      >Cancel</v-btn
-                    >
-                    <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                      >OK</v-btn
-                    >
+                    <v-btn color="blue darken-1" class="mr-3" outlined @click="closeDelete"
+                      ><strong>Cancel</strong></v-btn>
+                    <v-btn color="red" @click="deleteItemConfirm"><v-icon>mdi-delete</v-icon><strong>DELETE</strong></v-btn>
                     <v-spacer></v-spacer>
-                  </v-card-actions>
-                </v-card>
+                </v-sheet>
               </v-dialog>
 
                 <v-dialog v-model="dialogDetails" max-width="700px">
@@ -217,23 +215,6 @@
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
-                <v-dialog v-model="dialogDelete" max-width="500px">
-                  <v-card>
-                    <v-card-title class="headline"
-                    >Are you sure you want to delete this item?</v-card-title
-                  >
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="closeDelete"
-                      >Cancel</v-btn
-                    >
-                    <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                      >OK</v-btn
-                    >
-                    <v-spacer></v-spacer>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
             </v-toolbar>
           </template>
           <template v-slot:[`item.actions`]="{ item }">
@@ -269,10 +250,10 @@
         </v-data-table>
         <div class="text-center pt-2">
             <v-pagination
+              tile
               v-model="page"
               :length="pageCount"
               color="orange"
-              tile
             ></v-pagination>
           </div>
         </div>
@@ -332,16 +313,14 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-              color="blue darken-1"
-              class="mr-0"
-              text
+              class="blue--text text-capitalize" depressed
               @click="closeKendaraan()"
-              >Cancel</v-btn
             >
-            <v-btn color="blue darken-1" dark @click="saveKendaraan()">
+              Cancel
+            </v-btn>
+            <v-btn color="primary" class="text-capitalize" dark @click="saveKendaraan()">
               Save
             </v-btn>
-
           </v-card-actions>
         </v-card>
       </v-dialog>
