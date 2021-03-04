@@ -50,7 +50,7 @@
                         <v-text-field v-model="editedItem.no_stnk" :rules="stnkRules" :counter="8" label="Nomor STNK" outlined></v-text-field>
                       </v-col>
                       <v-col cols="12">
-                        <v-select
+                        <!-- <v-select
                           :items="jenis"
                           :rules="jenisRules"
                           label="Jenis Kendaraan"
@@ -58,7 +58,19 @@
                           item-text="name" 
                           item-value="nilai"
                           outlined>
-                        </v-select>
+                        </v-select> -->
+
+                        <v-card-text>Jenis Kendaraan</v-card-text>
+                        <v-chip-group
+                          active-class="primary--text"
+                          mandatory
+                          v-model="editedItem.jenis"
+                          :rules="jenisRules"
+                          required
+                        >      
+                          <v-chip value="1">Motor</v-chip>
+                          <v-chip value="2">Mobil</v-chip>
+                        </v-chip-group>
                       </v-col>
                     </v-form>
                   </v-card-text>
@@ -388,8 +400,6 @@ export default {
           Object.assign(this.kendaraan[this.editedIndex], this.editedItem);
         } 
       }
-
-
     }
   },
 };

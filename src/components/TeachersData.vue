@@ -57,7 +57,7 @@
                       lazy-validation
                       style="width: 100% !important"
                       >
-                      <v-col cols="12">
+                      <v-col cols="12" class="pt-1 pb-0">
                         <v-text-field 
                           v-if="formTitle != 'Edit Data guru'" 
                           v-model="editedItem.nip"
@@ -72,13 +72,13 @@
                           :counter="18"
                           v-model="editedItem.nip" type="number" label="NIP" outlined disabled></v-text-field>
                       </v-col>
-                      <v-col cols="12">
+                      <v-col cols="12" class="pt-1 pb-0">
                         <v-text-field 
                         v-model="editedItem.nama" 
                         :rules="nameRules"
                         label="Nama guru" outlined></v-text-field>
                       </v-col>
-                      <v-col cols="12" v-if="formTitle != 'Edit Data guru'">
+                      <v-col cols="12" class="pt-1 pb-0" v-if="formTitle != 'Edit Data guru'">
                         <v-text-field
                           label="Nomor SIM"
                           :rules="simRules"
@@ -88,7 +88,7 @@
                         >
                         </v-text-field>
                       </v-col>
-                      <v-col cols="12" v-if="formTitle != 'Edit Data guru'">
+                      <v-col cols="12" class="pt-1 pb-0" v-if="formTitle != 'Edit Data guru'">
                         <v-text-field
                           label="Nomor STNK"
                           :rules="stnkRules"
@@ -98,14 +98,18 @@
                         >
                         </v-text-field>
                       </v-col>
-                      <v-col cols="12" v-if="formTitle != 'Edit Data guru'">
-                        <v-select
-                          :items="jenis"
-                          :rules="jenisRules"
-                          label="Jenis Kendaraan"
+                      <v-col cols="12" class="pt-1 pb-0" v-if="formTitle != 'Edit Data guru'">
+                        <v-card-text>Jenis Kendaraan</v-card-text>
+                        <v-chip-group
+                          active-class="primary--text"
+                          mandatory
                           v-model="editedItem.jenis"
-                          outlined>
-                        </v-select>
+                          :rules="jenisRules"
+                          required
+                        >      
+                          <v-chip value="motor">Motor</v-chip>
+                          <v-chip value="mobil">Mobil</v-chip>
+                        </v-chip-group>
                       </v-col>
                     </v-form>
                   </v-card-text>
@@ -269,7 +273,7 @@
               lazy-validation
               style="width: 100% !important"
               >
-              <v-col cols="12">
+              <v-col cols="12" class="pt-1 pb-0">
                 <v-text-field 
                   v-model="kendaraan.nip"
                   type="number" 
@@ -279,7 +283,7 @@
                   disabled
                   outlined></v-text-field>
               </v-col>
-              <v-col cols="12">
+              <v-col cols="12" class="pt-1 pb-0">
                 <v-text-field
                   label="Nomor SIM"
                   :rules="simRules"
@@ -289,7 +293,7 @@
                 >
                 </v-text-field>
               </v-col>
-              <v-col cols="12">
+              <v-col cols="12" class="pt-1 pb-0">
                 <v-text-field
                   label="Nomor STNK"
                   :rules="stnkRules"
@@ -299,14 +303,18 @@
                 >
                 </v-text-field>
               </v-col>
-              <v-col cols="12">
-                <v-select
-                  :items="jenis"
-                  :rules="jenisRules"
-                  label="Jenis Kendaraan"
-                  v-model="kendaraan.jenis"
-                  outlined>
-                </v-select>
+              <v-col cols="12" class="pt-1 pb-0">
+                <v-card-text>Jenis Kendaraan</v-card-text>
+                  <v-chip-group
+                    active-class="primary--text"
+                    mandatory
+                    v-model="editedItem.jenis"
+                    :rules="jenisRules"
+                    required
+                  >      
+                    <v-chip value="motor">Motor</v-chip>
+                    <v-chip value="mobil">Mobil</v-chip>
+                  </v-chip-group>
               </v-col>
             </v-form>
           </v-card-text>

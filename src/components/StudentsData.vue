@@ -54,7 +54,7 @@
                       lazy-validation
                       style="width: 100% !important"
                       >
-                      <v-col cols="12">
+                      <v-col cols="12" class="py-0">
                         <v-text-field 
                           v-if="formTitle != 'Edit Data Siswa'" 
                           v-model="editedItem.nis" label="NIS" 
@@ -70,7 +70,7 @@
                           outlined disabled
                           :rules="nisRules"></v-text-field>
                       </v-col>
-                      <v-col cols="12">
+                      <v-col cols="12" class="py-0">
                         <v-text-field v-model="editedItem.nama" label="Nama Siswa" outlined :rules="nameRules"></v-text-field>
                       </v-col>
                       <v-col cols="12" v-if="formTitle != 'Edit Data Siswa'">
@@ -84,7 +84,7 @@
                         >
                         </v-text-field>
                       </v-col>
-                      <v-col cols="12" v-if="formTitle != 'Edit Data Siswa'">
+                      <v-col cols="12" class="py-0" v-if="formTitle != 'Edit Data Siswa'">
                         <v-text-field
                           label="Nomor STNK"
                           v-model="editedItem.noSTNK"
@@ -95,15 +95,18 @@
                         >
                         </v-text-field>
                       </v-col>
-                      <v-col cols="12" v-if="formTitle != 'Edit Data Siswa'">
-                        <v-select
-                          :items="jenis"
-                          label="Jenis Kendaraan"
+                      <v-col cols="12" class="py-0" v-if="formTitle != 'Edit Data Siswa'">
+                        <v-card-text>Jenis Kendaraan</v-card-text>
+                        <v-chip-group
+                          active-class="primary--text"
+                          mandatory
                           v-model="editedItem.jenis"
-                          outlined
                           :rules="jenisRules"
-                          >
-                        </v-select>
+                          required
+                        >
+                          <v-chip value="motor">Motor</v-chip>
+                          <v-chip value="mobil">Mobil</v-chip>
+                        </v-chip-group>
                       </v-col>
                     </v-form>
                   </v-card-text>
@@ -270,7 +273,7 @@
               lazy-validation
               style="width: 100% !important"
               >
-              <v-col cols="12">
+              <v-col cols="12" class="py-0">
                 <v-text-field 
                   v-model="kendaraan.nis"
                   type="number" 
@@ -280,7 +283,7 @@
                   disabled
                   outlined></v-text-field>
               </v-col>
-              <v-col cols="12">
+              <v-col cols="12" class="py-0">
                 <v-text-field
                   label="Nomor SIM"
                   :rules="simRules"
@@ -290,7 +293,7 @@
                 >
                 </v-text-field>
               </v-col>
-              <v-col cols="12">
+              <v-col cols="12" class="py-0">
                 <v-text-field
                   label="Nomor STNK"
                   :rules="stnkRules"
@@ -300,14 +303,18 @@
                 >
                 </v-text-field>
               </v-col>
-              <v-col cols="12">
-                <v-select
-                  :items="jenis"
-                  :rules="jenisRules"
-                  label="Jenis Kendaraan"
-                  v-model="kendaraan.jenis"
-                  outlined>
-                </v-select>
+              <v-col cols="12" class="py-0">
+                <v-card-text>Jenis Kendaraan</v-card-text>
+                  <v-chip-group
+                    active-class="primary--text"
+                    mandatory
+                    v-model="editedItem.jenis"
+                    :rules="jenisRules"
+                    required
+                  >      
+                    <v-chip value="motor">Motor</v-chip>
+                    <v-chip value="mobil">Mobil</v-chip>
+                  </v-chip-group>
               </v-col>
             </v-form>
           </v-card-text>

@@ -184,11 +184,14 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-              class="mr-0 blue--text font-weight-bold"
-              depressed
-              @click="closeDetails()"
+              color="red"
+              class="rounded-circle"
+              outlined
+              absolute
+              text
+              @click="closeDetails"
             >
-              Cancel
+              <v-icon>mdi-close</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
           </v-card-actions>
