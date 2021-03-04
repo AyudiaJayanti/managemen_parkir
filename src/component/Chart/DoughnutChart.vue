@@ -46,9 +46,7 @@
           res.data.tamu.forEach(element => {
             this.tamu += element
           });
-
           this.chartData.datasets[0].data = [this.siswa, this.guru, this.tamu]
-
           this.renderChart(this.chartData, this.options)
         })
         .catch(err => {

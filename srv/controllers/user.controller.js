@@ -137,26 +137,34 @@ exports.update = async function(req, res) {
         email,             
     } = req.body;
     
-    model.user.update({        
-        name, 
-        email,
-    }, {
+    await model.user.findOne({
         where: {
-            id: id
-        }
+            id:id
+        },
     }).then((user) => {
-        res.json({
-            'success': 1,
-            'messages': 'user berhasil diupdate',
-            'data': user,
+        model.user.update({
+            name, 
+            email,
+        }, {
+            where: {
+                id: id
+            }
+        }).then((user) => {
+            res.json({
+                'success': 1,
+                'messages': 'user berhasil diupdate',
+                'data': user,
+            })
+        }).catch(function(err) {
+            res.status(400).json({
+                'success': 0,
+                'messages': err.message,
+                'data': {},
+            }) 
         })
-    }).catch(function(err) {
-        res.status(400).json({
-            'success': 0,
-            'messages': err.message,
-            'data': {},
-        })            
-    })    
+    }).catch(function(err){
+
+    });
 };
 
 exports.delete = async function(req, res) {

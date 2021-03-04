@@ -55,7 +55,6 @@
         <div class="text-right  mb-3">
           <v-menu 
             offset-y 
-            left
             dark
             :close-on-content-click="false"
             v-model="menuDownload">
@@ -78,69 +77,58 @@
                   </v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-title>Download Laporan</v-list-item-title>
-                    <v-list-item-subtitle>Pilih Bulan, Tahun, dan Pekan</v-list-item-subtitle>
+                    <v-list-item-subtitle>Pilih tanggal awal dan akhir</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
 
               <v-divider></v-divider>
-
-              <v-list>
-                <v-list-item>
-                  <v-form
-                    ref="form"
-                  >
-                    <v-select 
-                      :items="tahun"
-                      placeholder="Tahun"
-                      label="Tahun"
-                      v-model="laporan.tahun"
-                      :rules="tahunRules">
-                    </v-select>
-                    <v-select 
-                      :items="items"
-                      placeholder="Bulan"
-                      label="Bulan"
-                      v-model="laporan.bulan"
-                      :rules="bulanRules">
-                    </v-select>
-                    <v-radio-group
-                      v-model="laporan.pekan"
-                      row
-                      label="Pekan"
-                      :rules="pekanRules">
-                      <v-radio
-                        label="All"
-                        value="All"
-                        color="primary"
-                      ></v-radio>
-                      <v-radio
-                        label="1"
-                        value="1"
-                        color="primary"
-                      ></v-radio>
-                      <v-radio
-                        label="2"
-                        value="2"
-                        color="primary"
-                      ></v-radio>
-                      <v-radio
-                        label="3"
-                        value="3"
-                        color="primary"
-                      ></v-radio>
-                      <v-radio
-                        label="4"
-                        value="4"
-                        color="primary"
-                      ></v-radio>
-                    </v-radio-group>
-
-                  </v-form>
-                </v-list-item>
-              </v-list>
-
+              <v-row>
+                <v-col
+                  cols="12"
+                >
+                  <v-row align="center" justify="center">
+                    <v-date-picker
+                      v-model="dates"
+                      color="primary"
+                      range
+                    ></v-date-picker>
+                  </v-row>
+                </v-col>
+                <v-col
+                  cols="12"
+                >
+                  <v-row align="center" justify="center">
+                    <v-btn
+                      color="indigo"
+                      elevation="10"
+                      class="mr-2"
+                      @click="dates = [moment().startOf('month').format('YYYY-MM-DD'), moment().endOf('month').format('YYYY-MM-DD')]"
+                      >
+                      Bulan Ini
+                    </v-btn>
+                    <v-btn
+                      color="indigo"
+                      elevation="10"
+                      @click="dates = [moment().startOf('isoWeek').format('YYYY-MM-DD'), moment().endOf('isoWeek').format('YYYY-MM-DD')]"
+                      >
+                      Pekan Ini
+                    </v-btn>
+                  </v-row>
+                  <v-row align="center" justify="center" class="mt-2"> 
+                    <v-btn
+                      depressed
+                      @click="dates = []"
+                      >
+                      <v-icon left small>mdi-reload</v-icon>
+                      Reset
+                    </v-btn>
+                  </v-row>
+                </v-col>
+              </v-row>
+            
               <v-card-actions>
+                <v-spacer></v-spacer>
                 <v-btn
                   text
                   @click="menuDownload = false"
@@ -158,6 +146,7 @@
             </v-card>
           </v-menu>
         </div>
+        <div>
         <v-data-table
           :headers="headers"
           :items="parkir"
@@ -208,6 +197,7 @@
             ></v-pagination>
           </div>
         </div>
+      </div> 
       <v-dialog v-model="dialogDetails" max-width="500">
         <v-card class="pt-5 px-8">
       
@@ -247,95 +237,6 @@
           </v-btn>
         </template>
       </v-snackbar>
-      <!-- <template>
-        <div >
-          <v-menu offset-y rounded="l" offset-overflow>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                v-bind="attrs"
-                v-on="on"
-                color="orange"
-                dark
-                fab
-                class="mr-3 mb-12"
-                bottom
-                right
-                fixed>
-                <v-icon> mdi-arrow-collapse-down </v-icon>
-              </v-btn>
-            </template>
-            <v-card >
-              <v-list >
-                <v-list-item >
-                  <v-list-item-avatar>
-                    <img
-                      src="https://cdn.vuetifyjs.com/images/john.jpg"
-                      alt="John"
-                    >
-                  </v-list-item-avatar>
-
-                  <v-list-item-content>
-                    <v-list-item-title>John Leider</v-list-item-title>
-                    <v-list-item-subtitle>Founder of Vuetify</v-list-item-subtitle>
-                  </v-list-item-content>
-
-                  <v-list-item-action>
-                    <v-btn
-                      :class="fav ? 'red--text' : ''"
-                      icon
-                      @click="fav = !fav"
-                    >
-                      <v-icon>mdi-heart</v-icon>
-                    </v-btn>
-                  </v-list-item-action>
-                </v-list-item>
-              </v-list>
-
-              <v-divider></v-divider>
-
-              <v-list>
-                <v-list-item>
-                  <v-list-item-action>
-                    <v-switch
-                      v-model="message"
-                      color="purple"
-                    ></v-switch>
-                  </v-list-item-action>
-                  <v-list-item-title>Enable messages</v-list-item-title>
-                </v-list-item>
-
-                <v-list-item>
-                  <v-list-item-action>
-                    <v-switch
-                      v-model="hints"
-                      color="purple"
-                    ></v-switch>
-                  </v-list-item-action>
-                  <v-list-item-title>Enable hints</v-list-item-title>
-                </v-list-item>
-              </v-list>
-
-              <v-card-actions>
-                <v-spacer></v-spacer>
-
-                <v-btn
-                  text
-                  @click="menu = false"
-                >
-                  Cancel
-                </v-btn>
-                <v-btn
-                  color="primary"
-                  text
-                  @click="menu = false"
-                >
-                  Save
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-menu>
-        </div>
-      </template> -->
     <router-view></router-view> 
   </v-app>
 </template>
@@ -405,12 +306,9 @@ export default {
     IdentitasKendaraan: [
       
     ],
-
     start_date: null,
     end_date: null,
-
     search: '',
-
     dialogDetails: false,
     dialogLaporan: false,
     parkir: [],
@@ -434,10 +332,8 @@ export default {
           sortable: true, 
           filter: value => {
             if (!this.download.bulan && !this.download.tahun) return true
-
             var from = new Date(this.download.tahun, this.items.indexOf(this.download.bulan), 1).setHours(7)
             var to = new Date(this.download.tahun, this.items.indexOf(this.download.bulan) + 1, 1).setHours(7)
-
             return new Date(value) >= from && new Date(value) <= to
           } 
         },
@@ -455,6 +351,9 @@ export default {
     },
   },
   mounted() {
+    var m = moment()
+    console.log(m.startOf('isoWeek').week(2).format('YYYY-MM-DD'))
+    console.log(m.clone().endOf('isoWeek').format('YYYY-MM-DD'))
     
     ParkirService.getAll()
       .then((res) => {
@@ -463,9 +362,7 @@ export default {
       .catch((err) => {
         console.log(err);
       });
-
   },
-
   sockets: {
     newParkir: function () {
       ParkirService.getAll()
@@ -531,26 +428,27 @@ export default {
           })
       }
     },
-
-    download_laporan(tahun, bulan, pekan) {
-      
-      console.log(tahun, bulan, pekan)
-      console.log(moment().year(tahun).month(this.items.indexOf(bulan)).startOf('month').toDate())
-
-      if(this.$refs.form.validate()){
-
+    download_laporan() {
+      if(this.dates.length > 1){
         var from, to
-  
+        if(this.dates[0] > this.dates[1]) {
+          from = this.dates[1]
+          to = this.dates[0]
+        } else {
+          from = this.dates[0]
+          to = this.dates[1]
+        }
+        
         ParkirService.laporan(from, to)
           .then(res => {
             this.laporanParkir = res.data.data;
-            console.log(this.laporanParkir)
+            
             if(typeof this.laporanParkir !== 'undefined' && this.laporanParkir.length > 0) {
               
               // var source =  this.$refs["content"];
               let rows = [];
               let columnHeader = ['ID', 'Jenis', 'Nama', 'Role', 'Tgl Masuk', 'Jam Masuk', 'Tgl Keluar', 'Jam Keluar', 'Status'];
-              let pdfName = 'LAPORAN_PARKIR_'+(this.items.indexOf(bulan) + 1)+'/'+tahun;
+              let pdfName = 'LAPORAN_PARKIR_'+from+"_SD_"+to
               var tamu = 0
               var guru = 0
               var siswa = 0
@@ -603,7 +501,7 @@ export default {
               var doc = new jsPDF();
               doc.text(15, 20, 'LAPORAN PARKIR')
               doc.setFontSize(9);
-              doc.text(15, 25, bulan.toUpperCase() + ' ' +tahun)
+              doc.text(15, 25, from + ' s/d ' +to)
     
               doc.autoTable(columnHeader, rows, { startY: 35 });
     
@@ -635,7 +533,6 @@ export default {
         this.snackbar = true
       }
     },
-    
   },
 };
 </script>

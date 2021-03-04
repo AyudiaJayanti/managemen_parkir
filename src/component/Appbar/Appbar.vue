@@ -128,7 +128,7 @@ export default {
   }),
   methods: {
     logout() {
-      this.$confirm("Yakin Ingin Keluar?").then(res => {
+      this.$confirm("Apakah anda yakin ingin keluar ?").then(res => {
         if(res) {
           this.$session.destroy()
           this.$router.push('/')

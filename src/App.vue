@@ -1,7 +1,6 @@
 <template>
   <v-app>
     <Bar/>
-    
     <div>
       <transition name="fade">
       <Appbar

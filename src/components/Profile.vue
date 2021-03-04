@@ -152,20 +152,16 @@ export default {
     ]
     
   }),
-
   mounted() {
     this.initialize()
   },
-
   computed: {
     rePassword() {
       return () => (this.newPassword === this.repeatPassword) || 'Password harus sama'
     }
   },
-
   methods: {
     initialize() {
-
       this.oldPassword = ""
       this.newPassword = ""
       this.repeatPassword = ""
@@ -234,8 +230,6 @@ export default {
       }
     }
   },
-
   
-
 }
 </script>
