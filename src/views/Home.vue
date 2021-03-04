@@ -1,25 +1,11 @@
 <template>
   <v-app>
-    <!-- <Navbar /> -->
-    <v-main class="my-0">
-      <div>
-        <img class="image-position" src="../assets/lp-car.svg">
+    <Navbar />
+    <v-main>
+      <div style="margin: auto;" class="text-center">
+        <h1 class="text-center">SCAN YOUR BARCODE</h1>
+        <img src="../assets/lp-card.svg" width="50%">
       </div>
-      <div class="ml-12" fluid>
-          <b><h1>Let's Get Your Parking Lot.</h1></b>
-          <p class="content-paragraph ">Temukan kemudahan dalam mencatat proses parkir sekolah anda.</p>
-
-          <v-btn
-            rounded
-            color="black"
-            height="50px"
-            dark
-            to="/Login"
-          >
-            Get Started
-          </v-btn>
-      </div>
-      
     </v-main>
   </v-app>
 </template>
@@ -43,10 +29,11 @@ b h1{
 </style>
 
 <script>
-//import Navbar from "../component/Appbar/Navbar";
+import Navbar from "../component/Appbar/Navbar";
+//import MasukCam from "../components/MasukMotorCam";
 export default {
   components: {
-    //Navbar,
+    Navbar,
   },
 };
 </script>

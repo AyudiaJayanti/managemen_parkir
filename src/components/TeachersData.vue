@@ -317,10 +317,12 @@
               @click="closeKendaraan()"
             >
               Cancel
-            </v-btn>
+              </v-btn>
             <v-btn color="primary" class="text-capitalize" dark @click="saveKendaraan()">
               Save
             </v-btn>
+
+
           </v-card-actions>
         </v-card>
       </v-dialog>
